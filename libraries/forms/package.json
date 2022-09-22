@@ -1,0 +1,11 @@
+{
+  "name": "@userfront/forms",
+  "version": "0.0.1",
+  "description": "Shared forms for the Userfront Toolkit",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

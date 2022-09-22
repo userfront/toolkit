@@ -25,5 +25,10 @@
     //    */
     //   "autoinstallerName": "rush-plugins"
     // }
+    {
+      "packageName": "rush-init-project-plugin",
+      "pluginName": "rush-init-project-plugin",
+      "autoinstallerName": "rush-plugins"
+    }
   ]
 }

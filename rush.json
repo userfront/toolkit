@@ -27,8 +27,7 @@
    * for details about these alternatives.
    */
   "pnpmVersion": "6.7.1",
-
-  // "npmVersion": "6.14.15",
+  // "npmVersion": "8.14.0",
   // "yarnVersion": "1.9.4",
 
   /**
@@ -62,7 +61,11 @@
      * The default value is false to avoid legacy compatibility issues.
      * It is strongly recommended to set strictPeerDependencies=true.
      */
-    // "strictPeerDependencies": true,
+    /*
+     * NOTE: set to false to allow @userfront/react's devDependencies to install correctly.
+     * Should be set back to true if/when the dual versions of @testing-library/react are resolved.
+     */
+    "strictPeerDependencies": false,
 
     /**
      * Configures the strategy used to select versions during installation.
@@ -483,12 +486,30 @@
     //   // "tags": [ "1.0.0-release", "frontend-team" ]
     // },
     // 
-    // {
-    //   "packageName": "my-controls",
-    //   "projectFolder": "libraries/my-controls",
-    //   "reviewCategory": "production",
-    //   "tags": [ "frontend-team" ]
-    // },
+    {
+      "packageName": "@userfront/elements",
+      "projectFolder": "libraries/elements"
+    },
+    {
+      "packageName": "@userfront/forms",
+      "projectFolder": "libraries/forms"
+    },
+    {
+      "packageName": "@userfront/models",
+      "projectFolder": "libraries/models"
+    },
+    {
+      "packageName": "@userfront/toolkit",
+      "projectFolder": "packages/toolkit"
+    },
+    {
+      "packageName": "@userfront/react",
+      "projectFolder": "packages/react"
+    },
+    {
+      "packageName": "@userfront/vue",
+      "projectFolder": "packages/vue"
+    },
     // 
     // {
     //   "packageName": "my-toolchain",
