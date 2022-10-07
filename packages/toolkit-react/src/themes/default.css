@@ -1,0 +1,29 @@
+.uf-btn-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.uf-btn {
+  background-color: white;
+  border: 3px solid blue;
+  margin-bottom: 6px;
+}
+
+.uf-btn-full {
+  display: block;
+  width: 100%;
+}
+
+.uf-form {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.uf-form > label {
+  flex: 1 0 100%;
+}
+
+.uf-form > input {
+  flex: 1 0 100%;
+  margin-bottom: 6px;
+}
