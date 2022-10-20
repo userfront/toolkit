@@ -1,7 +1,7 @@
 import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
 
-const EnterBackupCode = ({ onSubmit }) => {
+const EnterBackupCode = ({ onEvent }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
   };

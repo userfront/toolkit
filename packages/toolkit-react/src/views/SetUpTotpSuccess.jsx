@@ -4,7 +4,7 @@ const SetUpTotpSuccess = ({ backupCodes, onEvent }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     onEvent({
-      type: "SUBMIT",
+      type: "submit",
     });
   };
 

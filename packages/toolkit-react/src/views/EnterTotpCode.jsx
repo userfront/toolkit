@@ -6,7 +6,7 @@ const EnterTotpCode = ({ onEvent }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     onEvent({
-      type: "SUBMIT",
+      type: "submit",
       totpCode: event.target.elements.totpCode.value,
     });
   };

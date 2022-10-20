@@ -9,9 +9,22 @@ import { useMachine } from "@xstate/react";
 
 const signupFormModel = createSignupFormModel(defaultSignupFormContext);
 
+const childIdForStep = (stepName?: string) => {
+  switch (stepName) {
+    case "smsCodeSecondFactor":
+      return "smsCode";
+    case null:
+    case undefined:
+      return null;
+    default:
+      return stepName;
+  }
+};
+
 function App() {
   const [state, send, service] = useMachine(signupFormModel);
-  console.log("state", JSON.parse(JSON.stringify(state)));
+  console.log("state", state);
+  console.log("service", service);
 
   const handleEvent = (event: any) => {
     console.log("event", event);

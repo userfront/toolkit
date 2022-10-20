@@ -78,48 +78,71 @@ const textForStep = (type) => {
 };
 
 const componentForStep = (type) => {
-  switch (type) {
+  let typeString = "";
+  // Could be string or object of shape
+  // {
+  //   majorStep: "subStep"
+  // }
+  if (typeof type === "object") {
+    const key = Object.keys(type)[0];
+    const val = type[key];
+    typeString = `${key}.${val}`;
+  } else {
+    typeString = type;
+  }
+  console.log("typeString", typeString);
+  switch (typeString) {
+    case "showPreviewAndFetchFlow":
     case "selectFirstFactor":
       return SelectFactor;
     case "useSsoProvider":
       return Message;
-    case "enterEmailLink":
+    case "emailLink.showForm":
       return EnterEmail;
-    case "linkSentByEmail":
+    case "emailLink.showEmailSent":
       return Message;
-    case "enterEmailVerificationCode":
+    case "emailCode.showForm":
       return EnterEmail;
-    case "verificationCodeSentByEmail":
+    case "emailCode.showCodeForm":
       return EnterVerificationCode;
-    case "enterPhoneVerificationCode":
+    case "smsCode.showForm":
       return EnterPhone;
-    case "verificationCodeSentBySms":
+    case "smsCode.showCodeForm":
       return EnterVerificationCode;
-    case "signUpWithPassword":
+    case "password.showForm":
       return SignUpWithPassword;
     case "signUpSuccess":
       return Message;
     case "selectSecondFactor":
       return SelectFactor;
-    case "setUpTotp":
+    case "setUpTotp.showQrCode":
       return SetUpTotp;
-    case "setUpTotpSuccess":
+    case "setUpTotp.showBackupCodes":
       return SetUpTotpSuccess;
-    case "waitForFlow":
+    case "showPlaceholderAndFetchFlow":
       return Placeholder;
+    default:
+      return () => {
+        return <div>NO COMPONENT</div>;
+      };
   }
 };
 
 const SignupForm = ({ state, onEvent }) => {
   const _onEvent = onEvent || ((evt) => log("event", evt));
   const text = textForStep(state.value);
-  const title = text.title;
+  const title = text?.title || "NO TITLE DEFINED";
   const Component = componentForStep(state.value);
+  const isSecondFactor = state.context.isSecondFactor;
 
   return (
     <div className="uf-tool uf-signup-tool">
       <h2 className="uf-title">{title}</h2>
-      <Component state={state} onEvent={_onEvent} />
+      <Component
+        state={state}
+        onEvent={_onEvent}
+        isSecondFactor={isSecondFactor}
+      />
       <div className="uf-secured-by">
         <SecuredByUserfront />
       </div>

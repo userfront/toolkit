@@ -5,7 +5,7 @@ const EnterEmail = ({ onEvent }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     onEvent({
-      type: "SUBMIT",
+      type: "submit",
       email: event.target.elements.email.value,
     });
   };

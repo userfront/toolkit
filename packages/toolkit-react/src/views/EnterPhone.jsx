@@ -5,7 +5,7 @@ const EnterPhone = ({ onEvent }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     onEvent({
-      type: "SUBMIT",
+      type: "submit",
       phoneNumber: event.target.elements.phoneNumber.value,
     });
   };

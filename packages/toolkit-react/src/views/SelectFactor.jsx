@@ -9,47 +9,46 @@ const keyFor = (factor) => `${factor.channel}-${factor.strategy}`;
 const eventNameFor = (factor) => {
   switch (factor.strategy) {
     case "link": {
-      return "SELECT_EMAIL_LINK";
+      return "selectEmailLink";
     }
     case "password": {
-      return "SELECT_PASSWORD";
+      return "selectPassword";
     }
     case "totp": {
-      return "SELECT_TOTP";
+      return "selectTotp";
     }
     case "verificationCode": {
       if (factor.channel === "sms") {
-        return "SELECT_SMS_CODE";
+        return "selectSmsCode";
       } else {
-        return "SELECT_EMAIL_CODE";
+        return "selectEmailCode";
       }
     }
     default: {
-      return "SELECT_SSO_PROVIDER";
+      return "selectSsoProvider";
     }
   }
 };
 
-const SelectFactor = ({ state, onEvent }) => {
+const SelectFactor = ({ state, onEvent, isSecondFactor = false }) => {
   const _onEvent = onEvent || ((evt) => log("event", evt));
-  const factors =
-    state.current === "selectSecondFactor"
-      ? state.context.flow.secondFactors
-      : state.context.flow.firstFactors;
-  const compact = !!state.context.compact;
+  const factors = isSecondFactor
+    ? state.context.config.flow.secondFactors
+    : state.context.config.flow.firstFactors;
+  const compact = !!state.context.config.compact;
   const displayItems = [];
 
   const handlePasswordSubmit = (event) => {
     _onEvent({
       ...event,
-      type: "SUBMIT",
+      type: "submit",
     });
   };
 
   const handleSelectFactor = (factor) => {
     _onEvent({
       factor,
-      type: eventNameFor(factor),
+      type: "selectFactor",
     });
   };
 

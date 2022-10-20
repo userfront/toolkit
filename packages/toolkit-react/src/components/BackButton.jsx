@@ -2,7 +2,7 @@ const BackButton = ({ onBack, onClick, ...props }) => {
   const handleClick = (evt) => {
     if (onBack) {
       onBack({
-        type: "BACK",
+        type: "back",
       });
     }
     if (onClick) {
