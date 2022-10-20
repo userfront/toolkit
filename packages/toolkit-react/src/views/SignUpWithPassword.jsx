@@ -7,7 +7,6 @@ import BackButton from "../components/BackButton";
 const SignUpWithPassword = ({ onEvent, allowBack }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(event);
     const elements = event.target.elements;
     if (onEvent) {
       onEvent({

@@ -39,7 +39,6 @@ const SelectFactor = ({
   isSecondFactor = false,
 }) => {
   const _onEvent = onEvent || ((evt) => log("event", evt));
-  console.log("flow", flow);
   const factors = isSecondFactor
     ? allowedSecondFactors || flow.secondFactors
     : flow.firstFactors;

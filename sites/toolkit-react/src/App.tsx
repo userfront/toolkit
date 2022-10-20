@@ -22,9 +22,8 @@ const childIdForStep = (stepName?: string) => {
 };
 
 function App() {
-  const [state, send, service] = useMachine(signupFormModel);
+  const [state, send] = useMachine(signupFormModel);
   console.log("state", state);
-  console.log("service", service);
 
   const handleEvent = (event: any) => {
     console.log("event", event);

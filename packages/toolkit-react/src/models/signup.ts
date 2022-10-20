@@ -235,7 +235,6 @@ const _mockSuccess = {
 };
 
 const callMethod = (method: string, args?: any) => {
-  console.log(`callMethod ${method}`, args);
   if (method === "signup") {
     switch (args.method) {
       case "password":
@@ -729,7 +728,6 @@ const setErrorForPasswordMismatch = (context: SignupContext<Password>) =>
 
 // Disable back actions
 const disableBack = (context: SignupContext<View>) => {
-  console.log("disabling back!");
   return assign({
     allowBack: false,
   });
@@ -737,7 +735,6 @@ const disableBack = (context: SignupContext<View>) => {
 
 // Enable back actions
 const enableBack = (context: SignupContext<View>) => {
-  console.log("enabling back!");
   return assign({
     allowBack: true,
   });
@@ -967,13 +964,7 @@ const emailLinkConfig: SignupMachineConfig = {
           target: "send",
         },
         // When the user presses the back button, go back to the prior (first, second) factor selection view
-        back: {
-          actions: [
-            () => console.log("hi"),
-            // sendParent("backToFactors")
-          ],
-          target: "#backToFactors",
-        },
+        back: "#backToFactors",
       },
     },
     // Request to send the email link to the given email,

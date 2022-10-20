@@ -51,7 +51,6 @@ const componentForStep = (state) => {
   } else {
     typeString = type;
   }
-  console.log("typeString", typeString);
   switch (typeString) {
     // While flow is being set up, show placeholder or preview as appropriate
     // TODO might need to tweak a little for placeholder vs preview? Not super important.
