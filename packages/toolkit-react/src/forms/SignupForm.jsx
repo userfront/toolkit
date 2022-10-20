@@ -6,35 +6,13 @@ import SetUpTotp from "../views/SetUpTotp";
 import SetUpTotpSuccess from "../views/SetUpTotpSuccess";
 import SignUpWithPassword from "../views/SignUpWithPassword";
 import SecuredByUserfront from "../components/SecuredByUserfront";
+import Message from "../views/Message";
+import GeneralErrorMessage from "../views/GeneralErrorMessage";
+import TotpErrorMessage from "../views/TotpErrorMessage";
+import Success from "../views/Success";
+import EmailLinkSent from "../views/EmailLinkSent";
+import Placeholder from "../views/Placeholder";
 import { log } from "../services/logging";
-
-const Message = ({ message }) => {
-  return <p>{message}</p>;
-};
-
-const Placeholder = () => {
-  return <div className="uf-placeholder">...</div>;
-};
-
-const EmailLinkSent = () => {
-  return <div>TODO check your email</div>;
-};
-
-const Success = () => {
-  return <div>TODO generic success message + redirect link</div>;
-};
-
-const TotpErrorMessage = () => {
-  return (
-    <div>
-      TODO error message + back + retry buttons if we can't fetch QR code
-    </div>
-  );
-};
-
-const GeneralErrorMessage = () => {
-  return <div>TODO try again later + error code</div>;
-};
 
 // Map a state node to component, title, and props
 const componentForStep = (state) => {
