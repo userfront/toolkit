@@ -1,0 +1,270 @@
+import { assign, send } from "xstate";
+import {
+  UserfrontApiErrorEvent,
+  SignupContext,
+  Password,
+  View,
+  SelectFactorEvent,
+  CommonFormData,
+  EmailSubmitEvent,
+  EmailCodeContext,
+  SmsCodeContext,
+  CodeSubmitEvent,
+  PasswordContext,
+  PasswordSubmitEvent,
+  PhoneNumberSubmitEvent,
+  SetUpTotpContext,
+  UserfrontApiFetchQrCodeEvent,
+  TotpCodeSubmitEvent,
+  UserfrontApiFactorResponseEvent,
+  UserfrontApiGetTenantIdEvent,
+  UserfrontApiFetchFlowEvent,
+} from "./types";
+import { getTargetForFactor, signupFactors, hasValue } from "./utils";
+
+// Clear the current error message, if any
+export const clearError = assign({ error: undefined });
+
+// Set the error message from a Userfront API error
+export const setErrorFromApiError = assign({
+  errorMessage: (context, event: UserfrontApiErrorEvent) => event.data,
+});
+
+// Create & set the error message for a password mismatch (password !== confirmPassword)
+export const setErrorForPasswordMismatch = (context: SignupContext<Password>) =>
+  assign({
+    // TODO extract string
+    error: {
+      statusCode: 0,
+      message: "PASSWORD MISMATCH",
+      error: {
+        type: "password_mismatch_error",
+      },
+    },
+  });
+
+// Disable back actions
+export const disableBack = (context: SignupContext<View>) => {
+  return assign({
+    allowBack: false,
+  });
+};
+
+// Enable back actions
+export const enableBack = (context: SignupContext<View>) => {
+  return assign({
+    allowBack: true,
+  });
+};
+
+// Set up the view for the selected factor
+export const setupView = (
+  context: SignupContext<View>,
+  event: SelectFactorEvent
+) => {
+  const target = getTargetForFactor(event.factor) as keyof typeof signupFactors;
+
+  // If we're not on a factor, we must be on factor selection,
+  // which extends the Password context
+
+  if (!target) {
+    return assign({
+      view: {
+        password: "",
+      },
+    });
+  }
+  if (signupFactors[target]) {
+    const factorView = signupFactors[target].viewContext;
+    return assign({
+      view: factorView,
+    });
+  }
+  // We're on an unrecognized factor, so can't set anything except the base view
+  return assign({
+    view: {} as CommonFormData,
+  });
+};
+
+// Store the user's email (and possibly name and username too)
+export const setEmail = assign({
+  user: (context, event: EmailSubmitEvent) => ({
+    email: event.email,
+    name: event.name,
+    username: event.username,
+  }),
+});
+
+// Store the verification code so we can send it
+export const setCode = assign(
+  (
+    context: Pick<EmailCodeContext | SmsCodeContext, "view">,
+    event: CodeSubmitEvent
+  ) => ({
+    view: {
+      ...context.view,
+      code: event.code,
+    },
+  })
+);
+
+// Store the user's password (and at least one of email, name, username) so we can send it
+export const setPassword = assign(
+  (context: PasswordContext, event: PasswordSubmitEvent) => ({
+    user: {
+      email: event.email,
+      name: event.name,
+      username: event.username,
+    },
+    view: {
+      ...context.view,
+      password: event.password,
+    },
+  })
+);
+
+// Store the user's phone number so we can send it
+export const setPhoneNumber = assign(
+  (context: SmsCodeContext, event: PhoneNumberSubmitEvent) => ({
+    view: {
+      ...context.view,
+      phoneNumber: event.phoneNumber,
+    },
+  })
+);
+
+// Store the TOTP setup QR code we received from the server, so we can display it
+export const setQrCode = assign(
+  (context: SetUpTotpContext, event: UserfrontApiFetchQrCodeEvent) => ({
+    view: {
+      ...context.view,
+      qrCode: event.data.qrCode,
+      backupCodes: event.data.backupCodes,
+    },
+  })
+);
+
+// Store the TOTP code the user entered, so we can send it
+export const setTotpCode = assign(
+  (context: SetUpTotpContext, event: TotpCodeSubmitEvent) => ({
+    view: {
+      ...context.view,
+      totpCode: event.totpCode,
+    },
+  })
+);
+
+export const storeFactorResponse = assign(
+  (context: SetUpTotpContext, event: UserfrontApiFactorResponseEvent) => ({
+    view: {
+      ...context.view,
+      isMfaRequired: event.data.isMfaRequired,
+      allowedSecondFactors: event.data.authentication?.secondFactors || [],
+    },
+  })
+);
+
+// Store the allowed second factors, from the response to a successful first factor login.
+// allowedSecondFactors is not necessarily identical to config.flow.secondFactors, because
+// the user could have specific second factors set.
+export const setAllowedSecondFactors = assign(
+  (context: SignupContext<any>, event: UserfrontApiFactorResponseEvent) => ({
+    allowedSecondFactors: event.data.authentication.secondFactors,
+  })
+);
+
+// Same as above, but set from context.view instead of event.data
+// for views that don't proceed directly from the API request to
+// the second factor selection
+export const setAllowedSecondFactorsFromView = assign(
+  (context: SetUpTotpContext) => ({
+    allowedSecondFactors: context.view.allowedSecondFactors,
+  })
+);
+
+// Mark that the form should be showing & working with second factors
+export const markAsSecondFactor = assign({
+  isSecondFactor: true,
+});
+
+// Redirect to the afterLoginPath etc. after signed in, just an alias for the Userfront API method
+export const redirectIfSignedIn = () => {
+  // TODO implementation
+  console.log("redirectIfSignedIn");
+};
+
+// Set the tenantId based on what was returned from the Userfront API, or set isDevMode = true if
+// there is no tenantId set in the local Userfront SDK instance
+export const setTenantIdOrDevMode = (
+  context: SignupContext<any>,
+  event: UserfrontApiGetTenantIdEvent
+) => {
+  if (hasValue(event.data.tenantId)) {
+    return assign({
+      config: {
+        ...context.config,
+        tenantId: event.data.tenantId,
+      },
+    });
+  } else {
+    return assign({
+      config: {
+        ...context.config,
+        devMode: true,
+      },
+    });
+  }
+};
+
+// Set the auth flow based on what was returned from the Userfront API
+export const setFlowFromUserfrontApi = (
+  context: SignupContext<any>,
+  event: UserfrontApiFetchFlowEvent
+) =>
+  assign({
+    config: {
+      ...context.config,
+      flow: event.data,
+    },
+  });
+
+// Once we've gotten the auth flow from the Userfront server,
+// if we're in preview mode we need to set the auth flow in the context
+// and then, if the user had already clicked a factor button, continue
+// the flow if that factor is still available.
+export const setFlowFromUserfrontApiAndResume = (
+  context: SignupContext<any>,
+  event: UserfrontApiFetchFlowEvent
+) => {
+  const actionList = [];
+  actionList.push(
+    assign({
+      config: {
+        ...context.config,
+        flow: event.data,
+      },
+    })
+  );
+  // TODO could be no active factor (user clicked nothing)
+  // TODO could be a factor not available in the server flow
+  const target = getTargetForFactor(context.activeFactor!);
+  actionList.push(send(target));
+  return actionList;
+};
+
+// Set the active factor, the factor that we're currently viewing.
+// This is really just for the specific case when we're in "preview mode"
+// (a local auth flow was provided, and we were told to fetch the flow from the server)
+// and the user clicks a factor.
+
+// The factor that we're currently viewing is almost always dictated
+// by the state node we're in rather than context, this
+export const setActiveFactor = (
+  context: SignupContext<any>,
+  event: SelectFactorEvent
+) => ({
+  config: {
+    ...context.config,
+    activeFactor: event.factor,
+  },
+});
