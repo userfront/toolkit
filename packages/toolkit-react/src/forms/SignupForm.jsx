@@ -337,6 +337,11 @@ const SignupForm = ({ state, onEvent }) => {
   const _onEvent = onEvent || ((evt) => log("event", evt));
   const { Component, props, title } = componentForStep(state);
   const isSecondFactor = state.context.isSecondFactor;
+  const defaultProps = {
+    allowBack: state.context.view.allowBack,
+    isSecondFactor: state.context.isSecondFactor,
+    error: state.context.error,
+  };
 
   return (
     <div className="uf-tool uf-signup-tool">
@@ -344,6 +349,7 @@ const SignupForm = ({ state, onEvent }) => {
       <Component
         onEvent={_onEvent}
         isSecondFactor={isSecondFactor}
+        {...defaultProps}
         {...props}
       />
       <div className="uf-secured-by">

@@ -1,5 +1,90 @@
 import { createMachine, assign, send, sendParent, MachineConfig } from "xstate";
 
+// CONSTANTS
+
+// List of all possible factors with:
+// channel, strategy
+// name = name of their node in the state machine
+// testIs = predicate that returns true if another factor is equivalent to this one
+// testOnlyFirst = predicate that returns true if this is the only first factor
+// testOnlySecond = predicate that returns true if this is the only second factor
+const signupFactors = {
+  emailLink: {
+    channel: "email",
+    strategy: "link",
+    name: "emailLink",
+    testIs: "isEmailLink",
+    testOnlyFirst: "hasOnlyEmailLinkFirstFactor",
+    testOnlySecond: "hasOnlyEmailLinkSecondFactor",
+    viewContext: {
+      type: "emailLink",
+    },
+  },
+  emailCode: {
+    channel: "email",
+    strategy: "verificationCode",
+    name: "emailCode",
+    testIs: "isEmailCode",
+    testOnlyFirst: "hasOnlyEmailCodeFirstFactor",
+    testOnlySecond: "hasOnlyEmailCodeSecondFactor",
+    viewContext: {
+      type: "emailCode",
+      code: "",
+    },
+  },
+  smsCode: {
+    channel: "sms",
+    strategy: "verificationCode",
+    name: "smsCode",
+    testIs: "isSmsCode",
+    testOnlyFirst: "hasOnlySmsCodeFirstFactor",
+    testOnlySecond: "hasOnlySmsCodeSecondFactor",
+    viewContext: {
+      type: "smsCode",
+      phoneNumber: "",
+      code: "",
+    },
+  },
+  password: {
+    channel: "email",
+    strategy: "password",
+    name: "password",
+    testIs: "isPassword",
+    testOnlyFirst: "hasOnlyPasswordFirstFactor",
+    testOnlySecond: "hasOnlyPasswordSecondFactor",
+    viewContext: {
+      type: "password",
+      password: "",
+    },
+  },
+  totp: {
+    channel: "authenticator",
+    strategy: "totp",
+    name: "setUpTotp",
+    testIs: "isTotp",
+    testOnlyFirst: "hasOnlyTotpFirstFactor",
+    testOnlySecond: "hasOnlyTotpSecondFactor",
+    viewContext: {
+      type: "setUpTotp",
+      qrCode: "",
+      totpCode: "",
+      totpBackupCodes: [],
+      isMfaRequired: false,
+      allowedSecondFactors: [],
+    },
+  },
+  ssoProvider: {
+    channel: "email",
+    // No strategy, since this represents several different strategies
+    strategy: "",
+    name: "ssoProvider",
+    testIs: "isSsoProvider",
+    testOnlyFirst: "hasOnlySsoProviderFirstFactor",
+    testOnlySecond: "hasOnlySsoProviderSecondFactor",
+    viewContext: {},
+  },
+};
+
 // UTILITY FUNCTIONS
 
 // Create a guard/predicate that checks if the given factor
@@ -35,6 +120,23 @@ const hasValue = (str: any) => {
 // Check to see if two factors are equivalent.
 const matchFactor = (a: Factor, b: Factor) => {
   return a.channel === b.channel && a.strategy === b.strategy;
+};
+
+// Get the correct target string for the given factor
+const getTargetForFactor = (factor: Factor) => {
+  if (!factor) {
+    return "";
+  }
+  if (isSsoProvider(factor)) {
+    return "ssoProvider";
+  }
+  let target: keyof typeof signupFactors;
+  for (target in signupFactors) {
+    if (matchFactor(factor, signupFactors[target])) {
+      return target;
+    }
+  }
+  return "";
 };
 
 // Create an error object for the case where there's no auth flow
@@ -210,62 +312,6 @@ const callUserfrontApi = createMachine({
     },
   },
 });
-
-// List of all possible factors with:
-// channel, strategy
-// name = name of their node in the state machine
-// testIs = predicate that returns true if another factor is equivalent to this one
-// testOnlyFirst = predicate that returns true if this is the only first factor
-// testOnlySecond = predicate that returns true if this is the only second factor
-const signupFactors = {
-  emailLink: {
-    channel: "email",
-    strategy: "link",
-    name: "emailLink",
-    testIs: "isEmailLink",
-    testOnlyFirst: "hasOnlyEmailLinkFirstFactor",
-    testOnlySecond: "hasOnlyEmailLinkSecondFactor",
-  },
-  emailCode: {
-    channel: "email",
-    strategy: "verificationCode",
-    name: "emailCode",
-    testIs: "isEmailCode",
-    testOnlyFirst: "hasOnlyEmailCodeFirstFactor",
-    testOnlySecond: "hasOnlyEmailCodeSecondFactor",
-  },
-  smsCode: {
-    channel: "sms",
-    strategy: "verificationCode",
-    name: "smsCode",
-    testIs: "isSmsCode",
-    testOnlyFirst: "hasOnlySmsCodeFirstFactor",
-    testOnlySecond: "hasOnlySmsCodeSecondFactor",
-  },
-  password: {
-    channel: "email",
-    strategy: "password",
-    name: "password",
-    testIs: "isPassword",
-    testOnlyFirst: "hasOnlyPasswordFirstFactor",
-    testOnlySecond: "hasOnlyPasswordSecondFactor",
-  },
-  totp: {
-    channel: "authenticator",
-    strategy: "totp",
-    name: "setUpTotp",
-    testIs: "isTotp",
-    testOnlyFirst: "hasOnlyTotpFirstFactor",
-    testOnlySecond: "hasOnlyTotpSecondFactor",
-  },
-  ssoProvider: {
-    channel: "email",
-    name: "ssoProvider",
-    testIs: "isSsoProvider",
-    testOnlyFirst: "hasOnlySsoProviderFirstFactor",
-    testOnlySecond: "hasOnlySsoProviderSecondFactor",
-  },
-};
 
 // TYPES
 
@@ -678,6 +724,50 @@ const setErrorForPasswordMismatch = (context: SignupContext<Password>) =>
     },
   });
 
+// Disable back actions
+const disableBack = (context: SignupContext<View>) =>
+  assign({
+    view: {
+      ...context.view,
+      allowBack: false,
+    },
+  });
+
+// Enable back actions
+const enableBack = (context: SignupContext<View>) =>
+  assign({
+    view: {
+      ...context.view,
+      allowBack: false,
+    },
+  });
+
+// Set up the view for the selected factor
+const setupView = (context: SignupContext<View>, event: SelectFactorEvent) => {
+  const target = getTargetForFactor(event.factor) as keyof typeof signupFactors;
+  // If we're not on a factor, we must be on factor selection,
+  // which extends the Password context
+  if (!target) {
+    return assign({
+      view: {
+        type: "password",
+      },
+    });
+  }
+  if (signupFactors[target]) {
+    const view = signupFactors[target].viewContext;
+    return assign({
+      view,
+    });
+  }
+  // We're on an unrecognized factor
+  return assign({
+    view: {
+      type: "unknown",
+    },
+  });
+};
+
 // Store the user's email (and possibly name and username too)
 const setEmail = assign({
   user: (context, event: EmailSubmitEvent) => ({
@@ -751,7 +841,7 @@ const storeFactorResponse = assign(
     view: {
       ...context.view,
       isMfaRequired: event.data.isMfaRequired,
-      allowedSecondFactors: event.data.authentication.secondFactors,
+      allowedSecondFactors: event.data.authentication?.secondFactors || [],
     },
   })
 );
@@ -818,11 +908,6 @@ const setFlowFromUserfrontApi = (
     },
   });
 
-const getTargetForFactor = (factor: Factor) => {
-  // TODO fill this in
-  return "target";
-};
-
 // Once we've gotten the auth flow from the Userfront server,
 // if we're in preview mode we need to set the auth flow in the context
 // and then, if the user had already clicked a factor button, continue
@@ -870,6 +955,7 @@ const setActiveFactor = (
 const emailLinkConfig: SignupMachineConfig = {
   id: "emailLink",
   initial: "showForm",
+  entry: "setupView",
   states: {
     // Show the form to enter an email
     showForm: {
@@ -936,6 +1022,7 @@ const emailLinkConfig: SignupMachineConfig = {
 const emailCodeConfig: SignupMachineConfig = {
   id: "emailCode",
   initial: "showForm",
+  entry: "setupView",
   states: {
     // Show the form to enter an email address
     showForm: {
@@ -1047,6 +1134,7 @@ const emailCodeConfig: SignupMachineConfig = {
 const smsCodeConfig: SignupMachineConfig = {
   id: "smsCode",
   initial: "showForm",
+  entry: "setupView",
   states: {
     showForm: {
       on: {
@@ -1143,6 +1231,7 @@ const smsCodeConfig: SignupMachineConfig = {
 const passwordConfig: SignupMachineConfig = {
   id: "password",
   initial: "showForm",
+  entry: "setupView",
   states: {
     // Show the username, password, confirm password form
     showForm: {
@@ -1218,6 +1307,7 @@ const passwordConfig: SignupMachineConfig = {
 const setUpTotpConfig: SignupMachineConfig = {
   id: "setUpTotp",
   initial: "getQrCode",
+  entry: "setupView",
   states: {
     // First we need to get the QR code from the Userfront API,
     // so we can show it
@@ -1316,6 +1406,7 @@ const selectFactorConfig: SignupMachineConfig = {
   // because the SelectFactor view could have the Password view inlined.
   id: "selectFactor",
   initial: "showForm",
+  entry: "setupView",
   states: {
     // Bring over the Password state nodes, and override the showForm
     // node to add SelectFactor events to it.
@@ -1496,6 +1587,10 @@ export const defaultSignupOptions = {
     markAsSecondFactor,
     setAllowedSecondFactors,
     setAllowedSecondFactorsFromView,
+    storeFactorResponse,
+    disableBack,
+    enableBack,
+    setupView,
   },
 };
 
@@ -1701,6 +1796,7 @@ const signupMachineConfig: SignupMachineConfig = {
     },
     // Start the flow
     beginFlow: {
+      entry: "setupView",
       always: [
         // If we're returning from authenticating via SSO, proceed to the second factor.
         {
@@ -1714,6 +1810,7 @@ const signupMachineConfig: SignupMachineConfig = {
         },
         // If there are multiple first factors, then show the factor selection view
         {
+          actions: "enableBack",
           target: "selectFirstFactor",
           cond: "hasMultipleFirstFactors",
         },
@@ -1725,6 +1822,7 @@ const signupMachineConfig: SignupMachineConfig = {
         },
         // If a factor other than SSO is the only first factor, proceed directly to its view.
         ...Object.values(signupFactors).map((factor) => ({
+          actions: "disableBack",
           target: factor.name,
           cond: factor.testOnlyFirst,
         })),
@@ -1734,22 +1832,27 @@ const signupMachineConfig: SignupMachineConfig = {
         // Duplicates, should never be reached.
         // Only here to help out the XCode visualizer.
         {
+          actions: "disableBack",
           target: "emailLink",
           cond: "hasOnlyEmailLinkFirstFactor",
         },
         {
+          actions: "disableBack",
           target: "emailCode",
           cond: "hasOnlyEmailCodeFirstFactor",
         },
         {
+          actions: "disableBack",
           target: "smsCode",
           cond: "hasOnlySmsCodeFirstFactor",
         },
         {
+          actions: "disableBack",
           target: "password",
           cond: "hasOnlyPasswordFirstFactor",
         },
         {
+          actions: "disableBack",
           target: "setUpTotp",
           cond: "hasOnlyTotpFirstFactor",
         },
@@ -1779,6 +1882,7 @@ const signupMachineConfig: SignupMachineConfig = {
     // Check to see if a second factor is needed, and if so, proceed to the appropriate view
     beginSecondFactor: {
       id: "beginSecondFactor",
+      entry: "setupView",
       always: [
         // If a second factor isn't needed, finish the flow.
         {
@@ -1788,6 +1892,7 @@ const signupMachineConfig: SignupMachineConfig = {
         // These are identical to the first factor cases:
         // If there's multiple possible second factors, proceed to factor selection
         {
+          actions: "enableBack",
           target: "selectSecondFactor",
           cond: "hasMultipleSecondFactors",
         },
@@ -1798,6 +1903,7 @@ const signupMachineConfig: SignupMachineConfig = {
         },
         // Otherwise, if there's only one second factor, show that factor's view
         ...Object.values(signupFactors).map((factor) => ({
+          actions: "disableBack",
           target: factor.name,
           cond: factor.testOnlySecond,
         })),
@@ -1805,22 +1911,27 @@ const signupMachineConfig: SignupMachineConfig = {
         // Duplicates, should never be reached.
         // Only here to help out the XCode visualizer.
         {
+          actions: "disableBack",
           target: "emailLink",
           cond: "hasOnlyEmailLinkSecondFactor",
         },
         {
+          actions: "disableBack",
           target: "emailCode",
           cond: "hasOnlyEmailCodeSecondFactor",
         },
         {
+          actions: "disableBack",
           target: "smsCode",
           cond: "hasOnlySmsCodeSecondFactor",
         },
         {
+          actions: "disableBack",
           target: "password",
           cond: "hasOnlyPasswordSecondFactor",
         },
         {
+          actions: "disableBack",
           target: "setUpTotp",
           cond: "hasOnlyTotpSecondFactor",
         },

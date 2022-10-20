@@ -45,13 +45,6 @@ const SelectFactor = ({
     : flow.firstFactors;
   const displayItems = [];
 
-  const handlePasswordSubmit = (event) => {
-    _onEvent({
-      ...event,
-      type: "submit",
-    });
-  };
-
   const handleSelectFactor = (factor) => {
     _onEvent({
       factor,
@@ -88,7 +81,8 @@ const SelectFactor = ({
       displayItems.push(
         <SignUpWithPassword
           key={keyFor(factor)}
-          onSubmit={handlePasswordSubmit}
+          onEvent={_onEvent}
+          allowBack={false}
         />
       );
       if (i < factors.length - 1) {

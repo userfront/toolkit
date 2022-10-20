@@ -4,13 +4,14 @@ import BackButton from "../components/BackButton";
 // TODO: handle passwords not matching
 // TODO: handle empty fields
 
-const SignUpWithPassword = ({ onSubmit }) => {
+const SignUpWithPassword = ({ onEvent, allowBack }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(event);
     const elements = event.target.elements;
-    if (onSubmit) {
-      onSubmit({
+    if (onEvent) {
+      onEvent({
+        type: "submit",
         username: elements.username.value,
         email: elements.email.value,
         password: elements.password.value,
@@ -28,7 +29,7 @@ const SignUpWithPassword = ({ onSubmit }) => {
       <input type="password" name="password"></input>
       <label htmlFor="confirmPassword">Confirm your password</label>
       <input type="password" name="confirmPassword"></input>
-      <BackButton />
+      {allowBack && <BackButton onBack={onEvent} />}
       <SubmitButton />
     </form>
   );

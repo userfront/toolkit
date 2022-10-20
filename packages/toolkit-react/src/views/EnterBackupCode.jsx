@@ -1,7 +1,7 @@
 import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
 
-const EnterBackupCode = ({ onEvent }) => {
+const EnterBackupCode = ({ onEvent, allowBack }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
   };
@@ -10,7 +10,7 @@ const EnterBackupCode = ({ onEvent }) => {
     <form onSubmit={handleSubmit} className="uf-form">
       <label htmlFor="totpCode">Backup code</label>
       <input type="tel" name="totpCode" />
-      <BackButton />
+      {allowBack && <BackButton onBack={onEvent} />}
       <SubmitButton />
     </form>
   );

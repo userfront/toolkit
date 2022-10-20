@@ -2,7 +2,7 @@ import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
 import AlternativeButton from "../components/AlternativeButton";
 
-const EnterTotpCode = ({ onEvent }) => {
+const EnterTotpCode = ({ onEvent, allowBack }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     onEvent({
@@ -18,7 +18,7 @@ const EnterTotpCode = ({ onEvent }) => {
       </label>
       <input type="tel" name="totpCode" />
       <AlternativeButton>Use a backup code (TODO)</AlternativeButton>
-      <BackButton onBack={onEvent} />
+      {allowBack && <BackButton onBack={onEvent} />}
       <SubmitButton />
     </form>
   );

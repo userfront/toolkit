@@ -2,7 +2,7 @@ import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
 import AlternativeButton from "../components/AlternativeButton";
 
-const EnterTotpCode = ({ qrCode, onEvent }) => {
+const EnterTotpCode = ({ qrCode, onEvent, allowBack }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     onEvent({
@@ -18,7 +18,7 @@ const EnterTotpCode = ({ qrCode, onEvent }) => {
       <p>2. Enter the six-digit code from your authenticator app</p>
       <label htmlFor="totpCode">Six-digit code</label>
       <input type="tel" name="totpCode" />
-      <BackButton onBack={onEvent} />
+      {allowBack && <BackButton onBack={onEvent} />}
       <SubmitButton />
     </form>
   );
