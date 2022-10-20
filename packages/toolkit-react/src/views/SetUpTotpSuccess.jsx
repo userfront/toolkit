@@ -1,10 +1,10 @@
-import SubmitButton from "../components/SubmitButton";
+import ContinueButton from "../components/ContinueButton";
 
 const SetUpTotpSuccess = ({ backupCodes, onEvent }) => {
-  const handleSubmit = (event) => {
+  const handleContinue = (event) => {
     event.preventDefault();
     onEvent({
-      type: "submit",
+      type: "finish",
     });
   };
 
@@ -20,7 +20,7 @@ const SetUpTotpSuccess = ({ backupCodes, onEvent }) => {
           <li key={code}>{code}</li>
         ))}
       </ul>
-      <SubmitButton onClick={handleSubmit}>Finish</SubmitButton>
+      <ContinueButton onClick={handleContinue}>Finish</ContinueButton>
     </>
   );
 };

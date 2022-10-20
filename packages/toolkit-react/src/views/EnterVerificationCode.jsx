@@ -1,7 +1,7 @@
 import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
 
-const EnterVerificationCode = ({ state, onEvent }) => {
+const EnterVerificationCode = ({ onEvent }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     onEvent({
@@ -12,9 +12,7 @@ const EnterVerificationCode = ({ state, onEvent }) => {
 
   return (
     <form onSubmit={handleSubmit} className="uf-form">
-      <label htmlFor="verificationCode">
-        {state.event.label || "Enter code"}
-      </label>
+      <label htmlFor="verificationCode">"Enter your code"</label>
       <input type="tel" name="verificationCode" />
       <BackButton onBack={onEvent} />
       <SubmitButton />

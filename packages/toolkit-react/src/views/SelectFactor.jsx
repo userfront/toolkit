@@ -30,12 +30,19 @@ const eventNameFor = (factor) => {
   }
 };
 
-const SelectFactor = ({ state, onEvent, isSecondFactor = false }) => {
+const SelectFactor = ({
+  flow,
+  tenantId,
+  isCompact = false,
+  onEvent,
+  allowedSecondFactors,
+  isSecondFactor = false,
+}) => {
   const _onEvent = onEvent || ((evt) => log("event", evt));
+  console.log("flow", flow);
   const factors = isSecondFactor
-    ? state.context.config.flow.secondFactors
-    : state.context.config.flow.firstFactors;
-  const compact = !!state.context.config.compact;
+    ? allowedSecondFactors || flow.secondFactors
+    : flow.firstFactors;
   const displayItems = [];
 
   const handlePasswordSubmit = (event) => {
@@ -65,9 +72,7 @@ const SelectFactor = ({ state, onEvent, isSecondFactor = false }) => {
           key={keyFor(factor)}
         />
       );
-      continue;
-    }
-    if (compact) {
+    } else if (isCompact) {
       displayItems.push(
         <IconButton
           factor={factor}

@@ -14,6 +14,7 @@ const SignUpWithPassword = ({ onSubmit }) => {
         username: elements.username.value,
         email: elements.email.value,
         password: elements.password.value,
+        confirmPassword: elements.confirmPassword.value,
       });
     }
   };

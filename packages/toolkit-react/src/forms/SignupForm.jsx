@@ -16,68 +16,29 @@ const Placeholder = () => {
   return <div className="uf-placeholder">...</div>;
 };
 
-const textForStep = (type) => {
-  switch (type) {
-    case "selectFirstFactor":
-      return {
-        title: "Sign up",
-      };
-    case "useSsoProvider":
-      return {
-        title: "Redirecting...",
-      };
-    case "enterEmailLink":
-      return {
-        title: "Email me a link",
-      };
-    case "linkSentByEmail":
-      return {
-        title: "Check your email",
-      };
-    case "enterEmailVerificationCode":
-      return {
-        title: "Email me a code",
-      };
-    case "verificationCodeSentByEmail":
-      return {
-        title: "Enter your verification code",
-      };
-    case "enterPhoneVerificationCode":
-      return {
-        title: "Text me a code",
-      };
-    case "verificationCodeSentBySms":
-      return {
-        title: "Enter your verification code",
-      };
-    case "signUpWithPassword":
-      return {
-        title: "Sign up",
-      };
-    case "signUpSuccess":
-      return {
-        title: "Signed up!",
-      };
-    case "selectSecondFactor":
-      return {
-        title: "Set up two-factor authentication",
-      };
-    case "setUpTotp":
-      return {
-        title: "Set up two-factor authentication",
-      };
-    case "setUpTotpSuccess":
-      return {
-        title: "Save your backup codes",
-      };
-    case "waitForFlow":
-      return {
-        title: "Sign up",
-      };
-  }
+const EmailLinkSent = () => {
+  return <div>TODO check your email</div>;
 };
 
-const componentForStep = (type) => {
+const Success = () => {
+  return <div>TODO generic success message + redirect link</div>;
+};
+
+const TotpErrorMessage = () => {
+  return (
+    <div>
+      TODO error message + back + retry buttons if we can't fetch QR code
+    </div>
+  );
+};
+
+const GeneralErrorMessage = () => {
+  return <div>TODO try again later + error code</div>;
+};
+
+// Map a state node to component, title, and props
+const componentForStep = (state) => {
+  const type = state.value;
   let typeString = "";
   // Could be string or object of shape
   // {
@@ -92,35 +53,279 @@ const componentForStep = (type) => {
   }
   console.log("typeString", typeString);
   switch (typeString) {
+    // While flow is being set up, show placeholder or preview as appropriate
+    // TODO might need to tweak a little for placeholder vs preview? Not super important.
+    case "init":
+    case "getGlobalTenantId":
+    case "initFlow":
+    case "beginFlow":
     case "showPreviewAndFetchFlow":
-    case "selectFirstFactor":
-      return SelectFactor;
-    case "useSsoProvider":
-      return Message;
-    case "emailLink.showForm":
-      return EnterEmail;
-    case "emailLink.showEmailSent":
-      return Message;
-    case "emailCode.showForm":
-      return EnterEmail;
-    case "emailCode.showCodeForm":
-      return EnterVerificationCode;
-    case "smsCode.showForm":
-      return EnterPhone;
-    case "smsCode.showCodeForm":
-      return EnterVerificationCode;
-    case "password.showForm":
-      return SignUpWithPassword;
-    case "signUpSuccess":
-      return Message;
-    case "selectSecondFactor":
-      return SelectFactor;
-    case "setUpTotp.showQrCode":
-      return SetUpTotp;
-    case "setUpTotp.showBackupCodes":
-      return SetUpTotpSuccess;
     case "showPlaceholderAndFetchFlow":
-      return Placeholder;
+      return {
+        title: "Sign up",
+        Component: SelectFactor,
+        props: {
+          isPlaceholder: !!state.context.config.flow,
+          isCompact: state.context.config.compact,
+          loadingFactor: state.context.activeFactor,
+          flow: state.context.config.flow,
+          isSecondFactor: false,
+          tenantId: state.context.tenantId,
+        },
+      };
+
+    // SelectFactor flow, with password possibly included inline
+    case "selectFirstFactor.showForm":
+      return {
+        title: "Sign up",
+        Component: SelectFactor,
+        props: {
+          isCompact: state.context.config.compact,
+          flow: state.context.config.flow,
+          isSecondFactor: false,
+          tenantId: state.context.tenantId,
+        },
+      };
+    case "selectFirstFactor.send":
+      return {
+        title: "Sign up",
+        Component: SelectFactor,
+        props: {
+          // isCompact should always be false here
+          isCompact: state.context.config.compact,
+          flow: state.context.config.flow,
+          isSecondFactor: false,
+          tenantId: state.context.tenantId,
+          submittingPassword: true,
+        },
+      };
+
+    // SelectFactor flow for second factor,
+    // with password possibly inlined
+    case "beginSecondFactor":
+    case "selectSecondFactor.showForm":
+      return {
+        title: "Sign up",
+        Component: SelectFactor,
+        props: {
+          isCompact: state.context.config.compact,
+          flow: state.context.config.flow,
+          isSecondFactor: true,
+          allowedSecondFactors: state.context.allowedSecondFactors,
+          tenantId: state.context.tenantId,
+        },
+      };
+    case "selectSecondFactor.send":
+      return {
+        title: "Sign up",
+        Component: SelectFactor,
+        props: {
+          // isCompact should always be false here
+          isCompact: state.context.config.compact,
+          flow: state.context.config.flow,
+          isSecondFactor: true,
+          allowedSecondFactors: state.context.allowedSecondFactors,
+          tenantId: state.context.tenantId,
+          submittingPassword: true,
+        },
+      };
+
+    // SSO provider flow, shouldn't be reached
+    case "ssoProvider":
+      // We should have already redirected to the relevant SSO provider
+      return {
+        title: "Redirecting...",
+        Component: Message,
+        props: {
+          text: "",
+        },
+      };
+
+    // EmailLink flow
+    case "emailLink.showForm":
+      return {
+        title: "Email me a link",
+        Component: EnterEmail,
+        props: {
+          errorMessage: state.context.errorMessage,
+        },
+      };
+    case "emailLink.send":
+      return {
+        title: "Email me a link",
+        Component: EnterEmail,
+        props: {
+          isLoading: true,
+        },
+      };
+    case "emailLink.showEmailSent":
+      return {
+        title: "Check your email",
+        Component: EmailLinkSent,
+        props: {},
+      };
+
+    // EmailCode flow
+    case "emailCode.showForm":
+      return {
+        title: "Email me a code",
+        Component: EnterEmail,
+        props: {},
+      };
+    case "emailCode.send":
+      return {
+        title: "Email me a code",
+        Component: EnterEmail,
+        props: {
+          isLoading: true,
+        },
+      };
+    case "emailCode.showCodeForm":
+      return {
+        title: "Enter your verification code",
+        Component: EnterVerificationCode,
+        props: {},
+      };
+    case "emailCode.verifyCode":
+      return {
+        title: "Enter your verification code",
+        Component: EnterVerificationCode,
+        props: {
+          isLoading: true,
+        },
+      };
+    case "emailCode.showCodeVerified":
+      return {
+        title: "Verified",
+        Component: Success,
+        props: {},
+      };
+
+    // SmsCode flow
+    case "smsCode.showForm":
+      return {
+        title: "Text me a code",
+        Component: EnterPhone,
+        props: {},
+      };
+    case "smsCode.send":
+      return {
+        title: "Text me a code",
+        Component: EnterPhone,
+        props: {
+          isLoading: true,
+        },
+      };
+    case "smsCode.showCodeForm":
+      return {
+        title: "Enter your verification code",
+        Component: EnterVerificationCode,
+        props: {},
+      };
+    case "smsCode.verifyCode":
+      return {
+        title: "Enter your verification code",
+        Component: EnterVerificationCode,
+        props: {
+          isLoading: true,
+        },
+      };
+    case "smsCode.showCodeVerified":
+      return {
+        title: "Verified",
+        Component: Success,
+        props: {},
+      };
+
+    // Password flow (alone, not inline)
+    case "password.showForm":
+      return {
+        title: "Sign up",
+        Component: SignUpWithPassword,
+        props: {},
+      };
+    case "password.send":
+      return {
+        title: "Sign up",
+        Component: SignUpWithPassword,
+        props: {
+          isLoading: true,
+        },
+      };
+    case "password.showPasswordSet":
+      return {
+        title: "Successfully signed up",
+        Component: Success,
+      };
+
+    // SetUpTotp flow
+    case "setUpTotp.getQrCode":
+      return {
+        title: "Set up two-factor authentication",
+        Component: SetUpTotp,
+        props: {
+          isLoadingQrCode: true,
+        },
+      };
+    case "setUpTotp.showQrCode":
+      return {
+        title: "Set up two-factor authentication",
+        Component: SetUpTotp,
+        props: {
+          isLoading: true,
+        },
+      };
+    case "setUpTotp.confirmTotpCode":
+      return {
+        title: "Set up two-factor authentication",
+        Component: SetUpTotp,
+        props: {
+          isLoading: true,
+        },
+      };
+    case "setUpTotp.showBackupCodes":
+      return {
+        title: "Save your backup codes",
+        Component: SetUpTotpSuccess,
+        props: {
+          backupCodes: state.context.view.backupCodes || [],
+        },
+      };
+    case "setUpTotp.showTotpSetupComplete":
+      return {
+        title: "Successfully signed up",
+        Component: Success,
+        props: {},
+      };
+    // Show a standalone error message if we fail to fetch the QR code
+    case "setUpTotp.showErrorMessage":
+      return {
+        title: "Oops, something went wrong",
+        Component: TotpErrorMessage,
+        props: {},
+      };
+
+    // Top-level error messages
+    case "missingFlowInDevModeError":
+    case "missingFlowInLocalModeError":
+    case "missingFlowFromServerError":
+    case "UnhandledError":
+      return {
+        title: "Oops, something went wrong",
+        Component: GeneralErrorMessage,
+        props: {},
+      };
+
+    // Top-level "signed up" confirmation, in case we don't redirect
+    case "finish":
+      return {
+        title: "Successfully signed up",
+        Component: Success,
+        props: {},
+      };
+
+    // Shouldn't get here.
+    // TODO in prod this should be a GeneralErrorMessage
     default:
       return () => {
         return <div>NO COMPONENT</div>;
@@ -130,18 +335,16 @@ const componentForStep = (type) => {
 
 const SignupForm = ({ state, onEvent }) => {
   const _onEvent = onEvent || ((evt) => log("event", evt));
-  const text = textForStep(state.value);
-  const title = text?.title || "NO TITLE DEFINED";
-  const Component = componentForStep(state.value);
+  const { Component, props, title } = componentForStep(state);
   const isSecondFactor = state.context.isSecondFactor;
 
   return (
     <div className="uf-tool uf-signup-tool">
       <h2 className="uf-title">{title}</h2>
       <Component
-        state={state}
         onEvent={_onEvent}
         isSecondFactor={isSecondFactor}
+        {...props}
       />
       <div className="uf-secured-by">
         <SecuredByUserfront />

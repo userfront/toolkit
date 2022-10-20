@@ -125,9 +125,15 @@ const _mockSuccess = {
       ],
     },
   },
+  getTotpAuthenticatorQrCode: {
+    qrCode:
+      "https://en.wikipedia.org/wiki/QR_code#/media/File:QR_code_for_mobile_English_Wikipedia.svg",
+    backupCodes: ["backup1", "backup2", "backup3"],
+  },
 };
 
 const callMethod = (method: string, args?: any) => {
+  console.log(`callMethod ${method}`, args);
   if (method === "signup") {
     switch (args.method) {
       case "password":
@@ -354,6 +360,8 @@ interface SetUpTotp extends CommonFormData {
   qrCode: string;
   totpCode: string;
   totpBackupCodes: string[];
+  isMfaRequired: boolean;
+  allowedSecondFactors: Factor[];
 }
 
 interface Totp extends CommonFormData {
@@ -367,13 +375,14 @@ interface ResetPassword extends CommonFormData {
   type: "resetPassword";
 }
 
-interface FirstFactors extends CommonFormData {
-  type: "firstFactors";
+// Factor selection needs to extend Password because
+// the Password view could be inlined
+interface FirstFactors extends Password {
   compact: boolean;
 }
 
-interface SecondFactors extends CommonFormData {
-  type: "secondFactors";
+interface SecondFactors extends Password {
+  compact: boolean;
 }
 
 interface Message extends CommonFormData {
@@ -580,6 +589,13 @@ const secondFactorRequired = (
   return event.data.isMfaRequired;
 };
 
+// Same as above, but check against the view context,
+// for views that don't proceed directly from API call
+// to second factor selection
+const secondFactorRequiredFromView = (context: SetUpTotpContext) => {
+  return context.view.isMfaRequired;
+};
+
 // Do the "password" and "confirm password" fields match?
 // (One of the few validations done locally.)
 const passwordsMatch = (
@@ -730,6 +746,16 @@ const setTotpCode = assign(
   })
 );
 
+const storeFactorResponse = assign(
+  (context: SetUpTotpContext, event: UserfrontApiFactorResponseEvent) => ({
+    view: {
+      ...context.view,
+      isMfaRequired: event.data.isMfaRequired,
+      allowedSecondFactors: event.data.authentication.secondFactors,
+    },
+  })
+);
+
 // Store the allowed second factors, from the response to a successful first factor login.
 // allowedSecondFactors is not necessarily identical to config.flow.secondFactors, because
 // the user could have specific second factors set.
@@ -738,6 +764,13 @@ const setAllowedSecondFactors = assign(
     allowedSecondFactors: event.data.authentication.secondFactors,
   })
 );
+
+// Same as above, but set from context.view instead of event.data
+// for views that don't proceed directly from the API request to
+// the second factor selection
+const setAllowedSecondFactorsFromView = assign((context: SetUpTotpContext) => ({
+  allowedSecondFactors: context.view.allowedSecondFactors,
+}));
 
 // Mark that the form should be showing & working with second factors
 const markAsSecondFactor = assign({
@@ -1234,7 +1267,10 @@ const setUpTotpConfig: SignupMachineConfig = {
           },
         }),
         // When verified, show the backup codes so the user can record them
-        onDone: "showBackupCodes",
+        onDone: {
+          actions: "storeFactorResponse",
+          target: "showBackupCodes",
+        },
         // On error, show the error message and return to the form
         onError: {
           actions: "setErrorFromApiError",
@@ -1249,9 +1285,9 @@ const setUpTotpConfig: SignupMachineConfig = {
         // otherwise show a message and redirect
         finish: [
           {
-            actions: "setAllowedSecondFactors",
+            actions: "setAllowedSecondFactorsFromView",
             target: "#beginSecondFactor",
-            cond: "secondFactorRequired",
+            cond: "secondFactorRequiredFromView",
           },
           {
             actions: "redirectIfSignedIn",
@@ -1271,6 +1307,70 @@ const setUpTotpConfig: SignupMachineConfig = {
     // Show a confirmation screen, in case we don't redirect.
     showTotpSetupComplete: {
       type: "final",
+    },
+  },
+};
+
+const selectFactorConfig: SignupMachineConfig = {
+  // The SelectFactor config needs to extend the Password config,
+  // because the SelectFactor view could have the Password view inlined.
+  id: "selectFactor",
+  initial: "showForm",
+  states: {
+    // Bring over the Password state nodes, and override the showForm
+    // node to add SelectFactor events to it.
+    ...passwordConfig.states!,
+    showForm: {
+      on: {
+        // Bring over the Password events
+        ...passwordConfig.states!.showForm.on,
+        // When the user selects a factor, proceed to that factor's view.
+        selectFactor: [
+          ...Object.values(signupFactors).map((factor) => ({
+            target: `#${factor.name}`,
+            cond: factor.testIs,
+          })),
+          // This should be exhaustive; if we fall through to here without
+          // matching a factor, that means the user selected a factor we don't have a view for.
+
+          // Duplicates, should never be reached.
+          // Only here to help out the XCode visualizer.
+          {
+            target: "#emailLink",
+            cond: "isEmailLink",
+          },
+          {
+            target: "#emailCode",
+            cond: "isEmailCode",
+          },
+          {
+            target: "#smsCode",
+            cond: "isSmsCode",
+          },
+          {
+            target: "#password",
+            cond: "isPassword",
+          },
+          {
+            target: "#setUpTotp",
+            cond: "isTotp",
+          },
+          {
+            target: "#ssoProvider",
+            cond: "isSsoProvider",
+          },
+
+          // If we get here, it's an unhandled condition, show an error
+          {
+            target: "#unhandledError",
+          },
+        ],
+      },
+    },
+    // If we signed up with a password, no second factor is required, and
+    // we didn't redirect, show the top-level "finished" state
+    showPasswordSet: {
+      always: "#finish",
     },
   },
 };
@@ -1375,6 +1475,7 @@ export const defaultSignupOptions = {
     isReturningFromEmailLink,
     isReturningFromSsoFirstFactor,
     secondFactorRequired,
+    secondFactorRequiredFromView,
     secondFactorNotRequired,
   },
   actions: {
@@ -1393,6 +1494,8 @@ export const defaultSignupOptions = {
     clearError,
     setErrorForPasswordMismatch,
     markAsSecondFactor,
+    setAllowedSecondFactors,
+    setAllowedSecondFactorsFromView,
   },
 };
 
@@ -1659,51 +1762,7 @@ const signupMachineConfig: SignupMachineConfig = {
     },
     // Show the first factor selection view, non-compact
     // Parallel states for the Password view and the rest of the form
-    selectFirstFactor: {
-      on: {
-        // When the user selects a factor, proceed to that factor's view.
-        selectFactor: [
-          ...Object.values(signupFactors).map((factor) => ({
-            target: factor.name,
-            cond: factor.testIs,
-          })),
-          // This should be exhaustive; if we fall through to here without
-          // matching a factor, that means the user selected a factor we don't have a view for.
-
-          // Duplicates, should never be reached.
-          // Only here to help out the XCode visualizer.
-          {
-            target: "emailLink",
-            cond: "isEmailLink",
-          },
-          {
-            target: "emailCode",
-            cond: "isEmailCode",
-          },
-          {
-            target: "smsCode",
-            cond: "isSmsCode",
-          },
-          {
-            target: "password",
-            cond: "isPassword",
-          },
-          {
-            target: "setUpTotp",
-            cond: "isTotp",
-          },
-          {
-            target: "ssoProvider",
-            cond: "isSsoProvider",
-          },
-
-          // If we get here, it's an unhandled condition, show an error
-          {
-            target: "unhandledError",
-          },
-        ],
-      },
-    },
+    selectFirstFactor: selectFactorConfig,
     // The various factors' nested machines
     emailLink: emailLinkConfig,
     emailCode: emailCodeConfig,
@@ -1775,51 +1834,13 @@ const signupMachineConfig: SignupMachineConfig = {
     selectSecondFactor: {
       // When we reach here, set isSecondFactor = true so the view knows to display second factors.
       entry: "markAsSecondFactor",
-      on: {
-        // When the user selects a factor, proceed to that factor's view
-        selectFactor: [
-          ...Object.values(signupFactors).map((factor) => ({
-            target: factor.name,
-            cond: factor.testIs,
-          })),
-
-          // Duplicates, should never be reached.
-          // Only here to help out the XCode visualizer.
-          {
-            target: "emailLink",
-            cond: "isEmailLink",
-          },
-          {
-            target: "emailCode",
-            cond: "isEmailCode",
-          },
-          {
-            target: "smsCode",
-            cond: "isSmsCode",
-          },
-          {
-            target: "password",
-            cond: "isPassword",
-          },
-          {
-            target: "setUpTotp",
-            cond: "isTotp",
-          },
-          {
-            target: "ssoProvider",
-            cond: "isSsoProvider",
-          },
-
-          // If we get here, it's an unhandled error
-          {
-            target: "unhandledError",
-          },
-        ],
-      },
+      // Otherwise this is identical to the selectFirstFactor node
+      ...selectFactorConfig,
     },
     // Finish the flow.
     // Redirect, or show a confirmation view.
     finish: {
+      id: "finish",
       entry: "redirectIfLoggedIn",
       type: "final",
     },
