@@ -10,7 +10,7 @@ const EnterBackupCode = ({ onEvent, allowBack }) => {
     <form onSubmit={handleSubmit} className="uf-form">
       <label htmlFor="totpCode">Backup code</label>
       <input type="tel" name="totpCode" />
-      {allowBack && <BackButton onBack={onEvent} />}
+      {allowBack && <BackButton onEvent={onEvent} />}
       <SubmitButton />
     </form>
   );

@@ -1,7 +1,8 @@
 import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
+import ErrorMessage from "../components/ErrorMessage";
 
-const EnterEmail = ({ onEvent, allowBack }) => {
+const EnterEmail = ({ onEvent, allowBack, error }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     onEvent({
@@ -14,7 +15,8 @@ const EnterEmail = ({ onEvent, allowBack }) => {
     <form onSubmit={handleSubmit} className="uf-form">
       <label htmlFor="email">Email address</label>
       <input type="email" name="email" />
-      {allowBack && <BackButton onBack={onEvent} />}
+      <ErrorMessage error={error} />
+      {allowBack && <BackButton onEvent={onEvent} />}
       <SubmitButton />
     </form>
   );

@@ -1,34 +1,10 @@
 import IconButton from "../components/IconButton";
 import SignUpWithPassword from "./SignUpWithPassword";
 import Divider from "../components/Divider";
+import ErrorMessage from "../components/ErrorMessage";
 import { log } from "../services/logging";
 
 const keyFor = (factor) => `${factor.channel}-${factor.strategy}`;
-
-// TODO this is not great, should get these from one place / should be typed
-const eventNameFor = (factor) => {
-  switch (factor.strategy) {
-    case "link": {
-      return "selectEmailLink";
-    }
-    case "password": {
-      return "selectPassword";
-    }
-    case "totp": {
-      return "selectTotp";
-    }
-    case "verificationCode": {
-      if (factor.channel === "sms") {
-        return "selectSmsCode";
-      } else {
-        return "selectEmailCode";
-      }
-    }
-    default: {
-      return "selectSsoProvider";
-    }
-  }
-};
 
 const SelectFactor = ({
   flow,
@@ -37,6 +13,7 @@ const SelectFactor = ({
   onEvent,
   allowedSecondFactors,
   isSecondFactor = false,
+  error,
 }) => {
   const _onEvent = onEvent || ((evt) => log("event", evt));
   const factors = isSecondFactor
@@ -90,7 +67,12 @@ const SelectFactor = ({
     }
   }
 
-  return <>{displayItems}</>;
+  return (
+    <>
+      {displayItems}
+      <ErrorMessage error={error} />
+    </>
+  );
 };
 
 export default SelectFactor;

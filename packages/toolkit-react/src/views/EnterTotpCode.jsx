@@ -2,7 +2,7 @@ import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
 import AlternativeButton from "../components/AlternativeButton";
 
-const EnterTotpCode = ({ onEvent, allowBack }) => {
+const EnterTotpCode = ({ onEvent, allowBack, error }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     onEvent({
@@ -17,8 +17,9 @@ const EnterTotpCode = ({ onEvent, allowBack }) => {
         Six-digit code from authenticator app or device
       </label>
       <input type="tel" name="totpCode" />
+      <ErrorMessage error={error} />
       <AlternativeButton>Use a backup code (TODO)</AlternativeButton>
-      {allowBack && <BackButton onBack={onEvent} />}
+      {allowBack && <BackButton onEvent={onEvent} />}
       <SubmitButton />
     </form>
   );

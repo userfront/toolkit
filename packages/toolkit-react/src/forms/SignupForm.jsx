@@ -312,23 +312,20 @@ const componentForStep = (state) => {
 
 const SignupForm = ({ state, onEvent }) => {
   const _onEvent = onEvent || ((evt) => log("event", evt));
+  // Get the view component, title text, and props corresponding to this state
   const { Component, props, title } = componentForStep(state);
-  const isSecondFactor = state.context.isSecondFactor;
+  // Construct the default props that are passed to all views
   const defaultProps = {
     allowBack: state.context.allowBack,
     isSecondFactor: state.context.isSecondFactor,
     error: state.context.error,
+    user: state.context.user,
   };
 
   return (
     <div className="uf-tool uf-signup-tool">
       <h2 className="uf-title">{title}</h2>
-      <Component
-        onEvent={_onEvent}
-        isSecondFactor={isSecondFactor}
-        {...defaultProps}
-        {...props}
-      />
+      <Component onEvent={_onEvent} {...defaultProps} {...props} />
       <div className="uf-secured-by">
         <SecuredByUserfront />
       </div>

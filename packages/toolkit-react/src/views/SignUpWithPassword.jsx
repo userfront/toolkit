@@ -1,10 +1,8 @@
 import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
+import ErrorMessage from "../components/ErrorMessage";
 
-// TODO: handle passwords not matching
-// TODO: handle empty fields
-
-const SignUpWithPassword = ({ onEvent, allowBack }) => {
+const SignUpWithPassword = ({ onEvent, allowBack, error }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const elements = event.target.elements;
@@ -28,7 +26,8 @@ const SignUpWithPassword = ({ onEvent, allowBack }) => {
       <input type="password" name="password"></input>
       <label htmlFor="confirmPassword">Confirm your password</label>
       <input type="password" name="confirmPassword"></input>
-      {allowBack && <BackButton onBack={onEvent} />}
+      <ErrorMessage error={error} />
+      {allowBack && <BackButton onEvent={onEvent} />}
       <SubmitButton />
     </form>
   );

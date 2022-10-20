@@ -1,7 +1,8 @@
 import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
+import ErrorMessage from "../components/ErrorMessage";
 
-const EnterPhone = ({ onEvent, allowBack }) => {
+const EnterPhone = ({ onEvent, allowBack, error }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     onEvent({
@@ -14,7 +15,8 @@ const EnterPhone = ({ onEvent, allowBack }) => {
     <form onSubmit={handleSubmit} className="uf-form">
       <label htmlFor="phoneNumber">Mobile phone number</label>
       <input type="tel" name="phoneNumber" />
-      {allowBack && <BackButton onBack={onEvent} />}
+      <ErrorMessage error={error} />
+      {allowBack && <BackButton onEvent={onEvent} />}
       <SubmitButton />
     </form>
   );

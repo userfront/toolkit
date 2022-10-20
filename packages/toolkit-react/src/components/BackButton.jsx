@@ -1,7 +1,7 @@
-const BackButton = ({ onBack, onClick, ...props }) => {
+const BackButton = ({ onEvent, onClick, ...props }) => {
   const handleClick = (evt) => {
-    if (onBack) {
-      onBack({
+    if (onEvent) {
+      onEvent({
         type: "back",
       });
     }
