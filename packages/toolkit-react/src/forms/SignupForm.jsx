@@ -338,7 +338,7 @@ const SignupForm = ({ state, onEvent }) => {
   const { Component, props, title } = componentForStep(state);
   const isSecondFactor = state.context.isSecondFactor;
   const defaultProps = {
-    allowBack: state.context.view.allowBack,
+    allowBack: state.context.allowBack,
     isSecondFactor: state.context.isSecondFactor,
     error: state.context.error,
   };

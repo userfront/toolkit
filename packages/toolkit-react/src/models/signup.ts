@@ -377,9 +377,7 @@ interface UserData {
 // TYPES FOR FACTORS
 
 // Data common to forms for all factors
-interface CommonFormData {
-  allowBack: boolean;
-}
+interface CommonFormData {}
 
 interface EmailLink extends CommonFormData {
   type: "emailLink";
@@ -471,6 +469,7 @@ interface SignupContext<ViewType> {
   isSecondFactor: boolean;
   activeFactor?: Factor;
   allowedSecondFactors?: Factor[];
+  allowBack: boolean;
 
   // Current error (if any)
   error?: Error;
@@ -642,6 +641,10 @@ const secondFactorRequiredFromView = (context: SetUpTotpContext) => {
   return context.view.isMfaRequired;
 };
 
+const isSecondFactor = (context: SignupContext<View>) => {
+  return context.isSecondFactor;
+};
+
 // Do the "password" and "confirm password" fields match?
 // (One of the few validations done locally.)
 const passwordsMatch = (
@@ -725,46 +728,44 @@ const setErrorForPasswordMismatch = (context: SignupContext<Password>) =>
   });
 
 // Disable back actions
-const disableBack = (context: SignupContext<View>) =>
-  assign({
-    view: {
-      ...context.view,
-      allowBack: false,
-    },
+const disableBack = (context: SignupContext<View>) => {
+  console.log("disabling back!");
+  return assign({
+    allowBack: false,
   });
+};
 
 // Enable back actions
-const enableBack = (context: SignupContext<View>) =>
-  assign({
-    view: {
-      ...context.view,
-      allowBack: false,
-    },
+const enableBack = (context: SignupContext<View>) => {
+  console.log("enabling back!");
+  return assign({
+    allowBack: true,
   });
+};
 
 // Set up the view for the selected factor
 const setupView = (context: SignupContext<View>, event: SelectFactorEvent) => {
   const target = getTargetForFactor(event.factor) as keyof typeof signupFactors;
+
   // If we're not on a factor, we must be on factor selection,
   // which extends the Password context
+
   if (!target) {
     return assign({
       view: {
-        type: "password",
+        password: "",
       },
     });
   }
   if (signupFactors[target]) {
-    const view = signupFactors[target].viewContext;
+    const factorView = signupFactors[target].viewContext;
     return assign({
-      view,
+      view: factorView,
     });
   }
-  // We're on an unrecognized factor
+  // We're on an unrecognized factor, so can't set anything except the base view
   return assign({
-    view: {
-      type: "unknown",
-    },
+    view: {} as CommonFormData,
   });
 };
 
@@ -966,7 +967,13 @@ const emailLinkConfig: SignupMachineConfig = {
           target: "send",
         },
         // When the user presses the back button, go back to the prior (first, second) factor selection view
-        back: "#backToFactors",
+        back: {
+          actions: [
+            () => console.log("hi"),
+            // sendParent("backToFactors")
+          ],
+          target: "#backToFactors",
+        },
       },
     },
     // Request to send the email link to the given email,
@@ -1406,7 +1413,7 @@ const selectFactorConfig: SignupMachineConfig = {
   // because the SelectFactor view could have the Password view inlined.
   id: "selectFactor",
   initial: "showForm",
-  entry: "setupView",
+  entry: ["setupView", "enableBack"],
   states: {
     // Bring over the Password state nodes, and override the showForm
     // node to add SelectFactor events to it.
@@ -1568,6 +1575,7 @@ export const defaultSignupOptions = {
     secondFactorRequired,
     secondFactorRequiredFromView,
     secondFactorNotRequired,
+    isSecondFactor,
   },
   actions: {
     setActiveFactor,
@@ -1627,11 +1635,9 @@ export const defaultSignupContext = {
     compact: false,
     locale: "en-US",
   },
-  view: {
-    type: "loading",
-    allowBack: false,
-  } as Loading,
+  view: {} as Loading,
   isSecondFactor: false,
+  allowBack: true,
 };
 
 // Signup machine top-level configuration
@@ -1645,11 +1651,17 @@ const signupMachineConfig: SignupMachineConfig = {
   initial: "init",
   states: {
     // Go back to the previous factor selection screen.
-    // History node.
-    // TODO this isn't working...
-    back: {
+    backToFactors: {
       id: "backToFactors",
-      type: "history",
+      always: [
+        {
+          target: "selectSecondFactor",
+          cond: "isSecondFactor",
+        },
+        {
+          target: "selectFirstFactor",
+        },
+      ],
     },
     // Start the form's loading process
     init: {
@@ -1892,18 +1904,19 @@ const signupMachineConfig: SignupMachineConfig = {
         // These are identical to the first factor cases:
         // If there's multiple possible second factors, proceed to factor selection
         {
-          actions: "enableBack",
+          actions: ["enableBack", "markAsSecondFactor"],
           target: "selectSecondFactor",
           cond: "hasMultipleSecondFactors",
         },
         // If there's only SSO providers as second factors (?!?), proceed to factor selection
         {
+          actions: "markAsSecondFactor",
           target: "selectSecondFactor",
           cond: "hasOnlySsoSecondFactor",
         },
         // Otherwise, if there's only one second factor, show that factor's view
         ...Object.values(signupFactors).map((factor) => ({
-          actions: "disableBack",
+          actions: ["disableBack", "markAsSecondFactor"],
           target: factor.name,
           cond: factor.testOnlySecond,
         })),
@@ -1911,27 +1924,27 @@ const signupMachineConfig: SignupMachineConfig = {
         // Duplicates, should never be reached.
         // Only here to help out the XCode visualizer.
         {
-          actions: "disableBack",
+          actions: ["disableBack", "markAsSecondFactor"],
           target: "emailLink",
           cond: "hasOnlyEmailLinkSecondFactor",
         },
         {
-          actions: "disableBack",
+          actions: ["disableBack", "markAsSecondFactor"],
           target: "emailCode",
           cond: "hasOnlyEmailCodeSecondFactor",
         },
         {
-          actions: "disableBack",
+          actions: ["disableBack", "markAsSecondFactor"],
           target: "smsCode",
           cond: "hasOnlySmsCodeSecondFactor",
         },
         {
-          actions: "disableBack",
+          actions: ["disableBack", "markAsSecondFactor"],
           target: "password",
           cond: "hasOnlyPasswordSecondFactor",
         },
         {
-          actions: "disableBack",
+          actions: ["disableBack", "markAsSecondFactor"],
           target: "setUpTotp",
           cond: "hasOnlyTotpSecondFactor",
         },
@@ -1942,12 +1955,7 @@ const signupMachineConfig: SignupMachineConfig = {
         },
       ],
     },
-    selectSecondFactor: {
-      // When we reach here, set isSecondFactor = true so the view knows to display second factors.
-      entry: "markAsSecondFactor",
-      // Otherwise this is identical to the selectFirstFactor node
-      ...selectFactorConfig,
-    },
+    selectSecondFactor: selectFactorConfig,
     // Finish the flow.
     // Redirect, or show a confirmation view.
     finish: {
@@ -1960,7 +1968,7 @@ const signupMachineConfig: SignupMachineConfig = {
 
 // Create a state machine for the signup flow
 const createSignupMachine = (
-  initialContext: SignupContext<any>,
+  initialContext: SignupContext<View>,
   options: any = {}
 ) => {
   const machine = createMachine(signupMachineConfig, {
