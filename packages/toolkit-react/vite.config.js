@@ -12,6 +12,9 @@ export default defineConfig({
     }),
   ],
   build: {
+    define: {
+      "import.meta.vitest": false,
+    },
     lib: {
       entry: resolve(__dirname, "src/index.js"),
       name: "ToolkitReact",
@@ -27,5 +30,8 @@ export default defineConfig({
         },
       },
     },
+  },
+  test: {
+    includeSource: ["src/**/*.{js,jsx,ts,tsx}"],
   },
 });

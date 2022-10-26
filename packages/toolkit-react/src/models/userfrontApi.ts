@@ -9,7 +9,7 @@ export type CallUserfrontApiContext = {
   method: string;
   args: object;
   isDevMode: boolean;
-  _devDataType: string;
+  _devDataType?: string;
   result: object;
   error: object;
 };
@@ -77,7 +77,7 @@ const _mockSuccess = {
   },
 };
 
-const callMethod = (method: string, args?: any) => {
+let callMethod = (method: string, args?: any) => {
   if (method === "signup") {
     switch (args.method) {
       case "password":
@@ -154,3 +154,77 @@ export const callUserfrontApi = createMachine({
     },
   },
 });
+
+/* UNIT TESTS */
+import { interpret } from "xstate";
+
+if (import.meta.vitest) {
+  const { describe, it, expect, vi, afterEach, beforeEach, afterAll } =
+    import.meta.vitest;
+  describe("models/userfrontApi.ts", () => {
+    let originalCallMethod = callMethod;
+    beforeEach(() => {
+      callMethod = vi
+        .fn()
+        .mockImplementation(() =>
+          Promise.reject("called method without specific mock implementation")
+        );
+    });
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+    afterAll(() => {
+      callMethod = originalCallMethod;
+    });
+
+    it("should short-circuit to successDev if the context is in dev mode", async () => {
+      const context = {
+        method: "method",
+        args: [],
+        isDevMode: true,
+        _devDataType: "test",
+        result: {},
+        error: {},
+      };
+      const expectedValue = "successDev";
+      const machine = callUserfrontApi.withContext(context);
+      return new Promise<void>((resolve, reject) => {
+        const service = interpret(machine).onTransition((state) => {
+          if (state.matches(expectedValue)) {
+            resolve();
+          }
+          if (state.matches("call")) {
+            reject();
+          }
+        });
+
+        service.start();
+      });
+    });
+    it("should call the method with the arguments if the context is not in dev mode", async () => {
+      (callMethod as any).mockImplementationOnce(() => Promise.resolve({}));
+      const context = {
+        method: "method",
+        args: [],
+        isDevMode: false,
+        _devDataType: "test",
+        result: {},
+        error: {},
+      };
+      const expectedValue = "call";
+      const machine = callUserfrontApi.withContext(context);
+      return new Promise<void>((resolve, reject) => {
+        const service = interpret(machine).onTransition((state) => {
+          if (state.matches(expectedValue)) {
+            resolve();
+          }
+          if (state.matches("successDev")) {
+            reject();
+          }
+        });
+
+        service.start();
+      });
+    });
+  });
+}

@@ -158,7 +158,7 @@ export interface SignupContext<ViewType> {
   allowBack: boolean;
 
   // Current error (if any)
-  error?: Error;
+  error?: FormError;
 }
 
 // Utility type aliases for each view's context

@@ -74,6 +74,8 @@ export const setupView = (
       },
     });
   }
+
+  // Set up the view for this factor
   if (signupFactors[target]) {
     const factorView = signupFactors[target].viewContext;
     return assign({
@@ -245,10 +247,11 @@ export const setFlowFromUserfrontApiAndResume = (
       },
     })
   );
-  // TODO could be no active factor (user clicked nothing)
   // TODO could be a factor not available in the server flow
-  const target = getTargetForFactor(context.activeFactor!);
-  actionList.push(send(target));
+  if (context.activeFactor) {
+    const target = getTargetForFactor(context.activeFactor);
+    actionList.push(send(target));
+  }
   return actionList;
 };
 
@@ -268,3 +271,88 @@ export const setActiveFactor = (
     activeFactor: event.factor,
   },
 });
+
+/* UNIT TESTS */
+import { Factor } from "./types";
+import { createSignupContextForFactor } from "../../test/utils";
+
+if (import.meta.vitest) {
+  const { describe, it, expect } = import.meta.vitest;
+  describe("models/actions.ts", () => {
+    describe("setupView", () => {
+      it("should set up the Password view context if no factor is given", () => {
+        const event = {
+          type: "selectFactor",
+          factor: {} as Factor,
+          isSecondFactor: false,
+        };
+        const expected = assign({
+          view: {
+            password: "",
+          },
+        });
+        const actual = setupView(
+          {} as SignupContext<any>,
+          event as SelectFactorEvent
+        );
+        expect(actual).toEqual(expected);
+      });
+      Object.entries(signupFactors).forEach(([key, factorData]) => {
+        it(`should set up the correct context for the ${key} factor`, () => {
+          const event = {
+            type: "selectFactor",
+            factor: {
+              channel: factorData.channel,
+              strategy: factorData.strategy,
+            },
+            isSecondFactor: false,
+          };
+          const expected = assign({
+            view: factorData.viewContext,
+          });
+          const actual = setupView(
+            {} as SignupContext<any>,
+            event as SelectFactorEvent
+          );
+          expect(actual).toEqual(expected);
+        });
+      });
+    });
+    describe("setTenantIdOrDevMode", () => {
+      it("should set the tenantId if one is available", () => {
+        const event = {
+          type: "done" as any,
+          data: {
+            tenantId: "demo1234",
+          },
+        };
+        const context = createSignupContextForFactor("password");
+        const expected = assign({
+          config: {
+            ...context.config,
+            tenantId: "demo1234",
+          },
+        });
+        const actual = setTenantIdOrDevMode(context, event);
+        expect(actual).toEqual(expected);
+      });
+      it("should set dev mode if no tenantId is available", () => {
+        const event = {
+          type: "done" as any,
+          data: {
+            tenantId: "",
+          },
+        };
+        const context = createSignupContextForFactor("password");
+        const expected = assign({
+          config: {
+            ...context.config,
+            devMode: true,
+          },
+        });
+        const actual = setTenantIdOrDevMode(context, event);
+        expect(actual).toEqual(expected);
+      });
+    });
+  });
+}
