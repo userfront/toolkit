@@ -312,6 +312,8 @@ const componentForStep = (state) => {
   }
 };
 
+// Some errors to use for testing instead of state.context.error
+// TODO remove before prod!
 const _error = {
   message: "This is a short error message.",
 };
