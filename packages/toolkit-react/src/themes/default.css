@@ -14,7 +14,9 @@
   --uf-toolkit-container-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 
   /* Box shadow of form, when hovered or active */
-  --uf-toolkit-container-active-box-shadow: var(--uf-container-box-shadow);
+  --uf-toolkit-container-active-box-shadow: var(
+    --uf-toolkit-container-box-shadow
+  );
 
   /* Border radius of the outer container */
   --uf-toolkit-container-border-radius: 4px;
@@ -60,22 +62,22 @@
   --uf-toolkit-primary-color: #5e72e4;
 
   /* Hovered and active version of the primary color */
-  --uf-toolkit-primary-color-active: #7e8ee9;
+  --uf-toolkit-primary-color-active: #465ee4;
 
   /* Focused version of the primary color */
-  --uf-toolkit-primary-color-focus: var(--uf-toolkit-primary-color-active);
+  --uf-toolkit-primary-color-focus: #374cc5;
 
   /* Disabled version of the primary color */
   --uf-toolkit-primary-color-disabled: #9da8e4;
 
   /* Text color to use on primary color backdrop */
-  --uf-toolkit-primary-color-text: #f8f9fa;
+  --uf-toolkit-primary-color-text: #ffffff;
 
   /* Secondary color, for secondary button background */
   --uf-toolkit-secondary-color: #f8f9fa;
 
   /* Hovered and active version of the secondary color */
-  --uf-toolkit-secondary-color-active: #98b1e2;
+  --uf-toolkit-secondary-color-active: #f2f5fa;
 
   /* Focus version of the secondary color */
   --uf-toolkit-secondary-color-focus: var(--uf-toolkit-secondary-color-active);
@@ -84,13 +86,19 @@
   --uf-toolkit-secondary-color-disabled: #7a8291;
 
   /* Text color to use on secondary color backdrop */
-  --uf-toolkit-secondary-color-text: var(--uf-toolkit-text-color);
+  --uf-toolkit-secondary-color-text: #606266;
 
   /* Link color, for subtle buttons and links */
   --uf-toolkit-link-color: #5e72e4;
 
   /* Error color, for text related to errors */
-  --uf-toolkit-error-color: #f56c6c;
+  --uf-toolkit-error-color: #c71717;
+
+  /* Background color for error messages */
+  --uf-toolkit-error-background-color: #fae3e3;
+
+  /* Border color for error messages */
+  --uf-toolkit-error-border-color: #f7dcdc;
 
   /* Rounding for edges of buttons and inputs */
   --uf-toolkit-border-radius: 4px;
@@ -114,10 +122,10 @@
   --uf-toolkit-input-border: 1px solid #dcdfe6;
 
   /* Active and hovered input border style */
-  --uf-toolkit-input-border-active: 1px solid #c0c4cc;
+  --uf-toolkit-input-border-active: 1px solid #bcc1cf;
 
   /* Focused input border style */
-  --uf-toolkit-input-border-focus: 1px solid #5e72e4;
+  --uf-toolkit-input-border-focus: 2px solid #5e72e4;
 
   /* Input border in error state */
   --uf-toolkit-input-border-error: 1px solid var(--uf-toolkit-error-color);
@@ -132,7 +140,7 @@
   --uf-toolkit-label-text-color-error: var(--uf-toolkit-error-color);
 
   /* Label size */
-  --uf-toolkit-label-font-size: 0.75em;
+  --uf-toolkit-label-font-size: 0.8em;
 
   /* Spacing between input and label */
   --uf-toolkit-label-spacing: 0.5em;
@@ -156,7 +164,7 @@
   --uf-toolkit-button-height: 2em;
 
   /* Primary and secondary button padding */
-  --uf-toolkit-button-padding: 0.8em;
+  --uf-toolkit-button-padding: 0.5em;
 
   /* Button icon size - icons are always square */
   --uf-toolkit-button-icon-size: 2em;
@@ -168,10 +176,10 @@
   --uf-toolkit-label-alignment: left;
 
   /* Secured by Userfront font size */
-  --uf-toolkit-secured-font-size: 0.75em;
+  --uf-toolkit-secured-font-size: 1em;
 
   /* Secured by Userfront font color */
-  --uf-toolkit-secured-font-color: var(--uf-toolkit-text-color);
+  --uf-toolkit-secured-font-color: #666;
 
   /* Primary button border */
   --uf-toolkit-primary-button-border: none;
@@ -180,18 +188,23 @@
   --uf-toolkit-primary-button-border-active: none;
 
   /* Focused primary button border */
-  --uf-toolkit-primary-button-border-focus: 1px solid #5e72e4;
+  --uf-toolkit-primary-button-border-focus: 3px solid #13a0ff;
+
+  /* Box shadow for primary button when hovered, active, focused */
+  --uf-toolkit-primary-button-box-shadow-active: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 
   /* Secondary button border */
-  --uf-toolkit-secondary-button-border: 1px solid
-    var(--uf-toolkit-primary-color);
+  --uf-toolkit-secondary-button-border: 1px solid #cbceda;
 
   /* Hovered or active secondary button border */
-  --uf-toolkit-secondary-button-border-active: 1px solid
-    var(--uf-toolkit-primary-color);
+  --uf-toolkit-secondary-button-border-active: 1px solid #bcc1cf;
 
   /* Focused secondary button border */
-  --uf-toolkit-secondary-button-border-focus: 1px solid #5e72e4;
+  --uf-toolkit-secondary-button-border-focus: 2px solid #5e72e4;
+
+  /* Box shadow for secondary button when hovered, active, focused */
+  --uf-toolkit-secondary-button-box-shadow-active: 0 2px 8px 0
+    rgba(0, 0, 0, 0.03);
 }
 
 /* Actual styles for container (separate from variable declarations for clarity and consistency) */
@@ -225,6 +238,7 @@
 /* Title text */
 .uf-toolkit-container h2 {
   font-size: var(--uf-toolkit-title-font-size);
+  margin-top: 0;
 }
 
 /* Form layout */
@@ -289,7 +303,7 @@
 
 .uf-toolkit-container input.uf-toolkit-input:focus {
   background-color: var(--uf-toolkit-input-background-color-active);
-  border: var(--uf-toolkit-input-border-focus);
+  outline: var(--uf-toolkit-input-border-focus);
 }
 
 .uf-toolkit-container input.uf-toolkit-input.uf-toolkit-has-error {
@@ -324,11 +338,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  will-change: border, background-color, box-shadow;
+  transition: border, color, background-color, box-shadow 0.1s ease-out;
+}
+
+.uf-toolkit-button:hover,
+.uf-toolkit-button:active {
+  transform: scale(1.005);
 }
 
 .uf-toolkit-button .uf-toolkit-button-icon {
   width: var(--uf-toolkit-button-icon-size) !important;
   height: var(--uf-toolkit-button-icon-size) !important;
+  color: var(--uf-toolkit-text-color);
 }
 
 .uf-toolkit-button .uf-toolkit-icon-button-content {
@@ -353,17 +376,21 @@
   border: var(--uf-toolkit-button-border);
   border-radius: var(--uf-toolkit-border-radius);
   cursor: pointer;
+  line-height: 2;
+  font-weight: 500;
 }
 
 .uf-toolkit-container .uf-toolkit-button-primary:hover,
 .uf-toolkit-container .uf-toolkit-button-primary:active {
   background-color: var(--uf-toolkit-primary-color-active);
   border: var(--uf-toolkit-primary-button-border-active);
+  box-shadow: var(--uf-toolkit-primary-button-box-shadow-active);
 }
 
 .uf-toolkit-container .uf-toolkit-button-primary:focus {
   background-color: var(--uf-toolkit-primary-color-focus);
-  border: var(--uf-toolkit-primary-button-border-focus);
+  outline: var(--uf-toolkit-primary-button-border-focus);
+  box-shadow: var(--uf-toolkit-primary-button-box-shadow-active);
 }
 
 /* Secondary button */
@@ -379,11 +406,13 @@
 .uf-toolkit-container .uf-toolkit-button-secondary:active {
   background-color: var(--uf-toolkit-secondary-color-active);
   border: var(--uf-toolkit-secondary-button-border-active);
+  box-shadow: var(--uf-toolkit-secondary-button-box-shadow-active);
 }
 
 .uf-toolkit-container .uf-toolkit-button-secondary:focus {
   background-color: var(--uf-toolkit-secondary-color-focus);
-  border: var(--uf-toolkit-secondary-button-border-focus);
+  outline: var(--uf-toolkit-secondary-button-border-focus);
+  box-shadow: var(--uf-toolkit-secondary-button-box-shadow-active);
 }
 
 /* Subtle button */
@@ -394,14 +423,28 @@
   cursor: pointer;
 }
 
-/* Secured by Userfront */
-.uf-toolkit-container .uf-secured {
-  color: var(--uf-toolkit-secured-font-color);
-  font-size: var(--uf-toolkit-secured-font-size);
+.uf-toolkit-container .uf-toolkit-button-subtle:focus {
+  font-weight: bold;
 }
 
-.uf-toolkit-container .uf-secured .uf-secured-icon {
-  font-size: calc(var(--uf-toolkit-secured-font-size) * 1.1);
+/* Secured by Userfront */
+.uf-toolkit-container .uf-toolkit-secured,
+.uf-toolkit-container .uf-toolkit-secured:visited {
+  color: var(--uf-toolkit-secured-font-color);
+  font-size: var(--uf-toolkit-secured-font-size);
+  margin-right: var(--uf-toolkit-spacing);
+  text-decoration: none;
+}
+
+.uf-toolkit-container .uf-toolkit-secured .uf-toolkit-secured-icon {
+  /* Hard-coded to 18px to preserve sharpness of the image. */
+  width: 18px;
+  height: 18px;
+  margin-right: 0.3em;
+  vertical-align: top;
+
+  /* Adjust the image to the correct shade of gray */
+  filter: contrast(20%);
 }
 
 /* Dividers */
@@ -431,4 +474,28 @@
   flex: 0 0 auto;
   margin: 0 1em 0 1em;
   line-height: 1em;
+}
+
+/* Error message */
+
+.uf-toolkit-error {
+  min-height: calc(var(--uf-toolkit-spacing) * 2);
+  margin-bottom: var(--uf-toolkit-spacing);
+  border-radius: var(--uf-toolkit-border-radius);
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.uf-toolkit-error.uf-toolkit-has-error {
+  background-color: var(--uf-toolkit-error-background-color);
+  padding: calc(var(--uf-toolkit-spacing) / 2);
+  border: 1px solid var(--uf-toolkit-error-border-color);
+}
+
+.uf-toolkit-error .uf-toolkit-error-text {
+  color: var(--uf-toolkit-error-color);
+  display: block;
+  flex: 0 1 auto;
 }

@@ -10,7 +10,12 @@ const BackButton = ({ onEvent, onClick, ...props }) => {
     }
   };
   return (
-    <button type="button" {...props} onClick={handleClick}>
+    <button
+      className="uf-toolkit-button uf-toolkit-button-secondary"
+      type="button"
+      {...props}
+      onClick={handleClick}
+    >
       Back
     </button>
   );

@@ -12,9 +12,9 @@ const EnterEmail = ({ onEvent, allowBack, error }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="uf-form">
+    <form onSubmit={handleSubmit} className="uf-toolkit-form">
       <label htmlFor="email">Email address</label>
-      <input type="email" name="email" />
+      <input className="uf-toolkit-input" type="email" name="email" />
       <ErrorMessage error={error} />
       {allowBack && <BackButton onEvent={onEvent} />}
       <SubmitButton />

@@ -28,6 +28,8 @@ const SelectFactor = ({
     });
   };
 
+  let showingPassword = false;
+
   // Build list of buttons for factors,
   // with password button if in compact view,
   // or password entry if in default view
@@ -50,6 +52,7 @@ const SelectFactor = ({
         />
       );
     } else {
+      showingPassword = true;
       // Put dividers before and after, as appropriate
       if (i !== 0) {
         displayItems.push(<Divider text="or" key="before_password" />);
@@ -59,6 +62,7 @@ const SelectFactor = ({
           key={keyFor(factor)}
           onEvent={_onEvent}
           allowBack={false}
+          error={error}
         />
       );
       if (i < factors.length - 1) {
@@ -70,7 +74,7 @@ const SelectFactor = ({
   return (
     <>
       {displayItems}
-      <ErrorMessage error={error} />
+      {!showingPassword && <ErrorMessage error={error} />}
     </>
   );
 };

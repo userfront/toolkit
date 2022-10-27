@@ -7,9 +7,9 @@ const EnterBackupCode = ({ onEvent, allowBack }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="uf-form">
+    <form onSubmit={handleSubmit} className="uf-toolkit-form">
       <label htmlFor="totpCode">Backup code</label>
-      <input type="tel" name="totpCode" />
+      <input className="uf-toolkit-input" type="tel" name="totpCode" />
       {allowBack && <BackButton onEvent={onEvent} />}
       <SubmitButton />
     </form>

@@ -310,6 +310,15 @@ const componentForStep = (state) => {
   }
 };
 
+const _error = {
+  message: "This is a short error message.",
+};
+
+const _errorLong = {
+  message:
+    "This is a longer error message. Think about a cloud. Just float around and be there. It looks so good, I might as well not stop. I thought today we would do a happy little picture. Everybody's different. Trees are different. Let them all be individuals. You can do anything here - the only pre-requisite is that it makes you happy.",
+};
+
 const SignupForm = ({ state, onEvent }) => {
   const _onEvent = onEvent || ((evt) => log("event", evt));
   // Get the view component, title text, and props corresponding to this state
@@ -318,7 +327,7 @@ const SignupForm = ({ state, onEvent }) => {
   const defaultProps = {
     allowBack: state.context.allowBack,
     isSecondFactor: state.context.isSecondFactor,
-    error: state.context.error,
+    error: _error, //state.context.error,
     user: state.context.user,
   };
 
@@ -326,7 +335,7 @@ const SignupForm = ({ state, onEvent }) => {
     <div className="uf-toolkit-container">
       <h2>{title}</h2>
       <Component onEvent={_onEvent} {...defaultProps} {...props} />
-      <div className="uf-secured">
+      <div>
         <SecuredByUserfront />
       </div>
     </div>

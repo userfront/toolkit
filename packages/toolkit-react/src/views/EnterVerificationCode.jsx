@@ -12,9 +12,9 @@ const EnterVerificationCode = ({ onEvent, error }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="uf-form">
+    <form onSubmit={handleSubmit} className="uf-toolkit-form">
       <label htmlFor="verificationCode">"Enter your code"</label>
-      <input type="tel" name="verificationCode" />
+      <input className="uf-toolkit-input" type="tel" name="verificationCode" />
       <ErrorMessage error={error} />
       <BackButton onEvent={onEvent} />
       <SubmitButton />
