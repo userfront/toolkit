@@ -16,7 +16,13 @@ const BasicButton = ({ children, ...props }) => {
 
 const Icon = ({ logo }) => {
   return (
-    <img src={logo} alt="" className="uf-btn-icon" width="32px" height="32px" />
+    <img
+      src={logo}
+      alt=""
+      className="uf-toolkit-button-icon"
+      width="32px"
+      height="32px"
+    />
   );
 };
 
@@ -40,17 +46,19 @@ export const factorToLogoAndText = (factor) => {
   switch (factor.strategy) {
     case "password":
       return {
-        logo: <MdPassword size="32px" />,
+        logo: <MdPassword className="uf-toolkit-button-icon" size="32px" />,
         text: "Username and password",
       };
     case "link":
       return {
-        logo: <TbLink size="32px" />,
+        logo: <TbLink className="uf-toolkit-button-icon" size="32px" />,
         text: "Email me a link",
       };
     case "totp":
       return {
-        logo: <TiSortNumerically size="32px" />,
+        logo: (
+          <TiSortNumerically className="uf-toolkit-button-icon" size="32px" />
+        ),
         text: "Use an authenticator app",
       };
     case "apple":
@@ -93,12 +101,22 @@ export const factorToLogoAndText = (factor) => {
       switch (factor.channel) {
         case "email":
           return {
-            logo: <MdOutlineMarkEmailRead size="32px" />,
+            logo: (
+              <MdOutlineMarkEmailRead
+                className="uf-toolkit-button-icon"
+                size="32px"
+              />
+            ),
             text: "Email me a code",
           };
         case "sms":
           return {
-            logo: <TbDeviceMobileMessage size="32px" />,
+            logo: (
+              <TbDeviceMobileMessage
+                className="uf-toolkit-button-icon"
+                size="32px"
+              />
+            ),
             text: "Text me a code",
           };
       }
@@ -117,9 +135,14 @@ const IconButton = ({ factor, children, ...props }) => {
   }
   const { logo, text } = factorToLogoAndText(factor);
   return (
-    <button {...props} className="uf-btn uf-btn-full">
-      {logo}
-      {` ${text}`}
+    <button
+      {...props}
+      className="uf-toolkit-button uf-toolkit-button-secondary"
+    >
+      <span className="uf-toolkit-icon-button-content">
+        {logo}
+        <span className="uf-toolkit-icon-button-text">{`${text}`}</span>
+      </span>
     </button>
   );
 };

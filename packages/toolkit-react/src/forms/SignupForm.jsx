@@ -323,10 +323,10 @@ const SignupForm = ({ state, onEvent }) => {
   };
 
   return (
-    <div className="uf-tool uf-signup-tool">
-      <h2 className="uf-title">{title}</h2>
+    <div className="uf-toolkit-container">
+      <h2>{title}</h2>
       <Component onEvent={_onEvent} {...defaultProps} {...props} />
-      <div className="uf-secured-by">
+      <div className="uf-secured">
         <SecuredByUserfront />
       </div>
     </div>

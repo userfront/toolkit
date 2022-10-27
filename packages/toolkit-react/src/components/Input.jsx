@@ -1,5 +1,5 @@
 const Input = ({ ...props }) => {
-  return <input {...props} />;
+  return <input className="uf-toolkit-input" {...props} />;
 };
 
 export default Input;

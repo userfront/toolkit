@@ -1,29 +1,434 @@
-.uf-btn-icon {
-  width: 32px;
-  height: 32px;
+.uf-toolkit-container {
+  /* default style variables (light) */
+
+  /* Width breakpoints */
+  --uf-toolkit-break-small: 300px;
+
+  --uf-toolkit-break-medium: 450px;
+
+  --uf-toolkit-break-large: 600px;
+
+  /* Outer container */
+
+  /* Box shadow applied to the outer container */
+  --uf-toolkit-container-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+
+  /* Box shadow of form, when hovered or active */
+  --uf-toolkit-container-active-box-shadow: var(--uf-container-box-shadow);
+
+  /* Border radius of the outer container */
+  --uf-toolkit-container-border-radius: 4px;
+
+  /* Border style of the outer container */
+  --uf-toolkit-container-border: 1px solid #ebeef5;
+
+  /* Width of outer container */
+  --uf-toolkit-container-width: 450px;
+
+  /* Max width of outer container */
+  --uf-toolkit-container-max-width: unset;
+
+  /* Height of outer container */
+  --uf-toolkit-container-height: auto;
+
+  /* Max height of outer container */
+  --uf-toolkit-container-max-height: unset;
+
+  /* Margin of outer container */
+  --uf-toolkit-container-margin: 0 auto;
+
+  /* Toolkit form globals */
+  /* Default font size; scales entire form, since sizes are set with em units */
+  --uf-toolkit-em-size: 14px;
+
+  /* Overall spacing: padding of form, distance between inputs */
+  --uf-toolkit-spacing: 1em;
+
+  /* Font to be applied to the whole form */
+  --uf-toolkit-font-family: Avenir, Helvetica, Arial, sans-serif;
+
+  /* Background color of the form */
+  --uf-toolkit-background-color: #f8f9fa;
+
+  /* Default text and divider color of the form */
+  --uf-toolkit-text-color: #303133;
+
+  /* Muted text color, used for dividers */
+  --uf-toolkit-divider-color: #999;
+
+  /* Primary color of the form, for primary button background and highlights */
+  --uf-toolkit-primary-color: #5e72e4;
+
+  /* Hovered and active version of the primary color */
+  --uf-toolkit-primary-color-active: #7e8ee9;
+
+  /* Focused version of the primary color */
+  --uf-toolkit-primary-color-focus: var(--uf-toolkit-primary-color-active);
+
+  /* Disabled version of the primary color */
+  --uf-toolkit-primary-color-disabled: #9da8e4;
+
+  /* Text color to use on primary color backdrop */
+  --uf-toolkit-primary-color-text: #f8f9fa;
+
+  /* Secondary color, for secondary button background */
+  --uf-toolkit-secondary-color: #f8f9fa;
+
+  /* Hovered and active version of the secondary color */
+  --uf-toolkit-secondary-color-active: #98b1e2;
+
+  /* Focus version of the secondary color */
+  --uf-toolkit-secondary-color-focus: var(--uf-toolkit-secondary-color-active);
+
+  /* Disabled version of the secondary color */
+  --uf-toolkit-secondary-color-disabled: #7a8291;
+
+  /* Text color to use on secondary color backdrop */
+  --uf-toolkit-secondary-color-text: var(--uf-toolkit-text-color);
+
+  /* Link color, for subtle buttons and links */
+  --uf-toolkit-link-color: #5e72e4;
+
+  /* Error color, for text related to errors */
+  --uf-toolkit-error-color: #f56c6c;
+
+  /* Rounding for edges of buttons and inputs */
+  --uf-toolkit-border-radius: 4px;
+
+  /* Background color for text inputs */
+  --uf-toolkit-input-background-color: #f8f9fa;
+
+  /* Active and hovered background color for text inputs */
+  --uf-toolkit-input-background-color-active: #f8f9fa;
+
+  /* Text color for text inputs */
+  --uf-toolkit-input-text-color: #606266;
+
+  /* Input placeholder text color */
+  --uf-toolkit-placeholder-color: #999;
+
+  /* Active and hovered input placeholder text color */
+  --uf-toolkit-placeholder-color-active: #999;
+
+  /* Input border style */
+  --uf-toolkit-input-border: 1px solid #dcdfe6;
+
+  /* Active and hovered input border style */
+  --uf-toolkit-input-border-active: 1px solid #c0c4cc;
+
+  /* Focused input border style */
+  --uf-toolkit-input-border-focus: 1px solid #5e72e4;
+
+  /* Input border in error state */
+  --uf-toolkit-input-border-error: 1px solid var(--uf-toolkit-error-color);
+
+  /* Input font size */
+  --uf-toolkit-input-font-size: 1em;
+
+  /* Label text color */
+  --uf-toolkit-label-text-color: var(--uf-toolkit-text-color);
+
+  /* Label text color in error state */
+  --uf-toolkit-label-text-color-error: var(--uf-toolkit-error-color);
+
+  /* Label size */
+  --uf-toolkit-label-font-size: 0.75em;
+
+  /* Spacing between input and label */
+  --uf-toolkit-label-spacing: 0.5em;
+
+  /* Title font size */
+  --uf-toolkit-title-font-size: 1.5em;
+
+  /* Form-level error message color */
+  --uf-toolkit-error-text-color: var(--uf-toolkit-error-color);
+
+  /* Form-level error message text size */
+  --uf-toolkit-error-font-size: 1em;
+
+  /* Primary and secondary button font size */
+  --uf-toolkit-button-font-size: 1em;
+
+  /* Subtle button font size */
+  --uf-toolkit-subtle-button-font-size: 1em;
+
+  /* Primary and secondary button height */
+  --uf-toolkit-button-height: 2em;
+
+  /* Primary and secondary button padding */
+  --uf-toolkit-button-padding: 0.8em;
+
+  /* Button icon size - icons are always square */
+  --uf-toolkit-button-icon-size: 2em;
+
+  /* General toolkit alignment */
+  --uf-toolkit-alignment: center;
+
+  /* Label alignment, relative to attached input */
+  --uf-toolkit-label-alignment: left;
+
+  /* Secured by Userfront font size */
+  --uf-toolkit-secured-font-size: 0.75em;
+
+  /* Secured by Userfront font color */
+  --uf-toolkit-secured-font-color: var(--uf-toolkit-text-color);
+
+  /* Primary button border */
+  --uf-toolkit-primary-button-border: none;
+
+  /* Hovered or active primary button border */
+  --uf-toolkit-primary-button-border-active: none;
+
+  /* Focused primary button border */
+  --uf-toolkit-primary-button-border-focus: 1px solid #5e72e4;
+
+  /* Secondary button border */
+  --uf-toolkit-secondary-button-border: 1px solid
+    var(--uf-toolkit-primary-color);
+
+  /* Hovered or active secondary button border */
+  --uf-toolkit-secondary-button-border-active: 1px solid
+    var(--uf-toolkit-primary-color);
+
+  /* Focused secondary button border */
+  --uf-toolkit-secondary-button-border-focus: 1px solid #5e72e4;
 }
 
-.uf-btn {
-  background-color: white;
-  border: 3px solid blue;
-  margin-bottom: 6px;
+/* Actual styles for container (separate from variable declarations for clarity and consistency) */
+.uf-toolkit-container {
+  color: var(--uf-toolkit-text-color);
+  background-color: var(--uf-toolkit-background-color);
+  border: var(--uf-toolkit-container-border);
+  border-radius: var(--uf-toolkit-border-radius);
+  box-shadow: var(--uf-toolkit-container-box-shadow);
+
+  padding: var(--uf-toolkit-spacing);
+  margin: var(--uf-toolkit-container-margin);
+
+  width: var(--uf-toolkit-container-width);
+  max-width: var(--uf-toolkit-container-max-width);
+  min-width: 150px;
+  height: var(--uf-toolkit-container-height);
+  max-height: var(--uf-toolkit-container-max-height);
+
+  font-family: var(--uf-toolkit-font-family);
+  text-align: var(--uf-toolkit-alignment);
+  font-size: var(--uf-toolkit-em-size);
 }
 
-.uf-btn-full {
-  display: block;
-  width: 100%;
+.uf-toolkit-container:hover,
+.uf-toolkit-container:active,
+.uf-toolkit-container:focus {
+  box-shadow: var(--uf-toolkit-container-active-box-shadow);
 }
 
-.uf-form {
+/* Title text */
+.uf-toolkit-container h2 {
+  font-size: var(--uf-toolkit-title-font-size);
+}
+
+/* Form layout */
+.uf-toolkit-form {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  align-items: stretch;
+  text-align: initial;
 }
 
-.uf-form > label {
-  flex: 1 0 100%;
+.uf-toolkit-form .uf-toolkit-form-row {
+  flex: 1 0 auto;
+  margin-bottom: var(--uf-toolkit-spacing);
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
 }
 
-.uf-form > input {
-  flex: 1 0 100%;
-  margin-bottom: 6px;
+.uf-toolkit-form .uf-toolkit-form-row label {
+  flex: 0 1 40%;
+}
+
+.uf-toolkit-form .uf-toolkit-form-row input {
+  flex: 1 1 60%;
+  align-self: flex-end;
+}
+
+@media only screen and (max-width: 400px) {
+  .uf-toolkit-form .uf-toolkit-form-row {
+    flex-flow: column nowrap;
+    align-items: stretch;
+  }
+
+  .uf-toolkit-form .uf-toolkit-form-row label {
+    flex: 1 0 auto;
+  }
+
+  .uf-toolkit-form .uf-toolkit-form-row input {
+    flex: 0 0 auto;
+    align-self: stretch;
+  }
+}
+
+/* Text inputs */
+.uf-toolkit-container input.uf-toolkit-input {
+  color: var(--uf-toolkit-input-text-color);
+  background-color: var(--uf-toolkit-input-background-color);
+
+  border: var(--uf-toolkit-input-border);
+  border-radius: var(--uf-toolkit-border-radius);
+
+  font-size: var(--uf-toolkit-input-font-size);
+  line-height: calc(var(--uf-toolkit-input-font-size) * 2);
+}
+
+.uf-toolkit-container input.uf-toolkit-input:hover,
+.uf-toolkit-container input.uf-toolkit-input:active {
+  background-color: var(--uf-toolkit-input-background-color-active);
+  border: var(--uf-toolkit-input-border-active);
+}
+
+.uf-toolkit-container input.uf-toolkit-input:focus {
+  background-color: var(--uf-toolkit-input-background-color-active);
+  border: var(--uf-toolkit-input-border-focus);
+}
+
+.uf-toolkit-container input.uf-toolkit-input.uf-toolkit-has-error {
+  border: var(--uf-toolkit-input-border-error);
+}
+
+.uf-toolkit-container input.uf-toolkit-input::placeholder {
+  color: var(--uf-toolkit-placeholder-color);
+}
+
+.uf-toolkit-container input.uf-toolkit-input:hover::placeholder,
+.uf-toolkit-container input.uf-toolkit-input:active::placeholder {
+  color: var(--uf-toolkit-placeholder-color-active);
+}
+
+/* Labels for text inputs */
+.uf-toolkit-container label {
+  width: auto;
+  text-align: var(--uf-toolkit-label-alignment);
+  line-height: calc(var(--uf-toolkit-input-font-size) * 2);
+  margin: 0 0.5em 0 0.5em;
+  /* Ensure a minimum font size for labels, for accessibility */
+  font-size: max(var(--uf-toolkit-label-font-size), 13px);
+}
+
+/* Primary and secondary buttons */
+.uf-toolkit-button {
+  width: 100%;
+  margin-bottom: var(--uf-toolkit-spacing);
+  padding: var(--uf-toolkit-button-padding);
+  font-size: var(--uf-toolkit-button-font-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.uf-toolkit-button .uf-toolkit-button-icon {
+  width: var(--uf-toolkit-button-icon-size) !important;
+  height: var(--uf-toolkit-button-icon-size) !important;
+}
+
+.uf-toolkit-button .uf-toolkit-icon-button-content {
+  flex: 0 0 auto;
+  /* Experimentally determined: the smallest min-width so that all icon buttons are neatly organized */
+  min-width: 12em;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.uf-toolkit-button .uf-toolkit-icon-button-content .uf-toolkit-button-icon {
+  margin-right: var(--uf-toolkit-spacing);
+  /* Experimentally determined: adjustment to align left edge of button text to left edge of "sign up" */
+  margin-left: 0.5em;
+}
+
+/* Primary button */
+.uf-toolkit-container .uf-toolkit-button-primary {
+  background-color: var(--uf-toolkit-primary-color);
+  color: var(--uf-toolkit-primary-color-text);
+  border: var(--uf-toolkit-button-border);
+  border-radius: var(--uf-toolkit-border-radius);
+  cursor: pointer;
+}
+
+.uf-toolkit-container .uf-toolkit-button-primary:hover,
+.uf-toolkit-container .uf-toolkit-button-primary:active {
+  background-color: var(--uf-toolkit-primary-color-active);
+  border: var(--uf-toolkit-primary-button-border-active);
+}
+
+.uf-toolkit-container .uf-toolkit-button-primary:focus {
+  background-color: var(--uf-toolkit-primary-color-focus);
+  border: var(--uf-toolkit-primary-button-border-focus);
+}
+
+/* Secondary button */
+.uf-toolkit-container .uf-toolkit-button-secondary {
+  background-color: var(--uf-toolkit-secondary-color);
+  color: var(--uf-toolkit-secondary-color-text);
+  border: var(--uf-toolkit-secondary-button-border);
+  border-radius: var(--uf-toolkit-border-radius);
+  cursor: pointer;
+}
+
+.uf-toolkit-container .uf-toolkit-button-secondary:hover,
+.uf-toolkit-container .uf-toolkit-button-secondary:active {
+  background-color: var(--uf-toolkit-secondary-color-active);
+  border: var(--uf-toolkit-secondary-button-border-active);
+}
+
+.uf-toolkit-container .uf-toolkit-button-secondary:focus {
+  background-color: var(--uf-toolkit-secondary-color-focus);
+  border: var(--uf-toolkit-secondary-button-border-focus);
+}
+
+/* Subtle button */
+.uf-toolkit-container .uf-toolkit-button-subtle {
+  font-size: var(--uf-toolkit-subtle-button-font-size);
+  color: var(--uf-toolkit-link-color);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Secured by Userfront */
+.uf-toolkit-container .uf-secured {
+  color: var(--uf-toolkit-secured-font-color);
+  font-size: var(--uf-toolkit-secured-font-size);
+}
+
+.uf-toolkit-container .uf-secured .uf-secured-icon {
+  font-size: calc(var(--uf-toolkit-secured-font-size) * 1.1);
+}
+
+/* Dividers */
+
+.uf-toolkit-divider {
+  height: 1px;
+  border-bottom: 1px solid var(--uf-toolkit-divider-color);
+  margin-bottom: var(--uf-toolkit-spacing);
+}
+
+.uf-toolkit-divider-split {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: stretch;
+  margin-bottom: var(--uf-toolkit-spacing);
+  color: var(--uf-toolkit-text-color);
+}
+
+.uf-toolkit-divider-split .uf-toolkit-divider {
+  flex: 1 1 auto;
+  /* Experimentally determined 3px adjustment to center with text */
+  height: calc(var(--uf-toolkit-em-size) / 2);
+  margin-bottom: 0;
+}
+
+.uf-toolkit-divider-split .uf-toolkit-divider-text {
+  flex: 0 0 auto;
+  margin: 0 1em 0 1em;
+  line-height: 1em;
 }
