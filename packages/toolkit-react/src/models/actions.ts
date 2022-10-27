@@ -31,31 +31,25 @@ export const setErrorFromApiError = assign({
 });
 
 // Create & set the error message for a password mismatch (password !== confirmPassword)
-export const setErrorForPasswordMismatch = (context: SignupContext<Password>) =>
-  assign({
-    // TODO extract string
+export const setErrorForPasswordMismatch = assign({
+  error: {
+    statusCode: 0,
+    message: "The passwords don't match. Please re-enter your password.",
     error: {
-      statusCode: 0,
-      message: "PASSWORD MISMATCH",
-      error: {
-        type: "password_mismatch_error",
-      },
+      type: "password_mismatch_error",
     },
-  });
+  },
+});
 
 // Disable back actions
-export const disableBack = (context: SignupContext<View>) => {
-  return assign({
-    allowBack: false,
-  });
-};
+export const disableBack = assign({
+  allowBack: false,
+});
 
 // Enable back actions
-export const enableBack = (context: SignupContext<View>) => {
-  return assign({
-    allowBack: true,
-  });
-};
+export const enableBack = assign({
+  allowBack: true,
+});
 
 // Set up the view for the selected factor
 export const setupView = (

@@ -1,13 +1,6 @@
 .uf-toolkit-container {
   /* default style variables (light) */
 
-  /* Width breakpoints */
-  --uf-toolkit-break-small: 300px;
-
-  --uf-toolkit-break-medium: 450px;
-
-  --uf-toolkit-break-large: 600px;
-
   /* Outer container */
 
   /* Box shadow applied to the outer container */
@@ -25,10 +18,10 @@
   --uf-toolkit-container-border: 1px solid #ebeef5;
 
   /* Width of outer container */
-  --uf-toolkit-container-width: 450px;
+  --uf-toolkit-container-width: auto;
 
   /* Max width of outer container */
-  --uf-toolkit-container-max-width: unset;
+  --uf-toolkit-container-max-width: 450px;
 
   /* Height of outer container */
   --uf-toolkit-container-height: auto;
@@ -235,6 +228,11 @@
   box-shadow: var(--uf-toolkit-container-active-box-shadow);
 }
 
+/* Necessary global resets */
+.uf-toolkit-container ul {
+  padding-left: 0;
+}
+
 /* Title text */
 .uf-toolkit-container h2 {
   font-size: var(--uf-toolkit-title-font-size);
@@ -267,20 +265,22 @@
   align-self: flex-end;
 }
 
-@media only screen and (max-width: 400px) {
-  .uf-toolkit-form .uf-toolkit-form-row {
-    flex-flow: column nowrap;
-    align-items: stretch;
-  }
+/* Adjustments for small forms */
+.uf-toolkit-small .uf-toolkit-form .uf-toolkit-form-row,
+.uf-toolkit-tiny .uf-toolkit-form .uf-toolkit-form-row {
+  flex-flow: column nowrap;
+  align-items: stretch;
+}
 
-  .uf-toolkit-form .uf-toolkit-form-row label {
-    flex: 1 0 auto;
-  }
+.uf-toolkit-small .uf-toolkit-form .uf-toolkit-form-row label,
+.uf-toolkit-tiny .uf-toolkit-form .uf-toolkit-form-row label {
+  flex: 1 0 auto;
+}
 
-  .uf-toolkit-form .uf-toolkit-form-row input {
-    flex: 0 0 auto;
-    align-self: stretch;
-  }
+.uf-toolkit-small .uf-toolkit-form .uf-toolkit-form-row input,
+.uf-toolkit-tiny .uf-toolkit-form .uf-toolkit-form-row input {
+  flex: 0 0 auto;
+  align-self: stretch;
 }
 
 /* Text inputs */
@@ -331,8 +331,6 @@
 
 /* Primary and secondary buttons */
 .uf-toolkit-button {
-  width: 100%;
-  margin-bottom: var(--uf-toolkit-spacing);
   padding: var(--uf-toolkit-button-padding);
   font-size: var(--uf-toolkit-button-font-size);
   display: flex;
@@ -341,6 +339,16 @@
 
   will-change: border, background-color, box-shadow;
   transition: border, color, background-color, box-shadow 0.1s ease-out;
+}
+
+.uf-toolkit-tiny .uf-toolkit-button {
+  padding: calc(var(--uf-toolkit-button-padding) * 0.75);
+}
+
+/* Buttons are full width, top level items outside of a row */
+:not(.uf-toolkit-button-row) .uf-toolkit-button {
+  width: 100%;
+  margin-bottom: var(--uf-toolkit-spacing);
 }
 
 .uf-toolkit-button:hover,
@@ -421,10 +429,25 @@
   color: var(--uf-toolkit-link-color);
   text-decoration: underline;
   cursor: pointer;
+  border: none;
+  background-color: inherit;
 }
 
 .uf-toolkit-container .uf-toolkit-button-subtle:focus {
   font-weight: bold;
+}
+
+/* Button row - multiple buttons on one row */
+.uf-toolkit-container .uf-toolkit-button-row {
+  display: flex;
+  flex-flow: row nowrap;
+  column-gap: var(--uf-toolkit-spacing);
+  margin-bottom: var(--uf-toolkit-spacing);
+  justify-content: stretch;
+}
+
+.uf-toolkit-container .uf-toolkit-button-row > .uf-toolkit-button {
+  flex: 1 1;
 }
 
 /* Secured by Userfront */
@@ -436,6 +459,10 @@
   text-decoration: none;
 }
 
+.uf-toolkit-container .uf-toolkit-secured:hover {
+  text-decoration: underline;
+}
+
 .uf-toolkit-container .uf-toolkit-secured .uf-toolkit-secured-icon {
   /* Hard-coded to 18px to preserve sharpness of the image. */
   width: 18px;
@@ -445,6 +472,14 @@
 
   /* Adjust the image to the correct shade of gray */
   filter: contrast(20%);
+
+  transform: 0.2s ease-in-out;
+}
+
+.uf-toolkit-container .uf-toolkit-secured:hover .uf-toolkit-secured-icon {
+  text-decoration: underline;
+  filter: brightness(0) saturate(100%) invert(45%) sepia(10%) saturate(5443%)
+    hue-rotate(201deg) brightness(96%) contrast(86%);
 }
 
 /* Dividers */
@@ -479,7 +514,6 @@
 /* Error message */
 
 .uf-toolkit-error {
-  min-height: calc(var(--uf-toolkit-spacing) * 2);
   margin-bottom: var(--uf-toolkit-spacing);
   border-radius: var(--uf-toolkit-border-radius);
   display: flex;

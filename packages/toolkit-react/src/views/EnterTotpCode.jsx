@@ -13,14 +13,18 @@ const EnterTotpCode = ({ onEvent, allowBack, error }) => {
 
   return (
     <form onSubmit={handleSubmit} className="uf-toolkit-form">
-      <label htmlFor="totpCode">
-        Six-digit code from authenticator app or device
-      </label>
-      <input className="uf-toolkit-input" type="tel" name="totpCode" />
-      <ErrorMessage error={error} />
+      <div className="uf-toolkit-form-row">
+        <label htmlFor="totpCode">
+          Six-digit code from authenticator app or device
+        </label>
+        <input className="uf-toolkit-input" type="tel" name="totpCode" />
+      </div>
       <AlternativeButton>Use a backup code (TODO)</AlternativeButton>
-      {allowBack && <BackButton onEvent={onEvent} />}
-      <SubmitButton />
+      <ErrorMessage error={error} />
+      <div className="uf-toolkit-button-row">
+        {allowBack && <BackButton onEvent={onEvent} />}
+        <SubmitButton />
+      </div>
     </form>
   );
 };

@@ -13,11 +13,19 @@ const EnterVerificationCode = ({ onEvent, error }) => {
 
   return (
     <form onSubmit={handleSubmit} className="uf-toolkit-form">
-      <label htmlFor="verificationCode">"Enter your code"</label>
-      <input className="uf-toolkit-input" type="tel" name="verificationCode" />
+      <div className="uf-toolkit-form-row">
+        <label htmlFor="verificationCode">"Enter your code"</label>
+        <input
+          className="uf-toolkit-input"
+          type="tel"
+          name="verificationCode"
+        />
+      </div>
       <ErrorMessage error={error} />
-      <BackButton onEvent={onEvent} />
-      <SubmitButton />
+      <div className="uf-toolkit-button-row">
+        <BackButton onEvent={onEvent} />
+        <SubmitButton />
+      </div>
     </form>
   );
 };

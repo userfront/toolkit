@@ -228,6 +228,7 @@ export const defaultSignupContext = {
   view: {} as Loading,
   isSecondFactor: false,
   allowBack: true,
+  error: null,
 };
 
 // Signup machine top-level configuration

@@ -2,7 +2,11 @@ const RetryButton = (props) => {
   const message = props.children || "Retry";
   const onClick = props.onClick || (() => {});
   return (
-    <button onClick={onClick} {...props}>
+    <button
+      className="uf-toolkit-button uf-toolkit-button-subtle"
+      onClick={onClick}
+      {...props}
+    >
       {message}
     </button>
   );

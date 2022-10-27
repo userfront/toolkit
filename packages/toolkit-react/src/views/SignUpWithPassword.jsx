@@ -43,8 +43,10 @@ const SignUpWithPassword = ({ onEvent, allowBack, error }) => {
         ></input>
       </div>
       <ErrorMessage error={error} />
-      {allowBack && <BackButton onEvent={onEvent} />}
-      <SubmitButton />
+      <div className="uf-toolkit-button-row">
+        {allowBack && <BackButton onEvent={onEvent} />}
+        <SubmitButton />
+      </div>
     </form>
   );
 };

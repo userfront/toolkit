@@ -13,6 +13,8 @@ import Success from "../views/Success";
 import EmailLinkSent from "../views/EmailLinkSent";
 import Placeholder from "../views/Placeholder";
 import { log } from "../services/logging";
+import { useState } from "react";
+import { useSizeClass } from "../utils/hooks";
 
 // Map a state node to component, title, and props
 const componentForStep = (state) => {
@@ -320,6 +322,8 @@ const _errorLong = {
 };
 
 const SignupForm = ({ state, onEvent }) => {
+  const [containerRef, setContainerRef] = useState();
+  const sizeClass = useSizeClass(containerRef);
   const _onEvent = onEvent || ((evt) => log("event", evt));
   // Get the view component, title text, and props corresponding to this state
   const { Component, props, title } = componentForStep(state);
@@ -327,12 +331,12 @@ const SignupForm = ({ state, onEvent }) => {
   const defaultProps = {
     allowBack: state.context.allowBack,
     isSecondFactor: state.context.isSecondFactor,
-    error: _error, //state.context.error,
+    error: state.context.error,
     user: state.context.user,
   };
 
   return (
-    <div className="uf-toolkit-container">
+    <div ref={setContainerRef} className={`uf-toolkit-container ${sizeClass}`}>
       <h2>{title}</h2>
       <Component onEvent={_onEvent} {...defaultProps} {...props} />
       <div>

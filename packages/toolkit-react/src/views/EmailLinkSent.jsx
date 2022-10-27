@@ -10,7 +10,7 @@ const EmailLinkSent = ({ onEvent, user }) => {
   return (
     <div>
       <p>A link has been sent to {user.email}.</p>
-      <div>
+      <div className="uf-toolkit-button-row">
         <BackButton onEvent={onEvent} />
         <RetryButton onClick={onResend}>Resend</RetryButton>
       </div>

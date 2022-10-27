@@ -18,11 +18,15 @@ const EnterTotpCode = ({ qrCode, onEvent, allowBack, error }) => {
       <img src={qrCode} width="100px" height="100px" />
       <p>2. Enter the six-digit code from your authenticator app</p>
       <form onSubmit={handleSubmit} className="uf-toolkit-form">
-        <label htmlFor="totpCode">Six-digit code</label>
-        <input className="uf-toolkit-input" type="tel" name="totpCode" />
+        <div className="uf-toolkit-form-row">
+          <label htmlFor="totpCode">Six-digit code</label>
+          <input className="uf-toolkit-input" type="tel" name="totpCode" />
+        </div>
         <ErrorMessage error={error} />
-        {allowBack && <BackButton onEvent={onEvent} />}
-        <SubmitButton />
+        <div className="uf-toolkit-button-row">
+          {allowBack && <BackButton onEvent={onEvent} />}
+          <SubmitButton />
+        </div>
       </form>
     </>
   );

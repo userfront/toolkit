@@ -1,6 +1,10 @@
 const ContinueButton = (props) => {
   return (
-    <button type="submit" {...props}>
+    <button
+      className="uf-toolkit-button uf-toolkit-button-primary"
+      type="submit"
+      {...props}
+    >
       Continue
     </button>
   );
