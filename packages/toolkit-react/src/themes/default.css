@@ -365,7 +365,8 @@
 .uf-toolkit-button .uf-toolkit-icon-button-content {
   flex: 0 0 auto;
   /* Experimentally determined: the smallest min-width so that all icon buttons are neatly organized */
-  min-width: 12em;
+  /* min-width: 12em; aligns buttons so that all icons are vertically aligned - which makes it look off center */
+  min-width: 7em;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -373,8 +374,6 @@
 
 .uf-toolkit-button .uf-toolkit-icon-button-content .uf-toolkit-button-icon {
   margin-right: var(--uf-toolkit-spacing);
-  /* Experimentally determined: adjustment to align left edge of button text to left edge of "sign up" */
-  margin-left: 0.5em;
 }
 
 /* Primary button */
