@@ -1,7 +1,7 @@
 import { assign, send } from "xstate";
 import {
   UserfrontApiErrorEvent,
-  SignupContext,
+  AuthContext,
   Password,
   View,
   SelectFactorEvent,
@@ -13,14 +13,16 @@ import {
   PasswordContext,
   PasswordSubmitEvent,
   PhoneNumberSubmitEvent,
-  SetUpTotpContext,
+  TotpCodeContext,
   UserfrontApiFetchQrCodeEvent,
   TotpCodeSubmitEvent,
   UserfrontApiFactorResponseEvent,
   UserfrontApiGetTenantIdEvent,
   UserfrontApiFetchFlowEvent,
+  TotpCode,
+  UseBackupCodeEvent,
 } from "./types";
-import { getTargetForFactor, signupFactors, hasValue } from "./utils";
+import { getTargetForFactor, factorConfig, hasValue } from "./utils";
 
 // Clear the current error message, if any
 export const clearError = assign({ error: undefined });
@@ -53,10 +55,10 @@ export const enableBack = assign({
 
 // Set up the view for the selected factor
 export const setupView = (
-  context: SignupContext<View>,
+  context: AuthContext<View>,
   event: SelectFactorEvent
 ) => {
-  const target = getTargetForFactor(event.factor) as keyof typeof signupFactors;
+  const target = getTargetForFactor(event.factor) as keyof typeof factorConfig;
 
   // If we're not on a factor, we must be on factor selection,
   // which extends the Password context
@@ -70,8 +72,8 @@ export const setupView = (
   }
 
   // Set up the view for this factor
-  if (signupFactors[target]) {
-    const factorView = signupFactors[target].viewContext;
+  if (factorConfig[target]) {
+    const factorView = factorConfig[target].viewContext;
     return assign({
       view: factorView,
     });
@@ -131,7 +133,7 @@ export const setPhoneNumber = assign(
 
 // Store the TOTP setup QR code we received from the server, so we can display it
 export const setQrCode = assign(
-  (context: SetUpTotpContext, event: UserfrontApiFetchQrCodeEvent) => ({
+  (context: TotpCodeContext, event: UserfrontApiFetchQrCodeEvent) => ({
     view: {
       ...context.view,
       qrCode: event.data.qrCode,
@@ -142,16 +144,37 @@ export const setQrCode = assign(
 
 // Store the TOTP code the user entered, so we can send it
 export const setTotpCode = assign(
-  (context: SetUpTotpContext, event: TotpCodeSubmitEvent) => ({
+  (context: TotpCodeContext, event: TotpCodeSubmitEvent) => ({
     view: {
       ...context.view,
-      totpCode: event.totpCode,
+      totpCode: event.totpCode ?? "",
+      emailOrUsername: event.emailOrUsername ?? "",
     },
   })
 );
 
+export const setUseBackupCode = assign(
+  (context: TotpCodeContext, event: UseBackupCodeEvent) => ({
+    view: {
+      ...context.view,
+      useBackupCode: event.useBackupCode,
+    },
+  })
+);
+
+export const setShowEmailOrUsernameIfFirstFactor = (
+  context: TotpCodeContext
+) => {
+  return assign({
+    view: {
+      ...context.view,
+      showEmailOrUsername: context.isSecondFactor,
+    },
+  });
+};
+
 export const storeFactorResponse = assign(
-  (context: SetUpTotpContext, event: UserfrontApiFactorResponseEvent) => ({
+  (context: TotpCodeContext, event: UserfrontApiFactorResponseEvent) => ({
     view: {
       ...context.view,
       isMfaRequired: event.data.isMfaRequired,
@@ -164,7 +187,7 @@ export const storeFactorResponse = assign(
 // allowedSecondFactors is not necessarily identical to config.flow.secondFactors, because
 // the user could have specific second factors set.
 export const setAllowedSecondFactors = assign(
-  (context: SignupContext<any>, event: UserfrontApiFactorResponseEvent) => ({
+  (context: AuthContext<any>, event: UserfrontApiFactorResponseEvent) => ({
     allowedSecondFactors: event.data.authentication.secondFactors,
   })
 );
@@ -173,7 +196,7 @@ export const setAllowedSecondFactors = assign(
 // for views that don't proceed directly from the API request to
 // the second factor selection
 export const setAllowedSecondFactorsFromView = assign(
-  (context: SetUpTotpContext) => ({
+  (context: TotpCodeContext) => ({
     allowedSecondFactors: context.view.allowedSecondFactors,
   })
 );
@@ -192,7 +215,7 @@ export const redirectIfSignedIn = () => {
 // Set the tenantId based on what was returned from the Userfront API, or set isDevMode = true if
 // there is no tenantId set in the local Userfront SDK instance
 export const setTenantIdOrDevMode = (
-  context: SignupContext<any>,
+  context: AuthContext<any>,
   event: UserfrontApiGetTenantIdEvent
 ) => {
   if (hasValue(event.data.tenantId)) {
@@ -214,7 +237,7 @@ export const setTenantIdOrDevMode = (
 
 // Set the auth flow based on what was returned from the Userfront API
 export const setFlowFromUserfrontApi = (
-  context: SignupContext<any>,
+  context: AuthContext<any>,
   event: UserfrontApiFetchFlowEvent
 ) =>
   assign({
@@ -229,7 +252,7 @@ export const setFlowFromUserfrontApi = (
 // and then, if the user had already clicked a factor button, continue
 // the flow if that factor is still available.
 export const setFlowFromUserfrontApiAndResume = (
-  context: SignupContext<any>,
+  context: AuthContext<any>,
   event: UserfrontApiFetchFlowEvent
 ) => {
   const actionList = [];
@@ -257,7 +280,7 @@ export const setFlowFromUserfrontApiAndResume = (
 // The factor that we're currently viewing is almost always dictated
 // by the state node we're in rather than context, this
 export const setActiveFactor = (
-  context: SignupContext<any>,
+  context: AuthContext<any>,
   event: SelectFactorEvent
 ) => ({
   config: {
@@ -268,7 +291,7 @@ export const setActiveFactor = (
 
 /* UNIT TESTS */
 import { Factor } from "./types";
-import { createSignupContextForFactor } from "../../test/utils";
+import { createAuthContextForFactor } from "../../test/utils";
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
@@ -286,12 +309,12 @@ if (import.meta.vitest) {
           },
         });
         const actual = setupView(
-          {} as SignupContext<any>,
+          {} as AuthContext<any>,
           event as SelectFactorEvent
         );
         expect(actual).toEqual(expected);
       });
-      Object.entries(signupFactors).forEach(([key, factorData]) => {
+      Object.entries(factorConfig).forEach(([key, factorData]) => {
         it(`should set up the correct context for the ${key} factor`, () => {
           const event = {
             type: "selectFactor",
@@ -305,7 +328,7 @@ if (import.meta.vitest) {
             view: factorData.viewContext,
           });
           const actual = setupView(
-            {} as SignupContext<any>,
+            {} as AuthContext<any>,
             event as SelectFactorEvent
           );
           expect(actual).toEqual(expected);
@@ -320,7 +343,7 @@ if (import.meta.vitest) {
             tenantId: "demo1234",
           },
         };
-        const context = createSignupContextForFactor("password");
+        const context = createAuthContextForFactor("password");
         const expected = assign({
           config: {
             ...context.config,
@@ -337,7 +360,7 @@ if (import.meta.vitest) {
             tenantId: "",
           },
         };
-        const context = createSignupContextForFactor("password");
+        const context = createAuthContextForFactor("password");
         const expected = assign({
           config: {
             ...context.config,

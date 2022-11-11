@@ -1,11 +1,11 @@
 // State machine config for the "text me a code" view
 
-import { SignupMachineConfig, SmsCodeContext } from "./types";
+import { AuthMachineConfig, SmsCodeContext } from "./types";
 import { callUserfrontApi } from "./userfrontApi";
 import { hasValue } from "./utils";
 
 // Virtually identical to the "email me a code" machine above - see that one for more details
-const smsCodeConfig: SignupMachineConfig = {
+const smsCodeConfig: AuthMachineConfig = {
   id: "smsCode",
   initial: "showForm",
   entry: "setupView",

@@ -238,7 +238,7 @@ const componentForStep = (state) => {
       };
 
     // SetUpTotp flow
-    case "setUpTotp.getQrCode":
+    case "totpCode.getQrCode":
       return {
         title: "Set up two-factor authentication",
         Component: SetUpTotp,
@@ -246,7 +246,7 @@ const componentForStep = (state) => {
           isLoadingQrCode: true,
         },
       };
-    case "setUpTotp.showQrCode":
+    case "totpCode.showQrCode":
       return {
         title: "Set up two-factor authentication",
         Component: SetUpTotp,
@@ -254,7 +254,7 @@ const componentForStep = (state) => {
           isLoading: true,
         },
       };
-    case "setUpTotp.confirmTotpCode":
+    case "totpCode.confirmTotpCode":
       return {
         title: "Set up two-factor authentication",
         Component: SetUpTotp,
@@ -262,7 +262,7 @@ const componentForStep = (state) => {
           isLoading: true,
         },
       };
-    case "setUpTotp.showBackupCodes":
+    case "totpCode.showBackupCodes":
       return {
         title: "Save your backup codes",
         Component: SetUpTotpSuccess,
@@ -270,14 +270,14 @@ const componentForStep = (state) => {
           backupCodes: state.context.view.backupCodes || [],
         },
       };
-    case "setUpTotp.showTotpSetupComplete":
+    case "totpCode.showTotpSetupComplete":
       return {
         title: "Successfully signed up",
         Component: Success,
         props: {},
       };
     // Show a standalone error message if we fail to fetch the QR code
-    case "setUpTotp.showErrorMessage":
+    case "totpCode.showErrorMessage":
       return {
         title: "Oops, something went wrong",
         Component: TotpErrorMessage,

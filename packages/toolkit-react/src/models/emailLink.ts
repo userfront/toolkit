@@ -1,8 +1,8 @@
-import { SignupMachineConfig, EmailLinkContext } from "./types";
+import { AuthMachineConfig, EmailLinkContext } from "./types";
 import { callUserfrontApi } from "./userfrontApi";
 import { hasValue } from "./utils";
 
-const emailLinkConfig: SignupMachineConfig = {
+const emailLinkConfig: AuthMachineConfig = {
   id: "emailLink",
   initial: "showForm",
   entry: "setupView",

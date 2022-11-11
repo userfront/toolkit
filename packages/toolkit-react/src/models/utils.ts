@@ -9,7 +9,7 @@ import { Factor } from "./types";
 // testIs = predicate that returns true if another factor is equivalent to this one
 // testOnlyFirst = predicate that returns true if this is the only first factor
 // testOnlySecond = predicate that returns true if this is the only second factor
-export const signupFactors = {
+export const factorConfig = {
   emailLink: {
     channel: "email",
     strategy: "link",
@@ -61,14 +61,21 @@ export const signupFactors = {
   totp: {
     channel: "authenticator",
     strategy: "totp",
-    name: "setUpTotp",
+    name: "totpCode",
     testIs: "isTotp",
     testOnlyFirst: "hasOnlyTotpFirstFactor",
     testOnlySecond: "hasOnlyTotpSecondFactor",
     viewContext: {
-      type: "setUpTotp",
-      qrCode: "",
+      type: "totp",
       totpCode: "",
+      showEmailOrUsername: false,
+
+      // Properties for TOTP login
+      useBackupCode: false,
+      backupCode: "",
+
+      // Properties for TOTP setup
+      qrCode: "",
       totpBackupCodes: [],
       isMfaRequired: false,
       allowedSecondFactors: [],
@@ -131,9 +138,9 @@ export const getTargetForFactor = (factor: Factor) => {
   if (isSsoProvider(factor)) {
     return "ssoProvider";
   }
-  let target: keyof typeof signupFactors;
-  for (target in signupFactors) {
-    if (matchFactor(factor, signupFactors[target])) {
+  let target: keyof typeof factorConfig;
+  for (target in factorConfig) {
+    if (matchFactor(factor, factorConfig[target])) {
       return target;
     }
   }
@@ -183,7 +190,7 @@ if (import.meta.vitest) {
           expect(actual).toEqual(expected);
         });
       });
-      Object.entries(signupFactors).forEach(([key, factorData]) => {
+      Object.entries(factorConfig).forEach(([key, factorData]) => {
         if (key === "ssoProvider") {
           return;
         }

@@ -1,9 +1,9 @@
-import { SignupMachineConfig, SetUpTotpContext } from "./types";
+import { AuthMachineConfig, SetUpTotpContext } from "./types";
 import { callUserfrontApi } from "./userfrontApi";
 
 // TOTP Authenticator setup state machine config
-const setUpTotpConfig: SignupMachineConfig = {
-  id: "setUpTotp",
+const setUpTotpConfig: AuthMachineConfig = {
+  id: "totpCode",
   initial: "getQrCode",
   entry: "setupView",
   states: {

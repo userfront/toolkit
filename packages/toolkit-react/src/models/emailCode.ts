@@ -1,8 +1,8 @@
-import { SignupMachineConfig, EmailCodeContext } from "./types";
+import { AuthMachineConfig, EmailCodeContext } from "./types";
 import { callUserfrontApi } from "./userfrontApi";
 import { hasValue } from "./utils";
 
-const emailCodeConfig: SignupMachineConfig = {
+const emailCodeConfig: AuthMachineConfig = {
   id: "emailCode",
   initial: "showForm",
   entry: "setupView",

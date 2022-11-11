@@ -1,8 +1,8 @@
 import passwordConfig from "./passwordSignUp";
-import { SignupMachineConfig } from "./types";
-import { signupFactors } from "./utils";
+import { AuthMachineConfig } from "./types";
+import { factorConfig } from "./utils";
 
-const selectFactorConfig: SignupMachineConfig = {
+const selectFactorConfig: AuthMachineConfig = {
   // The SelectFactor config needs to extend the Password config,
   // because the SelectFactor view could have the Password view inlined.
   id: "selectFactor",
@@ -18,7 +18,7 @@ const selectFactorConfig: SignupMachineConfig = {
         ...passwordConfig.states!.showForm.on,
         // When the user selects a factor, proceed to that factor's view.
         selectFactor: [
-          ...Object.values(signupFactors).map((factor) => ({
+          ...Object.values(factorConfig).map((factor) => ({
             target: `#${factor.name}`,
             cond: factor.testIs,
           })),
@@ -44,7 +44,7 @@ const selectFactorConfig: SignupMachineConfig = {
             cond: "isPassword",
           },
           {
-            target: "#setUpTotp",
+            target: "#totpCode",
             cond: "isTotp",
           },
           {

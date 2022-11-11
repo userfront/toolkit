@@ -1,11 +1,11 @@
 // State machine for the "username and password" view
 
-import { SignupMachineConfig, PasswordContext } from "./types";
+import { AuthMachineConfig, PasswordContext } from "./types";
 import { callUserfrontApi } from "./userfrontApi";
 import { hasValue } from "./utils";
 
 // Note - could be running in parallel with the "select a factor" view
-const passwordConfig: SignupMachineConfig = {
+const passwordConfig: AuthMachineConfig = {
   id: "password",
   initial: "showForm",
   entry: "setupView",

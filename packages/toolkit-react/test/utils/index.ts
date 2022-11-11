@@ -1,5 +1,5 @@
 import {
-  SignupContext,
+  AuthContext,
   EmailLinkContext,
   EmailCodeContext,
   SmsCodeContext,
@@ -16,13 +16,11 @@ import {
   FormType,
 } from "../../src/models/types";
 
-import { signupFactors } from "../../src/models/utils";
+import { factorConfig } from "../../src/models/utils";
 
-export const createSignupContextForFactor = (
-  name: string
-): SignupContext<any> => {
-  const key = name as keyof typeof signupFactors;
-  const view = signupFactors[key]?.viewContext ?? {};
+export const createAuthContextForFactor = (name: string): AuthContext<any> => {
+  const key = name as keyof typeof factorConfig;
+  const view = factorConfig[key]?.viewContext ?? {};
   const context = {
     user: {
       email: "test@email.com",

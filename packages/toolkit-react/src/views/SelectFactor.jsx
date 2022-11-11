@@ -1,5 +1,6 @@
 import IconButton from "../components/IconButton";
 import SignUpWithPassword from "./SignUpWithPassword";
+import LogInWithPassword from "./LogInWithPassword";
 import Divider from "../components/Divider";
 import ErrorMessage from "../components/ErrorMessage";
 import { log } from "../services/logging";
@@ -13,6 +14,7 @@ const SelectFactor = ({
   onEvent,
   allowedSecondFactors,
   isSecondFactor = false,
+  isLogin = false,
   error,
 }) => {
   const _onEvent = onEvent || ((evt) => log("event", evt));
@@ -29,6 +31,8 @@ const SelectFactor = ({
   };
 
   let showingPassword = false;
+
+  const PasswordForm = isLogin ? LogInWithPassword : SignUpWithPassword;
 
   // Build list of buttons for factors,
   // with password button if in compact view,
@@ -58,7 +62,7 @@ const SelectFactor = ({
         displayItems.push(<Divider text="or" key="before_password" />);
       }
       displayItems.push(
-        <SignUpWithPassword
+        <PasswordForm
           key={keyFor(factor)}
           onEvent={_onEvent}
           allowBack={false}

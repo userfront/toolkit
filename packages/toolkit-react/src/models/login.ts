@@ -8,7 +8,8 @@ import {
   setPhoneNumber,
   setTenantIdOrDevMode,
   setTotpCode,
-  setQrCode,
+  setUseBackupCode,
+  setShowEmailOrUsernameIfFirstFactor,
   redirectIfSignedIn,
   setCode,
   setErrorFromApiError,
@@ -32,7 +33,6 @@ import {
   isLocalModeWithoutFlow,
   isDevModeWithoutFlow,
   isMissingTenantId,
-  passwordsMatch,
   isReturningFromEmailLink,
   isReturningFromSsoFirstFactor,
   secondFactorRequired,
@@ -42,7 +42,7 @@ import {
 } from "./guards";
 import passwordConfig from "./passwordSignUp";
 import selectFactorConfig from "./selectFactor";
-import totpCodeConfig from "./setUpTotp";
+import totpCodeConfig from "./totpCode";
 import smsCodeConfig from "./smsCode";
 import {
   AuthContext,
@@ -161,7 +161,6 @@ export const defaultSignupOptions = {
     isLocalModeWithoutFlow,
     isDevModeWithoutFlow,
     isMissingTenantId,
-    passwordsMatch,
     isReturningFromEmailLink,
     isReturningFromSsoFirstFactor,
     secondFactorRequired,
@@ -178,7 +177,8 @@ export const defaultSignupOptions = {
     setPhoneNumber,
     setTenantIdOrDevMode,
     setTotpCode,
-    setQrCode,
+    setUseBackupCode,
+    setShowEmailOrUsernameIfFirstFactor,
     redirectIfSignedIn,
     setCode,
     setErrorFromApiError,

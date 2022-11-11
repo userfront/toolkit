@@ -85,20 +85,21 @@ export interface Password extends CommonFormData {
   password: string;
 }
 
-export interface SetUpTotp extends CommonFormData {
-  type: "setUpTotp";
-  qrCode: string;
-  totpCode: string;
-  totpBackupCodes: string[];
-  isMfaRequired: boolean;
-  allowedSecondFactors: Factor[];
-}
-
-export interface Totp extends CommonFormData {
+export interface TotpCode extends CommonFormData {
   type: "totp";
+  showEmailOrUsername: boolean;
+  emailOrUsername?: string;
   totpCode: string;
-  backupCode: string;
-  useBackupCode: boolean;
+
+  // Data for login
+  backupCode?: string;
+  useBackupCode?: boolean;
+
+  // Data for signup
+  qrCode?: string;
+  totpBackupCodes?: string[];
+  allowedSecondFactors?: Factor[];
+  isMfaRequired?: boolean;
 }
 
 export interface ResetPassword extends CommonFormData {
@@ -130,8 +131,7 @@ export type View =
   | EmailCode
   | SmsCode
   | Password
-  | SetUpTotp
-  | Totp
+  | TotpCode
   | ResetPassword
   | FirstFactors
   | SecondFactors
@@ -141,7 +141,7 @@ export type View =
 // The full context for the signup form state machine,
 // with view data parameterized by the type of view we're
 // currently on.
-export interface SignupContext<ViewType> {
+export interface AuthContext<ViewType> {
   // User data
   user: UserData;
 
@@ -162,14 +162,15 @@ export interface SignupContext<ViewType> {
 }
 
 // Utility type aliases for each view's context
-export type EmailLinkContext = SignupContext<EmailLink>;
-export type EmailCodeContext = SignupContext<EmailCode>;
-export type SmsCodeContext = SignupContext<SmsCode>;
-export type PasswordContext = SignupContext<Password>;
-export type SetUpTotpContext = SignupContext<SetUpTotp>;
-export type FirstFactorsContext = SignupContext<FirstFactors>;
-export type SecondFactorsContext = SignupContext<SecondFactors>;
-export type LoadingContext = SignupContext<Loading>;
+export type AnyAuthContext = AuthContext<CommonFormData>;
+export type EmailLinkContext = AuthContext<EmailLink>;
+export type EmailCodeContext = AuthContext<EmailCode>;
+export type SmsCodeContext = AuthContext<SmsCode>;
+export type PasswordContext = AuthContext<Password>;
+export type TotpCodeContext = AuthContext<TotpCode>;
+export type FirstFactorsContext = AuthContext<FirstFactors>;
+export type SecondFactorsContext = AuthContext<SecondFactors>;
+export type LoadingContext = AuthContext<Loading>;
 
 // EVENT TYPES
 
@@ -265,7 +266,14 @@ export type PhoneNumberSubmitEvent = {
 
 export type TotpCodeSubmitEvent = {
   type: "submit";
-  totpCode: string;
+  totpCode?: string;
+  backupCode?: string;
+  emailOrUsername?: string;
+};
+
+export type UseBackupCodeEvent = {
+  type: "useBackupCode";
+  useBackupCode: boolean;
 };
 
 export type SelectFactorEvent = {
@@ -287,11 +295,12 @@ export type SignupMachineEvent =
   | PasswordSubmitEvent
   | PhoneNumberSubmitEvent
   | TotpCodeSubmitEvent
+  | UseBackupCodeEvent
   | SelectFactorEvent;
 
 // The full type of the signup machine's config
-export type SignupMachineConfig = MachineConfig<
-  SignupContext<View>,
+export type AuthMachineConfig = MachineConfig<
+  AuthContext<View>,
   any,
   SignupMachineEvent
 >;
