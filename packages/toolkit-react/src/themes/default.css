@@ -1,4 +1,5 @@
-.uf-toolkit-container {
+.uf-toolkit-container,
+.uf-toolkit-element {
   /* default style variables (light) */
 
   /* Outer container */
@@ -80,6 +81,21 @@
 
   /* Text color to use on secondary color backdrop */
   --uf-toolkit-secondary-color-text: #606266;
+
+  /* Logout button background color */
+  --uf-toolkit-logout-color: #f56c6c;
+
+  /* Hovered and active version of the logout color */
+  --uf-toolkit-logout-color-active: #f78989;
+
+  /* Focused version of the logout color */
+  --uf-toolkit-logout-color-focus: var(--uf-toolkit-logout-color-active);
+
+  /* Disabled version of the logout color */
+  --uf-toolkit-logout-color-disabled: #fab6b6;
+
+  /* Text color to use on logout color backdrop */
+  --uf-toolkit-logout-color-text: #ffffff;
 
   /* Link color, for subtle buttons and links */
   --uf-toolkit-link-color: #5e72e4;
@@ -198,6 +214,18 @@
   /* Box shadow for secondary button when hovered, active, focused */
   --uf-toolkit-secondary-button-box-shadow-active: 0 2px 8px 0
     rgba(0, 0, 0, 0.03);
+
+  /* Logout button border */
+  --uf-toolkit-logout-button-border: none;
+
+  /* Hovered or active logout button border */
+  --uf-toolkit-logout-button-border-active: none;
+
+  /* Focused logout button border */
+  --uf-toolkit-logout-button-border-focus: 3px solid #5e72e4;
+
+  /* Box shadow for logout button when hovered, active, focused */
+  --uf-toolkit-logout-button-box-shadow-active: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 
 /* Actual styles for container (separate from variable declarations for clarity and consistency) */
@@ -398,6 +426,30 @@
   background-color: var(--uf-toolkit-primary-color-focus);
   outline: var(--uf-toolkit-primary-button-border-focus);
   box-shadow: var(--uf-toolkit-primary-button-box-shadow-active);
+}
+
+/* Logout button */
+.uf-toolkit-button.uf-toolkit-button-logout {
+  background-color: var(--uf-toolkit-logout-color);
+  color: var(--uf-toolkit-logout-color-text);
+  border: var(--uf-toolkit-logout-button-border);
+  border-radius: var(--uf-toolkit-border-radius);
+  cursor: pointer;
+  line-height: 2;
+  font-weight: 500;
+}
+
+.uf-toolkit-button.uf-toolkit-button-logout:hover,
+.uf-toolkit-button.uf-toolkit-button-logout:active {
+  background-color: var(--uf-toolkit-logout-color-active);
+  border: var(--uf-toolkit-logout-button-border-active);
+  box-shadow: var(--uf-toolkit-logout-button-box-shadow-active);
+}
+
+.uf-toolkit-button.uf-toolkit-button-logout:focus {
+  background-color: var(--uf-toolkit-logout-color-focus);
+  outline: var(--uf-toolkit-logout-button-border-focus);
+  box-shadow: var(--uf-toolkit-logout-button-box-shadow-active);
 }
 
 /* Secondary button */

@@ -23,6 +23,8 @@ import {
   UseBackupCodeEvent,
 } from "./types";
 import { getTargetForFactor, factorConfig, hasValue } from "./utils";
+// @ts-ignore
+import callUserfront from "../services/userfront";
 
 // Clear the current error message, if any
 export const clearError = assign({ error: undefined });
@@ -208,8 +210,7 @@ export const markAsSecondFactor = assign({
 
 // Redirect to the afterLoginPath etc. after signed in, just an alias for the Userfront API method
 export const redirectIfSignedIn = () => {
-  // TODO implementation
-  console.log("redirectIfSignedIn");
+  callUserfront({ method: "redirectIfSignedIn" });
 };
 
 // Set the tenantId based on what was returned from the Userfront API, or set isDevMode = true if

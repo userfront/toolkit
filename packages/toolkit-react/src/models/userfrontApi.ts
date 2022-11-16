@@ -78,6 +78,17 @@ const _mockSuccess = {
 };
 
 let callMethod = (method: string, args?: any) => {
+  if (method === "sendResetLink") {
+    const email = args;
+    return Promise.resolve({
+      message: "OK",
+      result: {
+        email,
+        submittedAt: "2022-11-12T03:04:46.290Z",
+        messageId: "ed2052f6-da85-48aa-a24e-3eab4c5b08d0",
+      },
+    });
+  }
   if (method === "signup") {
     switch (args.method) {
       case "password":
