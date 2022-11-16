@@ -1,6 +1,6 @@
 import callUserfront from "../services/userfront";
 
-const LogoutButton = ({ redirect = true, children }) => {
+const LogoutButton = ({ redirect = true, disabled = false, children }) => {
   const _children = children || "Log out";
   const handleClick = async () => {
     try {
@@ -21,6 +21,8 @@ const LogoutButton = ({ redirect = true, children }) => {
     <button
       onClick={handleClick}
       className="uf-toolkit-element uf-toolkit-button uf-toolkit-button-logout"
+      aria-disabled={disabled}
+      disabled={disabled}
     >
       {_children}
     </button>
