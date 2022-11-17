@@ -20,7 +20,7 @@ const LogoutButton = ({ redirect = true, disabled = false, children }) => {
   return (
     <button
       onClick={handleClick}
-      className="uf-toolkit-element uf-toolkit-button uf-toolkit-button-logout"
+      className="uf-toolkit uf-toolkit-element uf-toolkit-button uf-toolkit-button-logout"
       aria-disabled={disabled}
       disabled={disabled}
     >

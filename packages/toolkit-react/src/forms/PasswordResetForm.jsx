@@ -40,7 +40,10 @@ const PasswordResetForm = () => {
   };
 
   return (
-    <div ref={setContainerRef} className={`uf-toolkit-container ${sizeClass}`}>
+    <div
+      ref={setContainerRef}
+      className={`uf-toolkit uf-toolkit-container ${sizeClass}`}
+    >
       <h2>{title}</h2>
       <p>{text}</p>
       {!success && (
