@@ -10,7 +10,9 @@ jobs:
     uses: ./.github/workflows/run-tests.yaml
   deploy-dev-app:
     uses: ./.github/workflows/deploy-dev-app.yaml
+    secrets: inherit
     if: ${{ always() }} # Deploy dev app even if tests fail
   deploy-storybook:
     uses: ./.github/workflows/deploy-storybook.yaml
+    secrets: inherit
     if: ${{ always() }} # Deploy Storybook even if dev app deploy fails
