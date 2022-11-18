@@ -1,6 +1,6 @@
 import LogoutButton from "../../components/LogoutButton";
 
 export default {
-  title: "LogoutButton",
+  title: "Forms/LogoutButton",
   component: LogoutButton,
 };

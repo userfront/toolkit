@@ -32,7 +32,7 @@ const sizeClasses = {
 };
 
 export default {
-  title: "EnterPhone",
+  title: "Views/Links and codes/Enter phone number",
   component: EnterPhone,
   argTypes: {
     allowBack: {

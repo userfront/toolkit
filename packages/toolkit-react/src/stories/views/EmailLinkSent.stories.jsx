@@ -32,7 +32,7 @@ const sizeClasses = {
 };
 
 export default {
-  title: "EmailLinkSent",
+  title: "Views/Links and codes/Email link sent",
   component: EmailLinkSent,
   argTypes: {
     email: {
@@ -77,7 +77,7 @@ export default {
   },
 };
 
-const Template = (args, { style }) => {
+export const Default = (args, { style }) => {
   if (args.width) {
     let sizeClass = "uf-toolkit-large";
     if (args.width <= 500) {
@@ -120,11 +120,10 @@ const Template = (args, { style }) => {
     </FixedWidth>
   );
 };
-
-export const Default = Template.bind({});
 Default.args = {
   email: "email@example.com",
   size: "uf-toolkit-medium",
   width: 0,
   ...argsForVariables(cssVariables),
 };
+Default.storyName = "Email link sent";

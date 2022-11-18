@@ -83,7 +83,7 @@ const factorForName = {
 };
 
 export default {
-  title: "SelectFactor",
+  title: "Views/Select factor",
   component: SelectFactor,
   argTypes: {
     isCompact: {

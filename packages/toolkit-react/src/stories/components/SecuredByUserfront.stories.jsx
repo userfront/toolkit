@@ -15,7 +15,7 @@ const cssVariables = [
 ];
 
 export default {
-  title: "Secured by Userfront",
+  title: "Components/Secured by Userfront",
   component: SecuredByUserfront,
   argTypes: argTypesForVariables(cssVariables),
 };

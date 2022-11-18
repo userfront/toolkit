@@ -32,7 +32,7 @@ const sizeClasses = {
 };
 
 export default {
-  title: "SetUpTotp",
+  title: "Views/Authenticator/Set up authenticator",
   component: SetUpTotp,
   argTypes: {
     allowBack: {

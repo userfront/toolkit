@@ -32,7 +32,7 @@ const sizeClasses = {
 };
 
 export default {
-  title: "Success",
+  title: "Views/Success",
   component: Success,
   argTypes: {
     size: {
@@ -71,7 +71,7 @@ export default {
   },
 };
 
-const Template = (args, { style }) => {
+export const Default = (args, { style }) => {
   if (args.width) {
     let sizeClass = "uf-toolkit-large";
     if (args.width <= 500) {
@@ -114,8 +114,6 @@ const Template = (args, { style }) => {
     </FixedWidth>
   );
 };
-
-export const Default = Template.bind({});
 Default.args = {
   allowBack: true,
   error: "",
@@ -123,3 +121,4 @@ Default.args = {
   width: 0,
   ...argsForVariables(cssVariables),
 };
+Default.storyName = "Success";

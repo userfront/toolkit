@@ -1,6 +1,6 @@
 import Placeholder from "../../views/Placeholder";
 
 export default {
-  title: "Placeholder",
+  title: "Views/Placeholder",
   component: Placeholder,
 };

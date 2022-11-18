@@ -29,7 +29,7 @@ const cssVariables = [
 ];
 
 export default {
-  title: "Continue button",
+  title: "Components/Continue button",
   component: ContinueButton,
   argTypes: {
     width: {

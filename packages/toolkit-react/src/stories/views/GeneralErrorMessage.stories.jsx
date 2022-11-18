@@ -32,7 +32,7 @@ const sizeClasses = {
 };
 
 export default {
-  title: "GeneralErrorMessage",
+  title: "Views/General (fatal) error message",
   component: GeneralErrorMessage,
   argTypes: {
     error: {
@@ -77,7 +77,7 @@ export default {
   },
 };
 
-const Template = (args, { style }) => {
+export const Default = (args, { style }) => {
   const error = args.error ? { message: args.error } : null;
   if (args.width) {
     let sizeClass = "uf-toolkit-large";
@@ -121,8 +121,6 @@ const Template = (args, { style }) => {
     </FixedWidth>
   );
 };
-
-export const Default = Template.bind({});
 Default.args = {
   error:
     "This view is only shown for a fatal error, most likely during development.",
@@ -130,3 +128,4 @@ Default.args = {
   width: 0,
   ...argsForVariables(cssVariables),
 };
+Default.storyName = "General (fatal) error message";

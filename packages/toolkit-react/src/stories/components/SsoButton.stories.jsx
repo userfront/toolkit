@@ -1,6 +1,6 @@
 import SsoButton from "../../components/SsoButton";
 
 export default {
-  title: "SsoButton",
+  title: "Components/SsoButton",
   component: SsoButton,
 };

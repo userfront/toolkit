@@ -82,7 +82,7 @@ const factorForName = {
 };
 
 export default {
-  title: "Icon button",
+  title: "Components/Icon button",
   component: IconButton,
   argTypes: {
     factor: {

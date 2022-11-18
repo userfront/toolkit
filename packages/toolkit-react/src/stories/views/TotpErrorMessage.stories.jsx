@@ -32,7 +32,7 @@ const sizeClasses = {
 };
 
 export default {
-  title: "TotpErrorMessage",
+  title: "Views/Authenticator/Setup (fatal) error message",
   component: TotpErrorMessage,
   argTypes: {
     allowBack: {

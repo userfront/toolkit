@@ -32,7 +32,7 @@ const sizeClasses = {
 };
 
 export default {
-  title: "EnterTotpCode",
+  title: "Views/Authenticator/Enter code",
   component: EnterTotpCode,
   argTypes: {
     allowBack: {

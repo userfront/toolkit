@@ -14,7 +14,7 @@ const cssVariables = [
 ];
 
 export default {
-  title: "Divider",
+  title: "Components/Divider",
   component: Divider,
   argTypes: {
     text: {

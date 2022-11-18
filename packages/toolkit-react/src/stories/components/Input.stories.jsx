@@ -26,7 +26,7 @@ const cssVariables = [
 ];
 
 export default {
-  title: "Input",
+  title: "Components/Input",
   component: Input,
   argTypes: {
     labelText: {

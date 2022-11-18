@@ -29,7 +29,7 @@ const cssVariables = [
 ];
 
 export default {
-  title: "Submit button",
+  title: "Components/Submit button",
   component: SubmitButton,
   argTypes: {
     text: {

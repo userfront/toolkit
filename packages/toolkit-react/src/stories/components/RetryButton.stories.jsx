@@ -17,7 +17,7 @@ const cssVariables = [
 ];
 
 export default {
-  title: "Retry button",
+  title: "Components/Retry button",
   component: RetryButton,
   argTypes: {
     text: {

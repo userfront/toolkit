@@ -17,7 +17,7 @@ const cssVariables = [
 ];
 
 export default {
-  title: "Alternative (subtle) button",
+  title: "Components/Alternative (subtle) button",
   component: AlternativeButton,
   argTypes: {
     text: {

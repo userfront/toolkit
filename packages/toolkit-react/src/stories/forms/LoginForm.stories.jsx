@@ -1,6 +1,6 @@
 import LoginForm from "../../forms/LoginForm";
 
 export default {
-  title: "LoginForm",
+  title: "Forms/LoginForm",
   component: LoginForm,
 };

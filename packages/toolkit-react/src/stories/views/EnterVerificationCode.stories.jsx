@@ -32,7 +32,7 @@ const sizeClasses = {
 };
 
 export default {
-  title: "EnterVerificationCode",
+  title: "Views/Links and codes/Enter verification code",
   component: EnterVerificationCode,
   argTypes: {
     allowBack: {

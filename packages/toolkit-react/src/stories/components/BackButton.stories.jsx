@@ -29,7 +29,7 @@ const cssVariables = [
 ];
 
 export default {
-  title: "Back button",
+  title: "Components/Back button",
   component: BackButton,
   argTypes: {
     text: {

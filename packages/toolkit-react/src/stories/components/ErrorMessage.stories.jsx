@@ -18,7 +18,7 @@ const cssVariables = [
 ];
 
 export default {
-  title: "ErrorMessage",
+  title: "Components/ErrorMessage",
   component: ErrorMessage,
   argTypes: {
     message: {

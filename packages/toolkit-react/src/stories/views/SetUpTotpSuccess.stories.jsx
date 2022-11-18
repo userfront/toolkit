@@ -32,7 +32,7 @@ const sizeClasses = {
 };
 
 export default {
-  title: "SetUpTotpSuccess",
+  title: "Views/Authenticator/Set up authenticator - success",
   component: SetUpTotpSuccess,
   argTypes: {
     size: {
@@ -71,7 +71,7 @@ export default {
   },
 };
 
-const Template = (args, { style }) => {
+export const Default = (args, { style }) => {
   const backupCodes = [
     "482391",
     "820340",
@@ -84,7 +84,6 @@ const Template = (args, { style }) => {
     "929189",
     "222257",
   ];
-  const error = args.error ? { message: args.error } : null;
   if (args.width) {
     let sizeClass = "uf-toolkit-large";
     if (args.width <= 500) {
@@ -127,8 +126,6 @@ const Template = (args, { style }) => {
     </FixedWidth>
   );
 };
-
-export const Default = Template.bind({});
 Default.args = {
   allowBack: true,
   error: "",
@@ -136,3 +133,4 @@ Default.args = {
   width: 0,
   ...argsForVariables(cssVariables),
 };
+Default.storyName = "Set up authenticator - success";

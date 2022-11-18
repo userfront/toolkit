@@ -32,7 +32,7 @@ const sizeClasses = {
 };
 
 export default {
-  title: "EnterBackupCode",
+  title: "Views/Authenticator/Enter backup code",
   component: EnterBackupCode,
   argTypes: {
     allowBack: {

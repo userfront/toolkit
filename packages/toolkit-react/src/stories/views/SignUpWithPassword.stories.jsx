@@ -32,7 +32,7 @@ const sizeClasses = {
 };
 
 export default {
-  title: "SignUpWithPassword",
+  title: "Views/Password/Sign up with password",
   component: SignUpWithPassword,
   argTypes: {
     allowBack: {

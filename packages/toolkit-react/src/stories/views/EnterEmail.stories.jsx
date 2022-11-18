@@ -32,7 +32,7 @@ const sizeClasses = {
 };
 
 export default {
-  title: "EnterEmail",
+  title: "Views/Links and codes/Enter email",
   component: EnterEmail,
   argTypes: {
     allowBack: {
