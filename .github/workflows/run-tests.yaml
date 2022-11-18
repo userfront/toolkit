@@ -16,7 +16,7 @@ jobs:
       - name: 'Install dependencies'
         run: npm ci
       - name: 'Run unit tests'
-        run: npm coverage
+        run: npm run coverage
       - name: 'Report coverage'
         if: ${{ always() }} # Generate report if tests are failing, too
         uses: davelosert/vitest-coverage-report-action@v1
