@@ -11,12 +11,13 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '>16.14'
-      - name: 'Switch to toolkit-react package directory'
-        run: cd packages/toolkit-react
       - name: 'Install dependencies'
+        working-directory: packages/toolkit-react
         run: npm ci
       - name: 'Run unit tests'
+        working-directory: packages/toolkit-react
         run: npm run coverage
       - name: 'Report coverage'
+        working-directory: packages/toolkit-react
         if: ${{ always() }} # Generate report if tests are failing, too
         uses: davelosert/vitest-coverage-report-action@v1
