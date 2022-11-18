@@ -13,6 +13,15 @@ export const parameters = {
     //   date: /Date$/,
     // },
   },
+  backgrounds: {
+    default: "default",
+    values: [
+      {
+        name: "default",
+        value: "#f8f9fa"
+      }
+    ]
+  }
 }
 
 // export const globalTypes = {

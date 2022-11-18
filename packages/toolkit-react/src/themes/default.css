@@ -257,6 +257,13 @@
   font-size: var(--uf-toolkit-em-size);
 }
 
+/* Styles for the Storybook test background for components */
+.uf-toolkit-test-background {
+  margin: 0 auto;
+  width: 100%;
+  max-width: min-content;
+}
+
 /* Actual styles for container (separate from variable declarations for clarity and consistency) */
 .uf-toolkit-container {
   color: var(--uf-toolkit-text-color);
@@ -407,11 +414,12 @@
   margin-bottom: var(--uf-toolkit-spacing);
 }
 
-.uf-toolkit-button:hover:not(:disabled),
-.uf-toolkit-button:active:not(:disabled) {
+.uf-toolkit-button:not(.uf-toolkit-button-subtle):hover:not(:disabled),
+.uf-toolkit-button:not(.uf-toolkit-button-subtle):active:not(:disabled) {
   transform: var(--uf-toolkit-button-hover-transform);
 }
 
+/* Icon buttons */
 .uf-toolkit-button .uf-toolkit-button-icon {
   width: var(--uf-toolkit-button-icon-size) !important;
   height: var(--uf-toolkit-button-icon-size) !important;

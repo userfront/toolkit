@@ -1,4 +1,4 @@
-const BackButton = ({ onEvent, onClick, ...props }) => {
+const BackButton = ({ onEvent, onClick, children, ...props }) => {
   const handleClick = (evt) => {
     if (onEvent) {
       onEvent({
@@ -9,6 +9,8 @@ const BackButton = ({ onEvent, onClick, ...props }) => {
       onClick(evt);
     }
   };
+
+  const content = children || "Back";
   return (
     <button
       className="uf-toolkit-button uf-toolkit-button-secondary"
@@ -16,7 +18,7 @@ const BackButton = ({ onEvent, onClick, ...props }) => {
       {...props}
       onClick={handleClick}
     >
-      Back
+      {content}
     </button>
   );
 };

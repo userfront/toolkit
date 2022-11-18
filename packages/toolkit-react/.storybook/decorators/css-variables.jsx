@@ -22,7 +22,7 @@ export const initialCssVariables = createInitialCssVariables(
 );
 
 export const withCssVariables = (Story, options) => {
-  const { args } = options;
+  const { args, parameters } = options;
   const cssVariables = { ...initialCssVariables };
   Object.keys(initialCssVariables).forEach((name) => {
     if (args[name]) {
@@ -30,8 +30,22 @@ export const withCssVariables = (Story, options) => {
     }
   });
 
+  if (parameters.passStyle) {
+    return (
+      <div
+        className="uf-toolkit uf-toolkit-element uf-toolkit-test-background"
+        style={cssVariables}
+      >
+        <Story style={cssVariables} />
+      </div>
+    );
+  }
+
   return (
-    <div className="uf-toolkit uf-toolkit-element" style={cssVariables}>
+    <div
+      className="uf-toolkit uf-toolkit-element uf-toolkit-test-background"
+      style={cssVariables}
+    >
       <Story />
     </div>
   );

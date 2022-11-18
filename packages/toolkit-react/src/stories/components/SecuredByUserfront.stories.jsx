@@ -1,6 +1,29 @@
 import SecuredByUserfront from "../../components/SecuredByUserfront";
+import {
+  argTypesForVariables,
+  argsForVariables,
+} from "../../../.storybook/decorators/css-variables";
+import FixedWidth from "../utils/FixedWidth";
+
+const cssVariables = [
+  "--uf-toolkit-secured-font-color",
+  "--uf-toolkit-secured-font-size",
+  "--uf-toolkit-spacing",
+  "--uf-toolkit-font-family",
+  "--uf-toolkit-alignment",
+  "--uf-toolkit-em-size",
+];
 
 export default {
-  title: "SecuredByUserfront",
+  title: "Secured by Userfront",
   component: SecuredByUserfront,
+  argTypes: argTypesForVariables(cssVariables),
 };
+
+export const Default = (args) => (
+  <FixedWidth width={400}>
+    <SecuredByUserfront />
+  </FixedWidth>
+);
+Default.args = argsForVariables(cssVariables);
+Default.storyName = "Secured by Userfront";
