@@ -33,5 +33,8 @@ export default defineConfig({
   },
   test: {
     includeSource: ["src/**/*.{js,jsx,ts,tsx}"],
+    coverage: {
+      reporter: ["text", "json-summary", "json"],
+    },
   },
 });

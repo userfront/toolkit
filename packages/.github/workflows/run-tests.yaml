@@ -1,0 +1,22 @@
+name: 'Run tests'
+on:
+  workflow_call:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: 'Install Node'
+        uses: actions/setup-node@v2
+        with:
+          node-version: '>16.14'
+      - name: 'Switch to toolkit-react package directory'
+        run: cd packages/toolkit-react
+      - name: 'Install dependencies'
+        run: npm ci
+      - name: 'Run unit tests'
+        run: npm coverage
+      - name: 'Report coverage'
+        if: ${{ always() }} # Generate report if tests are failing, too
+        uses: davelosert/vitest-coverage-report-action@v1
