@@ -10,18 +10,6 @@ import { useState, useEffect } from "react";
 
 const LoginFormModel = createLoginFormModel(defaultLoginFormContext);
 
-const childIdForStep = (stepName) => {
-  switch (stepName) {
-    case "smsCodeSecondFactor":
-      return "smsCode";
-    case null:
-    case undefined:
-      return null;
-    default:
-      return stepName;
-  }
-};
-
 function App() {
   const [hasSetInitialState, setHasSetInitialState] = useState(false);
   const [initialState, setInitialState] = useState({});
