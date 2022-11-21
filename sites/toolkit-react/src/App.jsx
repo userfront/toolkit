@@ -1,4 +1,5 @@
 import "./App.css";
+import "toolkit-react/style.css";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SignupDemo from "./pages/SignupDemo";

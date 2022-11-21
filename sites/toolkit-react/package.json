@@ -13,7 +13,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.3",
-    "toolkit-react": "*",
+    "toolkit-react": "../../packages/toolkit-react",
     "urlon": "^3.1.0"
   },
   "devDependencies": {
