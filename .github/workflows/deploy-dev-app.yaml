@@ -1,4 +1,6 @@
 name: 'Deploy dev app'
+env:
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_REACT_DEV_APP_PROJECT_ID }}
 on:
   workflow_call:
 
