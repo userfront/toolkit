@@ -18,7 +18,10 @@
   },
   "scripts": {
     "prepare": "husky install",
-    "lint": "prettier --check \"packages/**/*.{jsx?,tsx?}\""
+    "lint": "prettier --check \"packages/**/*.{jsx?,tsx?}\"",
+    "install:package:react": "cd ./packages/toolkit-react && npm install",
+    "install:site:react": "cd ./sites/toolkit-react && npm install",
+    "build:site:react": "cd ./sites/toolkit-react && npm run build"
   },
   "repository": {
     "type": "git",
