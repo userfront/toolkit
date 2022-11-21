@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
-    "preinstall": "cd ../.. && npm install"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@xstate/react": "^3.0.1",
