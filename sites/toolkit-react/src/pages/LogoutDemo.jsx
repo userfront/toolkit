@@ -1,4 +1,4 @@
-import { LogoutButton } from "toolkit-react";
+import { LogoutButton } from "../../../../packages/toolkit-react/src/index.js";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 

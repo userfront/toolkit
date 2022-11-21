@@ -2,7 +2,7 @@ import {
   SignupForm,
   createSignupFormModel,
   defaultSignupFormContext,
-} from "toolkit-react";
+} from "../../../../packages/toolkit-react/src/index.js";
 import { Link } from "react-router-dom";
 import { useMachine } from "@xstate/react";
 import Urlon from "urlon";
