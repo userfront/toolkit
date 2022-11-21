@@ -14,6 +14,7 @@
     "coverage": "vitest run --coverage",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
+    "preinstall": "cd ../.. && npm install",
     "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\""
   },
   "author": "",
