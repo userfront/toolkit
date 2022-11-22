@@ -4,6 +4,9 @@ on:
 
 jobs:
   test:
+    defaults:
+      run:
+        working-directory: packages/toolkit-react
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -12,12 +15,9 @@ jobs:
         with:
           node-version: '>16.14'
       - name: 'Install dependencies'
-        working-directory: packages/toolkit-react
         run: npm ci
       - name: 'Run unit tests'
-        working-directory: packages/toolkit-react
         run: npm run coverage
       - name: 'Report coverage'
-        working-directory: packages/toolkit-react
         if: ${{ always() }} # Generate report if tests are failing, too
         uses: davelosert/vitest-coverage-report-action@v1
