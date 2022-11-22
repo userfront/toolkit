@@ -23,3 +23,5 @@ jobs:
       - name: 'Report coverage'
         if: ${{ always() }} # Generate report if tests are failing, too
         uses: davelosert/vitest-coverage-report-action@v1
+        with:
+          working-directory: 'packages/toolkit-react'
