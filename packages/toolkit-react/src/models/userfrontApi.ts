@@ -3,7 +3,7 @@
 // Purpose is to allow us to abstract away the Userfront API,
 // instead use a simple model for MBT or whatever.
 
-import { createMachine, assign, sendParent } from "xstate";
+import { createMachine, assign, sendParent, MachineConfig } from "xstate";
 
 export type CallUserfrontApiContext = {
   method: string;
@@ -20,6 +20,12 @@ export type CallUserfrontApiEvents =
   | { type: "failure" }
   | { type: "successDev" }
   | { type: "success" };
+
+export type CallUserfrontApiMachineConfig = MachineConfig<
+  CallUserfrontApiContext,
+  any,
+  CallUserfrontApiEvents
+>;
 
 // Just some mock data to allow messing with the state machine
 const _mockSuccess = {
@@ -124,7 +130,14 @@ let callMethod = (method: string, ...args: any) => {
   }
 };
 
-export const callUserfrontApi = createMachine({
+const defaultOptions = {
+  services: {
+    callMethod: (context: CallUserfrontApiContext) =>
+      callMethod(context.method, context.args),
+  },
+};
+
+export const config: CallUserfrontApiMachineConfig = {
   id: "callUserfrontApi",
   schema: {
     context: {} as CallUserfrontApiContext,
@@ -149,7 +162,7 @@ export const callUserfrontApi = createMachine({
     call: {
       // Call the API method, await its result
       invoke: {
-        src: (context) => callMethod(context.method, context.args),
+        src: "callMethod",
         // On success, record the data
         onDone: {
           target: "success",
@@ -185,7 +198,9 @@ export const callUserfrontApi = createMachine({
       data: {},
     },
   },
-});
+};
+
+export const callUserfrontApi = createMachine(config, defaultOptions);
 
 /* UNIT TESTS */
 import { interpret } from "xstate";

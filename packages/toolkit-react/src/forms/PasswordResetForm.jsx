@@ -35,7 +35,7 @@ const PasswordResetForm = () => {
       );
     } catch (err) {
       setLoading(false);
-      setError(err.message);
+      setError(err);
     }
   };
 

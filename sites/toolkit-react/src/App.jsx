@@ -7,6 +7,17 @@ import LoginDemo from "./pages/LoginDemo";
 import ResetDemo from "./pages/ResetDemo";
 import LogoutDemo from "./pages/LogoutDemo";
 import Index from "./pages/Index";
+import Redirect from "./pages/Redirect";
+import LiveSignupDemo from "./pages/LiveSignupDemo";
+import LiveLoginDemo from "./pages/LiveLoginDemo";
+import LiveResetDemo from "./pages/LiveResetDemo";
+import LiveLogoutDemo from "./pages/LiveLogoutDemo";
+
+import Userfront from "@userfront/core";
+
+Userfront.init("6bg66q7n");
+
+window.Userfront = Userfront;
 
 const router = createBrowserRouter([
   {
@@ -28,6 +39,38 @@ const router = createBrowserRouter([
   {
     path: "/logout",
     element: <LogoutDemo />,
+  },
+  {
+    path: "/live/login",
+    element: <LiveLoginDemo />,
+  },
+  {
+    path: "/live/signup",
+    element: <LiveSignupDemo />,
+  },
+  {
+    path: "/live/reset",
+    element: <LiveResetDemo />,
+  },
+  {
+    path: "/live/logout",
+    element: <LiveLogoutDemo />,
+  },
+  {
+    path: "/redirects/after-login",
+    element: () => <Redirect type="after login" />,
+  },
+  {
+    path: "/redirects/after-logout",
+    element: () => <Redirect type="after logout" />,
+  },
+  {
+    path: "/redirects/after-signup",
+    element: () => <Redirect type="after signup" />,
+  },
+  {
+    path: "/redirects/password-reset",
+    element: () => <Redirect type="password reset" />,
   },
 ]);
 

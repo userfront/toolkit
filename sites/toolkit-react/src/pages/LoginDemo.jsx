@@ -1,5 +1,5 @@
 import {
-  LoginForm,
+  LoginForm as UnboundLoginForm,
   createLoginFormModel,
   defaultLoginFormContext,
 } from "../../../../packages/toolkit-react/src/index.js";
@@ -54,10 +54,7 @@ function App() {
     setStateUrlon(newUrlon);
   }, [state]);
 
-  console.log("state", state);
-
   const handleEvent = (event) => {
-    console.log("event", event);
     send(event);
   };
 
@@ -66,7 +63,7 @@ function App() {
       <div>
         <Link to="/">Home</Link>
       </div>
-      <LoginForm state={state} onEvent={handleEvent} />
+      <UnboundLoginForm state={state} onEvent={handleEvent} />
       <hr />
       <div>
         <h2>State JSON:</h2>

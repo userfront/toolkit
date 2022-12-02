@@ -1,5 +1,5 @@
 import {
-  SignupForm,
+  SignupForm as UnboundSignupForm,
   createSignupFormModel,
   defaultSignupFormContext,
 } from "../../../../packages/toolkit-react/src/index.js";
@@ -78,7 +78,7 @@ function App() {
       <div>
         <Link to="/">Home</Link>
       </div>
-      <SignupForm state={state} onEvent={handleEvent} />
+      <UnboundSignupForm state={state} onEvent={handleEvent} />
       <hr />
       <div>
         <h2>State JSON:</h2>

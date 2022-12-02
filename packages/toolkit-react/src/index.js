@@ -1,5 +1,7 @@
-export { default as SignupForm } from "./forms/SignupForm";
-export { default as LoginForm } from "./forms/LoginForm";
+export { default as UnboundSignupForm } from "./forms/SignupForm";
+export { default as UnboundLoginForm } from "./forms/LoginForm";
+export { default as SignupForm } from "./packaged-forms/SignupForm";
+export { default as LoginForm } from "./packaged-forms/LoginForm";
 export { default as PasswordResetForm } from "./forms/PasswordResetForm";
 export { default as LogoutButton } from "./components/LogoutButton";
 export {

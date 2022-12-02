@@ -18,9 +18,13 @@ const call = async ({ method, args, isDevMode = false, _devDataType = "" }) => {
   return new Promise((resolve, reject) => {
     const service = interpret(machine).onTransition((state) => {
       if (state.matches("success") || state.matches("successDev")) {
+        console.log("success");
+        console.log(state.context);
         return resolve(state.context.result);
       }
       if (state.matches("failure")) {
+        console.log("failure");
+        console.log(state.context);
         return reject(state.context.error);
       }
     });
