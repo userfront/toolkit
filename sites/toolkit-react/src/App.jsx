@@ -12,6 +12,7 @@ import LiveSignupDemo from "./pages/LiveSignupDemo";
 import LiveLoginDemo from "./pages/LiveLoginDemo";
 import LiveResetDemo from "./pages/LiveResetDemo";
 import LiveLogoutDemo from "./pages/LiveLogoutDemo";
+import LiveSetNewPasswordDemo from "./pages/LiveSetNewPasswordDemo";
 
 import Userfront from "@userfront/core";
 
@@ -70,7 +71,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/redirects/password-reset",
-    element: () => <Redirect type="password reset" />,
+    element: <LiveSetNewPasswordDemo />,
   },
 ]);
 
