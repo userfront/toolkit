@@ -45,11 +45,20 @@ const emailLinkConfig: AuthMachineConfig = {
           };
         },
         // On success, show that the email was sent
-        onDone: {
-          target: "showEmailSent",
-        },
-        // On failure, store the error and return to the email entry screen so we can try again
-        onError: {
+        onDone: [
+          {
+            actions: "setErrorFromApiError",
+            target: "showForm",
+            cond: "isUserfrontError",
+          },
+          {
+            target: "showEmailSent",
+          },
+        ],
+      },
+      // On failure, store the error and return to the email entry screen so we can try again
+      on: {
+        error: {
           actions: "setErrorFromApiError",
           target: "showForm",
         },

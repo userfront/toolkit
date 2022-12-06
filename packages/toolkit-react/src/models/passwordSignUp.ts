@@ -54,6 +54,12 @@ const passwordConfig: AuthMachineConfig = {
           };
         },
         onDone: [
+          // On error, store the error and return to the form
+          {
+            actions: "setErrorFromApiError",
+            target: "showForm",
+            cond: "isUserfrontError",
+          },
           // On success, proceed to second factor if required
           {
             actions: "setAllowedSecondFactors",
@@ -66,11 +72,6 @@ const passwordConfig: AuthMachineConfig = {
             target: "showPasswordSet",
           },
         ],
-        // Store the error and return to the form
-        onError: {
-          actions: "setErrorFromApiError",
-          target: "showForm",
-        },
       },
     },
     // Show a confirmation view, in case we don't redirect

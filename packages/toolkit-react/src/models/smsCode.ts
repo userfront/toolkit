@@ -43,13 +43,16 @@ const smsCodeConfig: AuthMachineConfig = {
             args,
           };
         },
-        onDone: {
-          target: "showCodeForm",
-        },
-        onError: {
-          actions: "setErrorFromApiError",
-          target: "showForm",
-        },
+        onDone: [
+          {
+            actions: "setErrorFromApiError",
+            target: "showForm",
+            cond: "isUserfrontError",
+          },
+          {
+            target: "showCodeForm",
+          },
+        ],
       },
     },
     showCodeForm: {
@@ -79,6 +82,11 @@ const smsCodeConfig: AuthMachineConfig = {
         },
         onDone: [
           {
+            actions: "setErrorFromApiError",
+            target: "showCodeForm",
+            cond: "isUserfrontError",
+          },
+          {
             actions: "setAllowedSecondFactors",
             target: "#beginSecondFactor",
             cond: "secondFactorRequired",
@@ -88,10 +96,6 @@ const smsCodeConfig: AuthMachineConfig = {
             target: "showCodeVerified",
           },
         ],
-        onError: {
-          actions: "setErrorFromApiError",
-          target: "showCodeForm",
-        },
       },
     },
     showCodeVerified: {

@@ -42,14 +42,17 @@ const emailCodeConfig: AuthMachineConfig = {
           };
         },
         // On success, ask the user to enter the verification code
-        onDone: {
-          target: "showCodeForm",
-        },
-        // On failure, set the error message and return to the entry form
-        onError: {
-          actions: "setErrorFromApiError",
-          target: "showForm",
-        },
+        onDone: [
+          // On failure, set the error message and return to the entry form
+          {
+            actions: "setErrorFromApiError",
+            target: "showForm",
+            cond: "isUserfrontError",
+          },
+          {
+            target: "showCodeForm",
+          },
+        ],
       },
     },
     // Show the form asking the user to enter the verification code
@@ -85,6 +88,12 @@ const emailCodeConfig: AuthMachineConfig = {
           };
         },
         onDone: [
+          // On error, show the error message on the code entry form
+          {
+            actions: "setErrorFromApiError",
+            target: "showCodeForm",
+            cond: "isUserfrontError",
+          },
           // If we need to enter a second factor, proceed to that step
           {
             actions: "setAllowedSecondFactors",
@@ -98,11 +107,6 @@ const emailCodeConfig: AuthMachineConfig = {
             target: "showCodeVerified",
           },
         ],
-        // On error, show the error message on the code entry form
-        onError: {
-          actions: "setErrorFromApiError",
-          target: "showCodeForm",
-        },
       },
     },
     // Show a "verified" view, so we have something to show if there's nowhere to redirect to

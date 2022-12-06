@@ -39,6 +39,7 @@ import {
   secondFactorRequiredFromView,
   secondFactorNotRequired,
   isSecondFactor,
+  isUserfrontError,
 } from "./guards";
 import passwordConfig from "./passwordSignUp";
 import selectFactorConfig from "./selectFactor";
@@ -167,6 +168,7 @@ export const defaultSignupOptions = {
     secondFactorRequiredFromView,
     secondFactorNotRequired,
     isSecondFactor,
+    isUserfrontError,
   },
   actions: {
     setActiveFactor,
@@ -282,14 +284,12 @@ const signupMachineConfig: AuthMachineConfig = {
         }),
         // Set the tenant ID if one was present, otherwise set isDevMode = true.
         // Then proceed to start the flow.
-        onDone: {
-          target: "initFlow",
-          actions: "setTenantIdOrDevMode",
-        },
-        // This error condition is handled in the initFlow step.
-        onError: {
-          target: "initFlow",
-        },
+        onDone: [
+          {
+            target: "initFlow",
+            actions: "setTenantIdOrDevMode",
+          },
+        ],
       },
     },
     // Start the flow, if possible, or report an error.
@@ -350,15 +350,14 @@ const signupMachineConfig: AuthMachineConfig = {
         }),
         // On success, proceed to the first step
         onDone: [
+          // On failure, report an error.
+          {
+            target: "missingFlowFromServerError",
+            cond: "isUserfrontError",
+          },
           {
             target: "beginFlow",
             actions: "setFlowFromUserfrontApi",
-          },
-        ],
-        // On failure, report an error.
-        onError: [
-          {
-            target: "missingFlowFromServerError",
           },
         ],
       },
@@ -375,6 +374,11 @@ const signupMachineConfig: AuthMachineConfig = {
         // On success, if the user hasn't selected a factor, then proceed as normal.
         // If the user has selected a factor, proceed directly to that factor's view.
         onDone: [
+          // Report errors.
+          {
+            target: "missingFlowFromServerError",
+            cond: "isUserfrontError",
+          },
           {
             target: "beginFlow",
             cond: "hasNoActiveFactor",
@@ -382,12 +386,6 @@ const signupMachineConfig: AuthMachineConfig = {
           },
           {
             actions: "setFlowFromUserfrontApiAndResume",
-          },
-        ],
-        // Report errors.
-        onError: [
-          {
-            target: "missingFlowFromServerError",
           },
         ],
       },

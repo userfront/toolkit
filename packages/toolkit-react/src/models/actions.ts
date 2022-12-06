@@ -31,7 +31,7 @@ export const clearError = assign({ error: undefined });
 
 // Set the error message from a Userfront API error
 export const setErrorFromApiError = assign({
-  errorMessage: (context, event: UserfrontApiErrorEvent) => event.data,
+  error: (context, event: UserfrontApiErrorEvent) => event.data.error,
 });
 
 // Create & set the error message for a password mismatch (password !== confirmPassword)

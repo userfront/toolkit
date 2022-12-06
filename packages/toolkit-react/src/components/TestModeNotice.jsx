@@ -7,11 +7,11 @@ const TestModeNotice = () => {
 
   useEffect(() => {
     const perform = async () => {
-      const { value: mode } = await callUserfront({
+      const result = await callUserfront({
         method: READ,
         args: { key: "mode" },
       });
-      if (mode.value === "test") {
+      if (result?.mode?.value === "test") {
         setIsTestMode(true);
         setTestModeReason(mode.reason);
       }

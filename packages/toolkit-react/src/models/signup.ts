@@ -39,6 +39,7 @@ import {
   secondFactorRequiredFromView,
   secondFactorNotRequired,
   isSecondFactor,
+  isUserfrontError,
 } from "./guards";
 import passwordConfig from "./passwordSignUp";
 import selectFactorConfig from "./selectFactor";
@@ -168,6 +169,7 @@ export const defaultSignupOptions = {
     secondFactorRequiredFromView,
     secondFactorNotRequired,
     isSecondFactor,
+    isUserfrontError,
   },
   actions: {
     setActiveFactor,
@@ -286,10 +288,6 @@ const signupMachineConfig: AuthMachineConfig = {
           target: "initFlow",
           actions: "setTenantIdOrDevMode",
         },
-        // This error condition is handled in the initFlow step.
-        onError: {
-          target: "initFlow",
-        },
       },
     },
     // Start the flow, if possible, or report an error.
@@ -350,15 +348,14 @@ const signupMachineConfig: AuthMachineConfig = {
         }),
         // On success, proceed to the first step
         onDone: [
+          // On failure, report an error.
+          {
+            target: "missingFlowFromServerError",
+            cond: "isUserfrontError",
+          },
           {
             target: "beginFlow",
             actions: "setFlowFromUserfrontApi",
-          },
-        ],
-        // On failure, report an error.
-        onError: [
-          {
-            target: "missingFlowFromServerError",
           },
         ],
       },
@@ -376,18 +373,16 @@ const signupMachineConfig: AuthMachineConfig = {
         // If the user has selected a factor, proceed directly to that factor's view.
         onDone: [
           {
+            target: "missingFlowFromServerError",
+            cond: "isUserfrontError",
+          },
+          {
             target: "beginFlow",
             cond: "hasNoActiveFactor",
             actions: "setFlowFromUserfrontApi",
           },
           {
             actions: "setFlowFromUserfrontApiAndResume",
-          },
-        ],
-        // Report errors.
-        onError: [
-          {
-            target: "missingFlowFromServerError",
           },
         ],
       },

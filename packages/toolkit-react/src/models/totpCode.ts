@@ -46,6 +46,12 @@ const totpCodeConfig: AuthMachineConfig = {
           };
         },
         onDone: [
+          // On error, store the error and return to the form
+          {
+            actions: "setErrorFromApiError",
+            target: "showForm",
+            cond: "isUserfrontError",
+          },
           // On success, proceed to second factor if required
           {
             actions: "setAllowedSecondFactors",
@@ -58,11 +64,6 @@ const totpCodeConfig: AuthMachineConfig = {
             target: "showTotpSuccess",
           },
         ],
-        // Store the error and return to the form
-        onError: {
-          actions: "setErrorFromApiError",
-          target: "showForm",
-        },
       },
     },
     sendBackupCode: {
@@ -84,6 +85,12 @@ const totpCodeConfig: AuthMachineConfig = {
           };
         },
         onDone: [
+          // On error, store the error and return to the form
+          {
+            actions: "setErrorFromApiError",
+            target: "showForm",
+            cond: "isUserfrontError",
+          },
           // On success, proceed to second factor if required
           {
             actions: "setAllowedSecondFactors",
@@ -96,11 +103,6 @@ const totpCodeConfig: AuthMachineConfig = {
             target: "showTotpSuccess",
           },
         ],
-        // Store the error and return to the form
-        onError: {
-          actions: "setErrorFromApiError",
-          target: "showForm",
-        },
       },
     },
     // Show a confirmation view, in case we don't redirect

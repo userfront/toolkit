@@ -111,9 +111,9 @@ let callMethod = (method: string, ...args: any) => {
       });
     }
     if (method === "signup") {
-      switch (args.method) {
-        case "password":
+      switch (args[0].method) {
         case "passwordless":
+        case "password":
         case "verificationCode":
           return Promise.resolve(_mockSuccess.signupFirst);
         default:
@@ -200,10 +200,10 @@ export const config: CallUserfrontApiMachineConfig = {
       type: "final",
       data: (context) => context.result,
     },
-    // If we failed, return "error" to the parent with the error as data
+    // If we failed, return "done" to the parent with an error flag and error as data
     failure: {
       type: "final",
-      entry: (context) => sendParent("error", context.error),
+      data: (context) => ({ _isError: true, error: context.error }),
     },
     // If we're in dev mode, return "done" to the parent with some dummy data
     // TODO dummy data generation

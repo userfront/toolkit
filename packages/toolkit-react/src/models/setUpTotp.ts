@@ -1,4 +1,4 @@
-import { AuthMachineConfig, SetUpTotpContext } from "./types";
+import { AuthMachineConfig, TotpCodeContext } from "./types";
 import { callUserfrontApi } from "./userfrontApi";
 
 // TOTP Authenticator setup state machine config
@@ -12,20 +12,23 @@ const setUpTotpConfig: AuthMachineConfig = {
     getQrCode: {
       invoke: {
         src: callUserfrontApi,
-        data: (context: SetUpTotpContext, event: any) => ({
+        data: (context: TotpCodeContext, event: any) => ({
           method: "getTotpAuthenticatorQrCode",
           args: {},
         }),
         // Once we have the QR code, show the form
-        onDone: {
-          actions: "setQrCode",
-          target: "showQrCode",
-        },
-        // If there's a problem getting the QR code, show an error message
-        onError: {
-          actions: "setErrorFromApiError",
-          target: "showErrorMessage",
-        },
+        onDone: [
+          // If there's a problem getting the QR code, show an error message
+          {
+            actions: "setErrorFromApiError",
+            target: "showErrorMessage",
+            cond: "isUserfrontError",
+          },
+          {
+            actions: "setQrCode",
+            target: "showQrCode",
+          },
+        ],
       },
     },
     // Show the form with QR code + field to verify it works
@@ -47,7 +50,7 @@ const setUpTotpConfig: AuthMachineConfig = {
       invoke: {
         src: callUserfrontApi,
         // Set the code and call the API method
-        data: (context: SetUpTotpContext, event: any) => ({
+        data: (context: TotpCodeContext, event: any) => ({
           method: "signup",
           args: {
             method: "totp",
@@ -55,15 +58,18 @@ const setUpTotpConfig: AuthMachineConfig = {
           },
         }),
         // When verified, show the backup codes so the user can record them
-        onDone: {
-          actions: "storeFactorResponse",
-          target: "showBackupCodes",
-        },
-        // On error, show the error message and return to the form
-        onError: {
-          actions: "setErrorFromApiError",
-          target: "showQrCode",
-        },
+        onDone: [
+          // On error, show the error message and return to the form
+          {
+            actions: "setErrorFromApiError",
+            target: "showQrCode",
+            cond: "isUserfrontError",
+          },
+          {
+            actions: "storeFactorResponse",
+            target: "showBackupCodes",
+          },
+        ],
       },
     },
     // Show the user's backup codes once TOTP setup succeeds

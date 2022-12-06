@@ -233,7 +233,10 @@ export type UserfrontApiFactorResponseEvent = {
 
 export type UserfrontApiErrorEvent = {
   type: "error";
-  data: FormError;
+  data: {
+    _isError: boolean;
+    error: FormError;
+  };
 };
 
 // VIEW-SPECIFIC EVENTS

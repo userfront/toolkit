@@ -1,10 +1,11 @@
 import {
   Factor,
   AuthContext,
-  SetUpTotpContext,
+  TotpCodeContext,
   Password,
   PasswordSubmitEvent,
   UserfrontApiFactorResponseEvent,
+  UserfrontApiErrorEvent,
   View,
 } from "./types";
 import { isMissing } from "./utils";
@@ -36,7 +37,7 @@ export const secondFactorRequired = (
 // Same as above, but check against the view context,
 // for views that don't proceed directly from API call
 // to second factor selection
-export const secondFactorRequiredFromView = (context: SetUpTotpContext) => {
+export const secondFactorRequiredFromView = (context: TotpCodeContext) => {
   return context.view.isMfaRequired;
 };
 
@@ -101,4 +102,12 @@ export const secondFactorNotRequired = (context: AuthContext<any>) => {
   // TODO implementation -> in UserfrontCore
   // effectively checking if we are signed in
   return false;
+};
+
+// Is this an error from a callUserfrontApi invocation?
+export const isUserfrontError = (
+  context: any,
+  event: UserfrontApiErrorEvent
+) => {
+  return event.data._isError;
 };
