@@ -634,8 +634,10 @@
 .uf-toolkit-test-mode-notice {
   background-color: var(--uf-toolkit-test-mode-background-color);
   color: var(--uf-toolkit-text-color);
-  padding: 0.25rem;
+  padding: 0.25rem 2rem 0.25rem 2rem;
+  margin: 0 auto;
   margin-top: 0.5rem;
+  width: max-content;
   border-radius: var(--uf-toolkit-border-radius);
   font-size: 0.8em;
 }
