@@ -248,6 +248,7 @@ const signupMachineConfig: AuthMachineConfig = {
     // Go back to the previous factor selection screen.
     backToFactors: {
       id: "backToFactors",
+      entry: "clearError",
       always: [
         {
           target: "selectSecondFactor",

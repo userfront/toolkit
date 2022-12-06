@@ -134,6 +134,9 @@ let callMethod = (method: string, ...args: any) => {
   }
   if (!window.Userfront[method]) {
     console.warn(`Method ${method} not found on Userfront object.`);
+    if (method === "getDefaultAuthFlow") {
+      return Promise.resolve(_mockSuccess.getDefaultAuthFlow);
+    }
     return Promise.reject();
   }
   try {
