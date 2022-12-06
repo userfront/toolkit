@@ -1,3 +1,6 @@
+/**
+ * @vitest-environment jsdom
+ */
 // CALL USERFRONT API
 // Separate machine to be invoked as a service
 // Purpose is to allow us to abstract away the Userfront API,
@@ -87,9 +90,13 @@ declare global {
   var Userfront: any;
 }
 
+export const READ = "__read__";
+
 let callMethod = (method: string, ...args: any) => {
   if (!window || !window.Userfront || !window.Userfront.store.tenantId) {
-    console.log("Userfront not initialized (TODO good error message)");
+    console.warn(
+      "Tried to call a Userfront method before the Userfront service was initialized."
+    );
 
     // TODO: Remove this test code prior to merge. Throw error instead.
     if (method === "sendResetLink") {
@@ -116,10 +123,17 @@ let callMethod = (method: string, ...args: any) => {
     // @ts-ignore
     return Promise.resolve(_mockSuccess[method]);
   }
+  if (method === READ) {
+    if (!args[0]?.key) {
+      console.warn(
+        "Tried to read a key from the Userfront object, but no key was provided."
+      );
+      return Promise.reject();
+    }
+    return Promise.resolve({ value: window.Userfront[args[0].key] });
+  }
   if (!window.Userfront[method]) {
-    console.log(
-      `Method ${method} not found on Userfront object. TODO better error message.`
-    );
+    console.warn(`Method ${method} not found on Userfront object.`);
     return Promise.reject();
   }
   try {
@@ -211,11 +225,16 @@ if (import.meta.vitest) {
   describe("models/userfrontApi.ts", () => {
     let originalCallMethod = callMethod;
     beforeEach(() => {
-      callMethod = vi
-        .fn()
-        .mockImplementation(() =>
-          Promise.reject("called method without specific mock implementation")
-        );
+      // callMethod = vi
+      //   .fn()
+      //   .mockImplementation(() =>
+      //     Promise.reject("called method without specific mock implementation")
+      //   );
+      window.Userfront = {
+        store: {
+          tenantId: "someTenantId",
+        },
+      };
     });
     afterEach(() => {
       vi.restoreAllMocks();
@@ -249,7 +268,7 @@ if (import.meta.vitest) {
       });
     });
     it("should call the method with the arguments if the context is not in dev mode", async () => {
-      (callMethod as any).mockImplementationOnce(() => Promise.resolve({}));
+      window.Userfront.method = () => ({ value: "someValue" });
       const context = {
         method: "method",
         args: [],
@@ -258,11 +277,12 @@ if (import.meta.vitest) {
         result: {},
         error: {},
       };
-      const expectedValue = "call";
+      const expectedValue = "success";
       const machine = callUserfrontApi.withContext(context);
       return new Promise<void>((resolve, reject) => {
         const service = interpret(machine).onTransition((state) => {
           if (state.matches(expectedValue)) {
+            expect(state.context.result).toEqual({ value: "someValue" });
             resolve();
           }
           if (state.matches("successDev")) {
@@ -270,6 +290,31 @@ if (import.meta.vitest) {
           }
         });
 
+        service.start();
+      });
+    });
+    it("should read a value from the Userfront object if the method is READ and a key is provided", async () => {
+      window.Userfront.someKey = "someValue";
+      const context = {
+        method: READ,
+        args: { key: "someKey" },
+        isDevMode: false,
+        _devDataType: "test",
+        result: {},
+        error: {},
+      };
+      const expectedValue = "success";
+      const machine = callUserfrontApi.withContext(context);
+      return new Promise<void>((resolve, reject) => {
+        const service = interpret(machine).onTransition((state) => {
+          if (state.matches(expectedValue)) {
+            expect(state.context.result).toEqual({ value: "someValue" });
+            resolve();
+          }
+          if (state.matches("successDev")) {
+            reject();
+          }
+        });
         service.start();
       });
     });

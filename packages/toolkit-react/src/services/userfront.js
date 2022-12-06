@@ -32,4 +32,6 @@ const call = async ({ method, args, isDevMode = false, _devDataType = "" }) => {
   });
 };
 
+export { READ } from "../models/userfrontApi.ts";
+
 export default call;

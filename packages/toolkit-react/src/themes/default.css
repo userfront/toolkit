@@ -247,6 +247,9 @@
 
   /* Box shadow for logout button when hovered, active, focused */
   --uf-toolkit-logout-button-box-shadow-active: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+
+  /* Background color for test mode banner */
+  --uf-toolkit-test-mode-background-color: #ffda96;
 }
 
 /* Styles for a free-standing toolkit element */
@@ -625,4 +628,14 @@
   color: var(--uf-toolkit-error-color);
   display: block;
   flex: 0 1 auto;
+}
+
+/* Test mode notice */
+.uf-toolkit-test-mode-notice {
+  background-color: var(--uf-toolkit-test-mode-background-color);
+  color: var(--uf-toolkit-text-color);
+  padding: 0.25rem;
+  margin-top: 0.5rem;
+  border-radius: var(--uf-toolkit-border-radius);
+  font-size: 0.8em;
 }
