@@ -6,6 +6,7 @@ import SignupDemo from "./pages/SignupDemo";
 import LoginDemo from "./pages/LoginDemo";
 import ResetDemo from "./pages/ResetDemo";
 import LogoutDemo from "./pages/LogoutDemo";
+import SetNewPasswordDemo from "./pages/SetNewPasswordDemo";
 import Index from "./pages/Index";
 import Redirect from "./pages/Redirect";
 import LiveSignupDemo from "./pages/LiveSignupDemo";
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
   {
     path: "/reset",
     element: <ResetDemo />,
+  },
+  {
+    path: "/set-password",
+    element: <SetNewPasswordDemo />,
   },
   {
     path: "/logout",
