@@ -316,20 +316,23 @@
 }
 
 .uf-toolkit-form .uf-toolkit-form-row {
-  flex: 1 0 auto;
   margin-bottom: var(--uf-toolkit-spacing);
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
+  /* flex: 1 0 auto; */
+  /* display: flex; */
+  /* flex-flow: row nowrap; */
+  /* align-items: center; */
 }
 
 .uf-toolkit-form .uf-toolkit-form-row label {
-  flex: 0 1 40%;
+  display: block;
+  /* flex: 0 1 40%; */
 }
 
 .uf-toolkit-form .uf-toolkit-form-row input {
-  flex: 1 1 60%;
-  align-self: flex-end;
+  display: block;
+  width: 100%;
+  /* flex: 1 1 100%; */
+  /* align-self: flex-end; */
 }
 
 /* Adjustments for small forms */
