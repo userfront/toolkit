@@ -75,7 +75,7 @@ This repo holds several different libraries.
     - `/toolkit-vue` - standalone dev/test site for `@userfront/vue`
   - `/strings` - (TODO/FUTURE) localized strings for toolkit components
 
-## Installation and setup
+## Development installation and setup
 
 1. Clone this repo.
 2. Install the packages:
