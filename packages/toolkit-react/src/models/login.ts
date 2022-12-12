@@ -476,11 +476,28 @@ const signupMachineConfig: AuthMachineConfig = {
     password: passwordConfig,
     totpCode: totpCodeConfig,
     ssoProvider: {
-      // The SSO provider buttons should directly link to SSO login,
-      // with appropriate state for first/second factor, so there's nothing more to do.
-      // We shouldn't even be able to get here in practice.
-      type: "final",
       id: "ssoProvider",
+      invoke: {
+        src: callUserfrontApi,
+        data: (context: any, event: any) => {
+          console.log("event");
+          console.log(event);
+          return {
+            method: "login",
+            args: {
+              method: event.factor?.strategy,
+            },
+          };
+        },
+        // At this point we should have already redirected to the SSO provider.
+        // If the API call returned an error, report it. Otherwise, not much we can do here.
+        onDone: [
+          {
+            target: "unhandledError",
+            cond: "isUserfrontError",
+          },
+        ],
+      },
     },
     // Check to see if a second factor is needed, and if so, proceed to the appropriate view
     beginSecondFactor: {

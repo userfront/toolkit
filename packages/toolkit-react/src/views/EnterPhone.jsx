@@ -1,6 +1,7 @@
 import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
 import ErrorMessage from "../components/ErrorMessage";
+import PhoneNumberInput from "../components/PhoneNumberInput";
 
 const EnterPhone = ({ onEvent, allowBack, error }) => {
   const handleSubmit = (event) => {
@@ -15,7 +16,7 @@ const EnterPhone = ({ onEvent, allowBack, error }) => {
     <form onSubmit={handleSubmit} className="uf-toolkit-form">
       <div className="uf-toolkit-form-row">
         <label htmlFor="phoneNumber">Mobile phone number</label>
-        <input className="uf-toolkit-input" type="tel" name="phoneNumber" />
+        <PhoneNumberInput name="phoneNumber" />
       </div>
       <ErrorMessage error={error} />
       <div className="uf-toolkit-button-row">

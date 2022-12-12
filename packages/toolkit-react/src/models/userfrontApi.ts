@@ -92,7 +92,7 @@ declare global {
 
 export const READ = "__read__";
 
-let callMethod = (method: string, ...args: any) => {
+let callMethod = async (method: string, ...args: any) => {
   if (!window || !window.Userfront || !window.Userfront.store.tenantId) {
     console.warn(
       "Tried to call a Userfront method before the Userfront service was initialized."
@@ -116,6 +116,16 @@ let callMethod = (method: string, ...args: any) => {
         case "password":
         case "verificationCode":
           return Promise.resolve(_mockSuccess.signupFirst);
+        case "azure":
+        case "google":
+        case "facebook":
+        case "github":
+        case "linkedin":
+        case "twitter":
+          console.log(
+            `Called signup method for ${args[0].method} - expect userfront/core to redirect there.`
+          );
+          return Promise.resolve({});
         default:
           return Promise.resolve(_mockSuccess.signupSecond);
       }
@@ -140,7 +150,7 @@ let callMethod = (method: string, ...args: any) => {
     return Promise.reject();
   }
   try {
-    const result = window.Userfront[method](...args);
+    const result = await window.Userfront[method](...args);
     return Promise.resolve(result);
   } catch (err) {
     return Promise.reject(err);
