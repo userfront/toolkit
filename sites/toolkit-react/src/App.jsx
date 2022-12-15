@@ -15,11 +15,9 @@ import LiveResetDemo from "./pages/LiveResetDemo";
 import LiveLogoutDemo from "./pages/LiveLogoutDemo";
 import LiveSetNewPasswordDemo from "./pages/LiveSetNewPasswordDemo";
 
-import Userfront from "@userfront/core";
+import Userfront from "../../../packages/toolkit-react/src/index.js";
 
 Userfront.init("6bg66q7n");
-
-window.Userfront = Userfront;
 
 const router = createBrowserRouter([
   {

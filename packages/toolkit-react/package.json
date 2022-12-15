@@ -33,6 +33,7 @@
   ],
   "dependencies": {
     "@react-hook/resize-observer": "^1.2.6",
+    "@userfront/core": "^0.4.6",
     "@xstate/react": "^3.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

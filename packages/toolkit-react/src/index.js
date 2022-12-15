@@ -14,4 +14,7 @@ export {
   defaultAuthContext as defaultLoginFormContext,
 } from "./models/login";
 
+import Userfront from "@userfront/core";
+export default Userfront;
+
 import "./themes/default.css";

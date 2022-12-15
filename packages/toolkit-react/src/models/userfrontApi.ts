@@ -7,6 +7,7 @@
 // instead use a simple model for MBT or whatever.
 
 import { createMachine, assign, sendParent, MachineConfig } from "xstate";
+import Userfront from "@userfront/core";
 
 export type CallUserfrontApiContext = {
   method: string;
@@ -86,14 +87,20 @@ const _mockSuccess = {
   },
 };
 
-declare global {
-  var Userfront: any;
+declare module "@userfront/core" {
+  interface Store {
+    tenantId?: string;
+  }
+
+  const store: Store;
 }
 
 export const READ = "__read__";
 
-let callMethod = async (method: string, ...args: any) => {
-  if (!window || !window.Userfront || !window.Userfront.store.tenantId) {
+type UserfrontMethod = keyof typeof Userfront | "__read__";
+
+let callMethod = async (method: UserfrontMethod, ...args: any) => {
+  if (!Userfront.store?.tenantId) {
     console.warn(
       "Tried to call a Userfront method before the Userfront service was initialized."
     );
@@ -134,23 +141,29 @@ let callMethod = async (method: string, ...args: any) => {
     return Promise.resolve(_mockSuccess[method]);
   }
   if (method === READ) {
-    if (!args[0]?.key) {
+    const key = args[0]?.key as keyof typeof Userfront;
+    if (!key) {
       console.warn(
         "Tried to read a key from the Userfront object, but no key was provided."
       );
       return Promise.reject();
     }
-    return Promise.resolve({ value: window.Userfront[args[0].key] });
+    return Promise.resolve({ value: Userfront[key] });
   }
-  if (!window.Userfront[method]) {
+  if (!Userfront[method] || !(typeof Userfront[method] === "function")) {
     console.warn(`Method ${method} not found on Userfront object.`);
+    // Method not yet on Userfront
+    // @ts-ignore
     if (method === "getDefaultAuthFlow") {
       return Promise.resolve(_mockSuccess.getDefaultAuthFlow);
     }
     return Promise.reject();
   }
   try {
-    const result = await window.Userfront[method](...args);
+    // We already proved that Userfront[method] is a function above,
+    // but TS doesn't deduce it.
+    // @ts-ignore
+    const result = await Userfront[method](...args);
     return Promise.resolve(result);
   } catch (err) {
     return Promise.reject(err);
@@ -160,7 +173,7 @@ let callMethod = async (method: string, ...args: any) => {
 const defaultOptions = {
   services: {
     callMethod: (context: CallUserfrontApiContext) =>
-      callMethod(context.method, context.args),
+      callMethod(context.method as UserfrontMethod, context.args),
   },
 };
 
@@ -243,11 +256,7 @@ if (import.meta.vitest) {
       //   .mockImplementation(() =>
       //     Promise.reject("called method without specific mock implementation")
       //   );
-      window.Userfront = {
-        store: {
-          tenantId: "someTenantId",
-        },
-      };
+      Userfront.store.tenantId = "someTenantId";
     });
     afterEach(() => {
       vi.restoreAllMocks();
@@ -281,7 +290,10 @@ if (import.meta.vitest) {
       });
     });
     it("should call the method with the arguments if the context is not in dev mode", async () => {
-      window.Userfront.method = () => ({ value: "someValue" });
+      // Testing a case that should be caught by TypeScript, because
+      // this can be called from JavaScript code.
+      // @ts-ignore
+      Userfront.method = () => ({ value: "someValue" });
       const context = {
         method: "method",
         args: [],
@@ -307,7 +319,10 @@ if (import.meta.vitest) {
       });
     });
     it("should read a value from the Userfront object if the method is READ and a key is provided", async () => {
-      window.Userfront.someKey = "someValue";
+      // Testing a case that should be caught by TypeScript, because
+      // this can be called from JavaScript code.
+      // @ts-ignore
+      Userfront.someKey = "someValue";
       const context = {
         method: READ,
         args: { key: "someKey" },
