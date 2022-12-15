@@ -480,8 +480,6 @@ const signupMachineConfig: AuthMachineConfig = {
       invoke: {
         src: callUserfrontApi,
         data: (context: any, event: any) => {
-          console.log("event");
-          console.log(event);
           return {
             method: "login",
             args: {

@@ -1,4 +1,5 @@
 import { SignupForm } from "../../../../packages/toolkit-react/src/index.js";
+import { useEnableGlobalUserfront } from "../hooks.js";
 
 // TODO this should come from server when we have the flows/default endpoint up
 const flow = {
@@ -16,6 +17,7 @@ const flow = {
 };
 
 function LiveSignupDemo() {
+  useEnableGlobalUserfront();
   return (
     <SignupForm
       tenantId="6bg66q7n"

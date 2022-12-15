@@ -1,8 +1,10 @@
 import { LogoutButton } from "../../../../packages/toolkit-react/src/index.js";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useDisableGlobalUserfront } from "../hooks.js";
 
 const LogoutDemo = () => {
+  useDisableGlobalUserfront();
   const [disabled, setDisabled] = useState(false);
   const toggleDisabled = () => setDisabled(!disabled);
   return (

@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { useMachine } from "@xstate/react";
 import Urlon from "urlon";
 import { useState, useEffect } from "react";
+import { useDisableGlobalUserfront } from "../hooks.js";
 
 const signupFormModel = createSignupFormModel(defaultSignupFormContext);
 
@@ -23,6 +24,7 @@ const childIdForStep = (stepName) => {
 };
 
 function App() {
+  useDisableGlobalUserfront();
   const [hasSetInitialState, setHasSetInitialState] = useState(false);
   const [initialState, setInitialState] = useState({});
   if (!hasSetInitialState) {
