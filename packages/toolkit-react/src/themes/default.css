@@ -315,24 +315,37 @@
   text-align: initial;
 }
 
+/* Form row: label + input group */
 .uf-toolkit-form .uf-toolkit-form-row {
   margin-bottom: var(--uf-toolkit-spacing);
-  /* flex: 1 0 auto; */
-  /* display: flex; */
-  /* flex-flow: row nowrap; */
-  /* align-items: center; */
 }
 
 .uf-toolkit-form .uf-toolkit-form-row label {
   display: block;
-  /* flex: 0 1 40%; */
+  margin-left: 1px;
 }
 
 .uf-toolkit-form .uf-toolkit-form-row input {
   display: block;
   width: 100%;
-  /* flex: 1 1 100%; */
-  /* align-self: flex-end; */
+}
+
+/* Inline form row variant, with label on same line as input. */
+/* Not used by default, but can remain available as an option. */
+.uf-toolkit-form .uf-toolkit-form-row .uf-toolkit-form-row-inline {
+  flex: 1 0 auto;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+.uf-toolkit-form .uf-toolkit-form-row .uf-toolkit-form-row-inline label {
+  flex: 0 1 40%;
+}
+
+.uf-toolkit-form .uf-toolkit-form-row .uf-toolkit-form-row-inline input {
+  flex: 1 1 100%;
+  align-self: flex-end;
 }
 
 /* Adjustments for small forms */
