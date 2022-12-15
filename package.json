@@ -1,0 +1,41 @@
+{
+  "name": "toolkit",
+  "version": "1.0.0",
+  "description": "This repo establishes the Userfront toolkit, with the following features",
+  "lint-staged": {
+    "*.{js,jsx,css,md,ts,tsx}": "prettier --write"
+  },
+  "main": "index.js",
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "sites/*"
+    ]
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "prepare": "husky install",
+    "lint": "prettier --check \"packages/**/*.{jsx?,tsx?}\"",
+    "install:package:react": "cd packages/toolkit-react && npm install",
+    "install:site:react": "cd sites/toolkit-react && npm install",
+    "build:site:react": "cd sites/toolkit-react && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/userfront/toolkit.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/userfront/toolkit/issues"
+  },
+  "homepage": "https://github.com/userfront/toolkit#readme",
+  "devDependencies": {
+    "husky": "^8.0.0",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1"
+  }
+}

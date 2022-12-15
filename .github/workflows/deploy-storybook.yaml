@@ -1,0 +1,25 @@
+name: 'Deploy dev app'
+env:
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_REACT_STORYBOOK_PROJECT_ID }}
+on:
+  workflow_call:
+
+jobs:
+  deploy-storybook:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '>16.14'
+      - name: 'Install Vercel CLI'
+        run: npm install --global vercel@latest
+      - name: 'Pull Vercel environment'
+        working-directory: packages/toolkit-react
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+      - name: 'Build Storybook static app'
+        working-directory: packages/toolkit-react
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+      - name: 'Deploy Storybook static app to Vercel'
+        working-directory: packages/toolkit-react
+        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}

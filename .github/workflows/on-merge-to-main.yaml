@@ -1,0 +1,28 @@
+name: 'Run tasks on merge to main'
+# i.e. publish new docs, update sites, publish npm packages
+# env:
+#   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+#   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+jobs:
+  do-nothing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Log something'
+        run: 'echo "Merged to main branch"'
+  # run-tests:
+  #   uses: ./.github/workflows/run-tests.yaml
+  # deploy-dev-app:
+  #   uses: ./.github/workflows/deploy-dev-app.yaml
+  #   secrets: inherit
+  #   if: ${{ always() }} # Deploy dev app even if tests fail
+  # deploy-storybook:
+  #   uses: ./.github/workflows/deploy-storybook.yaml
+  #   secrets: inherit
+  #   if: ${{ always() }} # Deploy Storybook even if dev app deploy fails
