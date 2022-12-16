@@ -8,13 +8,18 @@ export { default as LogoutButton } from "./components/LogoutButton";
 export {
   default as createSignupFormModel,
   defaultAuthContext as defaultSignupFormContext,
-} from "./models/signup";
+} from "./models/forms/signup";
 export {
   default as createLoginFormModel,
   defaultAuthContext as defaultLoginFormContext,
-} from "./models/login";
+} from "./models/forms/login";
 
 import Userfront from "@userfront/core";
 export default Userfront;
+
+import { overrideUserfrontSingleton } from "./services/userfront";
+export const _devTools = {
+  overrideUserfrontSingleton,
+};
 
 import "./themes/default.css";

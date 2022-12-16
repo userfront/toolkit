@@ -1,22 +1,10 @@
 import {
   AuthContext,
-  EmailLinkContext,
-  EmailCodeContext,
-  SmsCodeContext,
-  PasswordContext,
-  SetUpTotpContext,
-  FirstFactorsContext,
-  SecondFactorsContext,
-  LoadingContext,
-  UserData,
-  FormConfig,
-  Factor,
-  FormError,
   OptionalFieldConfig,
   FormType,
 } from "../../src/models/types";
 
-import { factorConfig } from "../../src/models/utils";
+import { factorConfig } from "../../src/models/config/utils";
 
 export const createAuthContextForFactor = (name: string): AuthContext<any> => {
   const key = name as keyof typeof factorConfig;

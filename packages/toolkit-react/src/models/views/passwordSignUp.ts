@@ -1,8 +1,8 @@
 // State machine for the "username and password" view
 
-import { AuthMachineConfig, PasswordContext } from "./types";
-import { callUserfrontApi } from "./userfrontApi";
-import { hasValue } from "./utils";
+import { AuthMachineConfig, PasswordContext } from "../types";
+import { callUserfront } from "../../services/userfront";
+import { hasValue } from "../config/utils";
 
 // Note - could be running in parallel with the "select a factor" view
 const passwordConfig: AuthMachineConfig = {
@@ -34,32 +34,30 @@ const passwordConfig: AuthMachineConfig = {
     send: {
       entry: "clearError",
       invoke: {
-        src: callUserfrontApi,
         // Set email, password, and possibly name and/or username as arguments and call the method
-        data: (context: PasswordContext, event: any) => {
-          const args = {
+        src: (context) => {
+          const arg: Record<string, string> = {
             method: "password",
             email: context.user.email,
-            password: context.view.password,
-          } as any;
+            password: (<PasswordContext>context).view.password,
+          };
           if (hasValue(context.user.name)) {
-            args.name = context.user.name;
+            arg.name = context.user.name;
           }
           if (hasValue(context.user.username)) {
-            args.username = context.user.username;
+            arg.username = context.user.username;
           }
-          return {
-            method: "signup",
-            args,
-          };
+          return callUserfront({
+            method: context.config.type,
+            args: [arg],
+          });
+        },
+        // On error, store the error and return to the form
+        onError: {
+          actions: "setErrorFromApiError",
+          target: "showForm",
         },
         onDone: [
-          // On error, store the error and return to the form
-          {
-            actions: "setErrorFromApiError",
-            target: "showForm",
-            cond: "isUserfrontError",
-          },
           // On success, proceed to second factor if required
           {
             actions: "setAllowedSecondFactors",

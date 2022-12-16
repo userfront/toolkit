@@ -1,4 +1,4 @@
-import callUserfront from "../services/userfront";
+import { callUserfront } from "../services/userfront";
 
 const LogoutButton = ({ redirect = true, disabled = false, children }) => {
   const _children = children || "Log out";
@@ -6,9 +6,11 @@ const LogoutButton = ({ redirect = true, disabled = false, children }) => {
     try {
       callUserfront({
         method: "logout",
-        args: {
-          redirect,
-        },
+        args: [
+          {
+            redirect,
+          },
+        ],
       });
     } catch (err) {
       // ...can this method even error, short of being disconnected or Userfront being down?

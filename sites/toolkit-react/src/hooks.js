@@ -1,12 +1,14 @@
 import { useEffect } from "react";
-import Userfront from "../../../packages/toolkit-react/src/index.js";
+import Userfront, {
+  _devTools,
+} from "../../../packages/toolkit-react/src/index.js";
+import mockUserfront from "./mockUserfront";
 
-export function useDisableGlobalUserfront() {
+export function useMockUserfront() {
   useEffect(() => {
-    const tenantId = Userfront.store.tenantId;
-    Userfront.store.tenantId = undefined;
+    _devTools.overrideUserfrontSingleton(mockUserfront);
     return () => {
-      Userfront.store.tenantId = tenantId;
+      _devTools.overrideUserfrontSingleton(Userfront);
     };
   }, []);
 }

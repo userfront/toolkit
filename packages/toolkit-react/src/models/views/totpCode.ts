@@ -1,6 +1,5 @@
-import { AuthMachineConfig, TotpCodeContext } from "./types";
-import { callUserfrontApi } from "./userfrontApi";
-import { hasValue } from "./utils";
+import { callUserfront } from "../../services/userfront";
+import { AuthMachineConfig, TotpCodeContext } from "../types";
 
 // TOTP Authenticator state machine config
 const totpCodeConfig: AuthMachineConfig = {
@@ -26,32 +25,32 @@ const totpCodeConfig: AuthMachineConfig = {
     send: {
       entry: "clearError",
       invoke: {
-        src: callUserfrontApi,
-        // Set totpCode and possibly emailOrUsername as arguments and call the method
-        data: (context: TotpCodeContext, event: any) => {
-          const args = {
+        // Set totpCode or backupCode and possibly emailOrUsername as arguments and call the method
+        src: (_context) => {
+          const context = <TotpCodeContext>_context;
+          const arg: Record<string, string> = {
             method: "totp",
-          } as any;
+          };
           if (context.view.useBackupCode) {
-            args.backupCode = context.view.backupCode;
+            arg.backupCode = <string>context.view.backupCode;
           } else {
-            args.totpCode = context.view.totpCode;
+            arg.totpCode = context.view.totpCode;
           }
           if (context.view.emailOrUsername) {
-            args.emailOrUsername = context.view.emailOrUsername;
+            arg.emailOrUsername = context.view.emailOrUsername;
           }
-          return {
-            method: "login",
-            args,
-          };
+          return callUserfront({
+            method: context.config.type,
+            args: [arg],
+          });
         },
+        // On error, store the error and return to the form
+        onError: {
+          actions: "setErrorFromApiError",
+          target: "showForm",
+        },
+
         onDone: [
-          // On error, store the error and return to the form
-          {
-            actions: "setErrorFromApiError",
-            target: "showForm",
-            cond: "isUserfrontError",
-          },
           // On success, proceed to second factor if required
           {
             actions: "setAllowedSecondFactors",
@@ -69,28 +68,27 @@ const totpCodeConfig: AuthMachineConfig = {
     sendBackupCode: {
       entry: "clearError",
       invoke: {
-        src: callUserfrontApi,
         // Set backupCode and possibly emailOrUsername as arguments and call the method
-        data: (context: TotpCodeContext, event: any) => {
-          const args = {
+        src: (_context) => {
+          const context = <TotpCodeContext>_context;
+          const arg: Record<string, string> = {
             method: "totp",
-            backupCode: context.view.totpCode,
-          } as any;
-          if (context.view.emailOrUsername) {
-            args.emailOrUsername = context.view.emailOrUsername;
-          }
-          return {
-            method: "login",
-            args,
+            backupCode: <string>context.view.backupCode,
           };
+          if (context.view.emailOrUsername) {
+            arg.emailOrUsername = context.view.emailOrUsername;
+          }
+          return callUserfront({
+            method: context.config.type,
+            args: [arg],
+          });
+        },
+        // On error, store the error and return to the form
+        onError: {
+          actions: "setErrorFromApiError",
+          target: "showForm",
         },
         onDone: [
-          // On error, store the error and return to the form
-          {
-            actions: "setErrorFromApiError",
-            target: "showForm",
-            cond: "isUserfrontError",
-          },
           // On success, proceed to second factor if required
           {
             actions: "setAllowedSecondFactors",

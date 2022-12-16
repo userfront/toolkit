@@ -1,4 +1,4 @@
-import callUserfront, { READ } from "../services/userfront";
+import { getUserfrontProperty } from "../services/userfront";
 import { useState, useEffect } from "react";
 
 const TestModeNotice = () => {
@@ -7,10 +7,7 @@ const TestModeNotice = () => {
 
   useEffect(() => {
     const perform = async () => {
-      const result = await callUserfront({
-        method: READ,
-        args: { key: "mode" },
-      });
+      const result = await getUserfrontProperty("mode");
       if (result?.mode?.value === "test") {
         setIsTestMode(true);
         setTestModeReason(mode.reason);

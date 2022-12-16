@@ -7,7 +7,7 @@ import {
   UserfrontApiFactorResponseEvent,
   UserfrontApiErrorEvent,
   View,
-} from "./types";
+} from "../types";
 import { isMissing } from "./utils";
 
 // GUARDS / PREDICATES
@@ -102,12 +102,4 @@ export const secondFactorNotRequired = (context: AuthContext<any>) => {
   // TODO implementation -> in UserfrontCore
   // effectively checking if we are signed in
   return false;
-};
-
-// Is this an error from a callUserfrontApi invocation?
-export const isUserfrontError = (
-  context: any,
-  event: UserfrontApiErrorEvent
-) => {
-  return event.data._isError;
 };

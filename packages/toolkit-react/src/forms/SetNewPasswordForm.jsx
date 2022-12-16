@@ -1,4 +1,4 @@
-import callUserfront from "../services/userfront";
+import { callUserfront } from "../services/userfront";
 import SubmitButton from "../components/SubmitButton";
 import ContinueButton from "../components/ContinueButton";
 import ErrorMessage from "../components/ErrorMessage";
@@ -33,7 +33,7 @@ const SetNewPasswordForm = () => {
     try {
       const response = await callUserfront({
         method: "updatePassword",
-        args: { password },
+        args: [{ password }],
       });
       setSuccess(true);
       setLoading(false);

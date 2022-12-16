@@ -1,5 +1,7 @@
 import LoginForm from "../forms/LoginForm";
-import createLoginFormMachine, { defaultAuthContext } from "../models/login";
+import createLoginFormMachine, {
+  defaultAuthContext,
+} from "../models/forms/login";
 import { useMachine } from "@xstate/react";
 
 function PackagedLoginForm({

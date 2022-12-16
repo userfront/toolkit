@@ -27,11 +27,7 @@ export type FormError = {
 export type OptionalFieldConfig = "hide" | "allow" | "require";
 
 // Types of form in the toolkit
-export type FormType =
-  | "signup"
-  | "login"
-  | "requestPasswordResetEmail"
-  | "resetPassword";
+export type FormType = "signup" | "login";
 
 // Configuration data for the form - intended to be set either by the caller
 // or during initial setup steps of the form, then fixed afterward.

@@ -1,5 +1,9 @@
-import { AuthMachineConfig, TotpCodeContext } from "./types";
-import { callUserfrontApi } from "./userfrontApi";
+import { callUserfront } from "../../services/userfront";
+import {
+  AuthMachineConfig,
+  SignupMachineEvent,
+  TotpCodeSubmitEvent,
+} from "../types";
 
 // TOTP Authenticator setup state machine config
 const setUpTotpConfig: AuthMachineConfig = {
@@ -11,24 +15,19 @@ const setUpTotpConfig: AuthMachineConfig = {
     // so we can show it
     getQrCode: {
       invoke: {
-        src: callUserfrontApi,
-        data: (context: TotpCodeContext, event: any) => ({
-          method: "getTotpAuthenticatorQrCode",
-          args: {},
-        }),
+        // Method will exist on userfront-core when published
+        // @ts-ignore
+        src: () => callUserfront({ method: "getTotp" }),
+        // If there's a problem getting the QR code, show an error message
+        onError: {
+          actions: "setErrorFromApiError",
+          target: "showErrorMessage",
+        },
         // Once we have the QR code, show the form
-        onDone: [
-          // If there's a problem getting the QR code, show an error message
-          {
-            actions: "setErrorFromApiError",
-            target: "showErrorMessage",
-            cond: "isUserfrontError",
-          },
-          {
-            actions: "setQrCode",
-            target: "showQrCode",
-          },
-        ],
+        onDone: {
+          actions: "setQrCode",
+          target: "showQrCode",
+        },
       },
     },
     // Show the form with QR code + field to verify it works
@@ -48,28 +47,28 @@ const setUpTotpConfig: AuthMachineConfig = {
     confirmTotpCode: {
       entry: "clearError",
       invoke: {
-        src: callUserfrontApi,
         // Set the code and call the API method
-        data: (context: TotpCodeContext, event: any) => ({
-          method: "signup",
-          args: {
-            method: "totp",
-            totpCode: event.totpCode,
-          },
-        }),
+        src: (context: any, event: SignupMachineEvent) =>
+          callUserfront({
+            method: context.config.type,
+            args: [
+              {
+                method: "totp",
+                totpCode: (<TotpCodeSubmitEvent>event).totpCode,
+              },
+            ],
+          }),
+        // On error, show the error message and return to the form
+        onError: {
+          actions: "setErrorFromApiError",
+          target: "showQrCode",
+        },
+
         // When verified, show the backup codes so the user can record them
-        onDone: [
-          // On error, show the error message and return to the form
-          {
-            actions: "setErrorFromApiError",
-            target: "showQrCode",
-            cond: "isUserfrontError",
-          },
-          {
-            actions: "storeFactorResponse",
-            target: "showBackupCodes",
-          },
-        ],
+        onDone: {
+          actions: "storeFactorResponse",
+          target: "showBackupCodes",
+        },
       },
     },
     // Show the user's backup codes once TOTP setup succeeds

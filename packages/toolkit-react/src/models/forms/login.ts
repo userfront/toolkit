@@ -8,7 +8,8 @@ import {
   setPhoneNumber,
   setTenantIdOrDevMode,
   setTotpCode,
-  setQrCode,
+  setUseBackupCode,
+  setShowEmailOrUsernameIfFirstFactor,
   redirectIfSignedIn,
   setCode,
   setErrorFromApiError,
@@ -21,9 +22,9 @@ import {
   disableBack,
   enableBack,
   setupView,
-} from "./actions";
-import emailCodeConfig from "./emailCode";
-import emailLinkConfig from "./emailLink";
+} from "../config/actions";
+import emailCodeConfig from "../views/emailCode";
+import emailLinkConfig from "../views/emailLink";
 import {
   isSsoProvider,
   hasNoActiveFactor,
@@ -32,19 +33,17 @@ import {
   isLocalModeWithoutFlow,
   isDevModeWithoutFlow,
   isMissingTenantId,
-  passwordsMatch,
   isReturningFromEmailLink,
   isReturningFromSsoFirstFactor,
   secondFactorRequired,
   secondFactorRequiredFromView,
   secondFactorNotRequired,
   isSecondFactor,
-  isUserfrontError,
-} from "./guards";
-import passwordConfig from "./passwordSignUp";
-import selectFactorConfig from "./selectFactor";
-import totpCodeConfig from "./setUpTotp";
-import smsCodeConfig from "./smsCode";
+} from "../config/guards";
+import passwordConfig from "../views/passwordSignUp";
+import selectFactorConfig from "../views/selectFactor";
+import totpCodeConfig from "../views/totpCode";
+import smsCodeConfig from "../views/smsCode";
 import {
   AuthContext,
   SelectFactorEvent,
@@ -53,18 +52,15 @@ import {
   AuthMachineConfig,
   View,
   SignupMachineEvent,
-  TotpCodeContext,
-  FormType,
-  UserData,
-} from "./types";
-import { callUserfrontApi } from "./userfrontApi";
+} from "../types";
+import { callUserfront } from "../../services/userfront";
 import {
   createOnlyFactorCondition,
   matchFactor,
   factorConfig,
   missingFlowError,
   unhandledError,
-} from "./utils";
+} from "../config/utils";
 
 // SIGNUP FORM MACHINE CONFIG
 
@@ -162,14 +158,12 @@ export const defaultSignupOptions = {
     isLocalModeWithoutFlow,
     isDevModeWithoutFlow,
     isMissingTenantId,
-    passwordsMatch,
     isReturningFromEmailLink,
     isReturningFromSsoFirstFactor,
     secondFactorRequired,
     secondFactorRequiredFromView,
     secondFactorNotRequired,
     isSecondFactor,
-    isUserfrontError,
   },
   actions: {
     setActiveFactor,
@@ -180,7 +174,8 @@ export const defaultSignupOptions = {
     setPhoneNumber,
     setTenantIdOrDevMode,
     setTotpCode,
-    setQrCode,
+    setUseBackupCode,
+    setShowEmailOrUsernameIfFirstFactor,
     redirectIfSignedIn,
     setCode,
     setErrorFromApiError,
@@ -228,6 +223,7 @@ export const defaultAuthContext = {
     phoneNumberConfig: "hide" as OptionalFieldConfig,
     compact: false,
     locale: "en-US",
+    type: "login",
   },
   view: {} as Loading,
   isSecondFactor: false,
@@ -248,7 +244,6 @@ const signupMachineConfig: AuthMachineConfig = {
     // Go back to the previous factor selection screen.
     backToFactors: {
       id: "backToFactors",
-      entry: "clearError",
       always: [
         {
           target: "selectSecondFactor",
@@ -278,17 +273,23 @@ const signupMachineConfig: AuthMachineConfig = {
     // TODO need new method
     getGlobalTenantId: {
       invoke: {
-        src: callUserfrontApi,
-        data: (context: TotpCodeContext, event: any) => ({
-          method: "getTenantId",
-          args: {},
-        }),
+        // Method does not yet exist on userfront-core but will
+        // @ts-ignore
+        src: () => getUserfrontProperty("tenantId"),
         // Set the tenant ID if one was present, otherwise set isDevMode = true.
         // Then proceed to start the flow.
-        onDone: {
-          target: "initFlow",
-          actions: "setTenantIdOrDevMode",
-        },
+        onDone: [
+          {
+            target: "initFlow",
+            actions: "setTenantIdOrDevMode",
+          },
+        ],
+        onError: [
+          {
+            target: "initFlow",
+            actions: "setTenantIdOrDevMode",
+          },
+        ],
       },
     },
     // Start the flow, if possible, or report an error.
@@ -342,18 +343,15 @@ const signupMachineConfig: AuthMachineConfig = {
     // Show the placeholder while fetching the flow from Userfront servers.
     showPlaceholderAndFetchFlow: {
       invoke: {
-        src: callUserfrontApi,
-        data: (context: TotpCodeContext, event: any) => ({
-          method: "getDefaultAuthFlow",
-          args: {},
-        }),
+        // Method does not yet exist on userfront-core but will
+        // @ts-ignore
+        src: () => callUserfront({ method: "getDefaultAuthFlow" }),
+        // On failure, report an error.
+        onError: {
+          target: "missingFlowFromServerError",
+        },
         // On success, proceed to the first step
         onDone: [
-          // On failure, report an error.
-          {
-            target: "missingFlowFromServerError",
-            cond: "isUserfrontError",
-          },
           {
             target: "beginFlow",
             actions: "setFlowFromUserfrontApi",
@@ -365,18 +363,16 @@ const signupMachineConfig: AuthMachineConfig = {
     // while fetching the updated flow from Userfront servers
     showPreviewAndFetchFlow: {
       invoke: {
-        src: callUserfrontApi,
-        data: (context: TotpCodeContext, event: any) => ({
-          method: "getDefaultAuthFlow",
-          args: {},
-        }),
+        // Method does not yet exist on userfront-core but will
+        // @ts-ignore
+        src: () => callUserfront({ method: "getDefaultAuthFlow" }),
+        // Report errors.
+        onError: {
+          target: "missingFlowFromServerError",
+        },
         // On success, if the user hasn't selected a factor, then proceed as normal.
         // If the user has selected a factor, proceed directly to that factor's view.
         onDone: [
-          {
-            target: "missingFlowFromServerError",
-            cond: "isUserfrontError",
-          },
           {
             target: "beginFlow",
             cond: "hasNoActiveFactor",
@@ -476,21 +472,21 @@ const signupMachineConfig: AuthMachineConfig = {
     ssoProvider: {
       id: "ssoProvider",
       invoke: {
-        src: callUserfrontApi,
-        data: (context: any, event: any) => ({
-          method: "signup",
-          args: {
-            method: event.factor?.provider,
-          },
-        }),
+        src: (context: any, event: any) => {
+          return callUserfront({
+            method: "login",
+            args: [
+              {
+                method: event.factor?.strategy,
+              },
+            ],
+          });
+        },
         // At this point we should have already redirected to the SSO provider.
         // If the API call returned an error, report it. Otherwise, not much we can do here.
-        onDone: [
-          {
-            target: "unhandledError",
-            cond: "isUserfrontError",
-          },
-        ],
+        onError: {
+          target: "unhandledError",
+        },
       },
     },
     // Check to see if a second factor is needed, and if so, proceed to the appropriate view

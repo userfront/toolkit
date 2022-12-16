@@ -1,7 +1,7 @@
 // CONSTANTS
 
 import { isSsoProvider } from "./guards";
-import { Factor } from "./types";
+import { Factor } from "../types";
 
 // List of all possible factors with:
 // channel, strategy
@@ -121,7 +121,7 @@ export const isMissing = (str: any) => {
 };
 
 // Return true if a strong has any value.
-export const hasValue = (str: any) => {
+export const hasValue = (str: any): str is string => {
   return typeof str === "string" && str.length > 0;
 };
 

@@ -1,4 +1,4 @@
-import callUserfront from "../services/userfront";
+import { callUserfront } from "../services/userfront";
 import SubmitButton from "../components/SubmitButton";
 import ErrorMessage from "../components/ErrorMessage";
 import SecuredByUserfront from "../components/SecuredByUserfront";
@@ -25,7 +25,7 @@ const PasswordResetForm = () => {
       const email = event.target.elements.email.value;
       const response = await callUserfront({
         method: "sendResetLink",
-        args: email,
+        args: [email],
       });
       setSuccess(true);
       setLoading(false);

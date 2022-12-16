@@ -1,9 +1,9 @@
 import { PasswordResetForm } from "../../../../packages/toolkit-react/src/index.js";
 import { Link } from "react-router-dom";
-import { useDisableGlobalUserfront } from "../hooks.js";
+import { useMockUserfront } from "../hooks.js";
 
 const ResetDemo = () => {
-  useDisableGlobalUserfront();
+  useMockUserfront();
   return (
     <div className="App">
       <div>

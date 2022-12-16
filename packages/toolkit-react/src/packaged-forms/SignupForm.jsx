@@ -1,5 +1,7 @@
 import SignupForm from "../forms/SignupForm";
-import createSignupFormMachine, { defaultAuthContext } from "../models/signup";
+import createSignupFormMachine, {
+  defaultAuthContext,
+} from "../models/forms/signup";
 import { useMachine } from "@xstate/react";
 
 function PackagedSignupForm({

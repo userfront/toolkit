@@ -1,6 +1,6 @@
-import { AuthMachineConfig, EmailLinkContext } from "./types";
-import { callUserfrontApi } from "./userfrontApi";
-import { hasValue } from "./utils";
+import { AuthMachineConfig } from "../types";
+import { callUserfront } from "../../services/userfront";
+import { hasValue } from "../config/utils";
 
 const emailLinkConfig: AuthMachineConfig = {
   id: "emailLink",
@@ -26,41 +26,31 @@ const emailLinkConfig: AuthMachineConfig = {
       entry: "clearError",
       // Call the Userfront API login/signup with passwordless method
       invoke: {
-        src: callUserfrontApi,
         // Set the method and email, and name and/or username if present, as arguments
-        data: (context: EmailLinkContext, event: any) => {
-          const args = {
+        src: (context) => {
+          const arg: Record<string, string> = {
             method: "passwordless",
             email: context.user.email,
-          } as any;
+          };
           if (hasValue(context.user.name)) {
-            args.name = context.user.name;
+            arg.name = context.user.name;
           }
           if (hasValue(context.user.username)) {
-            args.username = context.user.username;
+            arg.username = context.user.username;
           }
-          return {
-            method: "signup",
-            args,
-          };
+          return callUserfront({
+            method: context.config.type,
+            args: [arg],
+          });
         },
-        // On success, show that the email was sent
-        onDone: [
-          {
-            actions: "setErrorFromApiError",
-            target: "showForm",
-            cond: "isUserfrontError",
-          },
-          {
-            target: "showEmailSent",
-          },
-        ],
-      },
-      // On failure, store the error and return to the email entry screen so we can try again
-      on: {
-        error: {
+        // On failure, store the error and return to the email entry screen so we can try again
+        onError: {
           actions: "setErrorFromApiError",
           target: "showForm",
+        },
+        // On success, show that the email was sent
+        onDone: {
+          target: "showEmailSent",
         },
       },
     },

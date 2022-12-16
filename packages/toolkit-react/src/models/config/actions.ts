@@ -19,19 +19,18 @@ import {
   UserfrontApiFactorResponseEvent,
   UserfrontApiGetTenantIdEvent,
   UserfrontApiFetchFlowEvent,
-  TotpCode,
   UseBackupCodeEvent,
-} from "./types";
+} from "../types";
 import { getTargetForFactor, factorConfig, hasValue } from "./utils";
 // @ts-ignore
-import callUserfront from "../services/userfront";
+import { callUserfront } from "../../services/userfront";
 
 // Clear the current error message, if any
 export const clearError = assign({ error: undefined });
 
 // Set the error message from a Userfront API error
 export const setErrorFromApiError = assign({
-  error: (context, event: UserfrontApiErrorEvent) => event.data.error,
+  error: (context, event: UserfrontApiErrorEvent) => event.data,
 });
 
 // Create & set the error message for a password mismatch (password !== confirmPassword)
@@ -210,7 +209,7 @@ export const markAsSecondFactor = assign({
 
 // Redirect to the afterLoginPath etc. after signed in, just an alias for the Userfront API method
 export const redirectIfSignedIn = () => {
-  callUserfront({ method: "redirectIfSignedIn" });
+  callUserfront({ method: "redirectIfLoggedIn", args: [] });
 };
 
 // Set the tenantId based on what was returned from the Userfront API, or set isDevMode = true if
@@ -291,8 +290,8 @@ export const setActiveFactor = (
 });
 
 /* UNIT TESTS */
-import { Factor } from "./types";
-import { createAuthContextForFactor } from "../../test/utils";
+import { Factor } from "../types";
+import { createAuthContextForFactor } from "../../../test/utils";
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;

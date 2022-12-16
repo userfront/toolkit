@@ -1,6 +1,6 @@
 import passwordConfig from "./passwordSignUp";
-import { AuthMachineConfig } from "./types";
-import { factorConfig } from "./utils";
+import { AuthMachineConfig } from "../types";
+import { factorConfig } from "../config/utils";
 
 const selectFactorConfig: AuthMachineConfig = {
   // The SelectFactor config needs to extend the Password config,
