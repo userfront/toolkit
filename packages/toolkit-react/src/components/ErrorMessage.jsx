@@ -7,7 +7,7 @@ const ErrorMessage = ({ error }) => {
   const message =
     error?.message || "An unknown error has occurred. Please try again later.";
   return (
-    <div className={classes.join(" ")}>
+    <div className={classes.join(" ")} role="alert">
       {hasError && <span className="uf-toolkit-error-text">{message}</span>}
     </div>
   );

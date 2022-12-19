@@ -412,6 +412,14 @@
   font-size: max(var(--uf-toolkit-label-font-size), 13px);
 }
 
+/* Secondary text - additional information for text inputs */
+.uf-toolkit .uf-toolkit-secondary-text {
+  font-size: max(var(--uf-toolkit-label-font-size), 13px);
+  color: var(--uf-toolkit-secondary-color-text);
+  display: inline-block;
+  margin-top: 0.5em;
+}
+
 /* Primary and secondary buttons */
 .uf-toolkit-button {
   padding: var(--uf-toolkit-button-padding);
