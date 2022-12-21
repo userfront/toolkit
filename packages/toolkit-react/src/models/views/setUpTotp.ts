@@ -83,7 +83,7 @@ const setUpTotpConfig: AuthMachineConfig = {
             cond: "secondFactorRequiredFromView",
           },
           {
-            actions: "redirectIfSignedIn",
+            actions: "redirectIfLoggedIn",
             target: "showTotpSetupComplete",
           },
         ],

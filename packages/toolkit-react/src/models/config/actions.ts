@@ -209,7 +209,7 @@ export const markAsSecondFactor = assign({
 });
 
 // Redirect to the afterLoginPath etc. after signed in, just an alias for the Userfront API method
-export const redirectIfSignedIn = () => {
+export const redirectIfLoggedIn = () => {
   callUserfront({ method: "redirectIfLoggedIn", args: [] });
 };
 

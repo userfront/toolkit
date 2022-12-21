@@ -66,7 +66,7 @@ const passwordConfig: AuthMachineConfig = {
           },
           // Otherwise we're logged in; redirect, and show a confirmation view
           {
-            actions: "redirectIfSignedIn",
+            actions: "redirectIfLoggedIn",
             target: "showPasswordSet",
           },
         ],

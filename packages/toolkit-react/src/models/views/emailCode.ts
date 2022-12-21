@@ -97,7 +97,7 @@ const emailCodeConfig: AuthMachineConfig = {
           // Otherwise, we're signed in, redirect.
           // Show the "verified" view in case redirect fails.
           {
-            actions: "redirectIfSignedIn",
+            actions: "redirectIfLoggedIn",
             target: "showCodeVerified",
           },
         ],
