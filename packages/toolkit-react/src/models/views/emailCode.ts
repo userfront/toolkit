@@ -26,7 +26,6 @@ const emailCodeConfig: AuthMachineConfig = {
         // Set method, email, and possibly name and username as arguments for the call
         src: (context) => {
           const arg: Record<string, string> = {
-            method: "verificationCode",
             channel: "email",
             email: context.user.email,
           };
@@ -37,7 +36,7 @@ const emailCodeConfig: AuthMachineConfig = {
             arg.username = context.user.username;
           }
           return callUserfront({
-            method: context.config.type,
+            method: "sendVerificationCode",
             args: [arg],
           });
         },
@@ -71,10 +70,9 @@ const emailCodeConfig: AuthMachineConfig = {
       entry: "clearError",
       invoke: {
         // Set the arguments and call the Userfront API method to check the verification code
-        // TODO this is not quite right?
         src: (context) =>
           callUserfront({
-            method: "sendVerificationCode",
+            method: context.config.type,
             args: [
               {
                 method: "verificationCode",

@@ -8,17 +8,10 @@ const flow = {
     { channel: "email", strategy: "verificationCode" },
     { channel: "sms", strategy: "verificationCode" },
   ],
-  secondFactors: [
-    { channel: "sms", strategy: "verificationCode" },
-    { channel: "authenticator", strategy: "totp" },
-  ],
-  isMfaRequired: true,
 };
 
 function LiveLoginDemo() {
-  return (
-    <LoginForm tenantId="6bg66q7n" flow={flow} compact={true} devMode={false} />
-  );
+  return <LoginForm flow={flow} compact={true} />;
 }
 
 export default LiveLoginDemo;

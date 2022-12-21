@@ -1,4 +1,5 @@
-import { assign, send } from "xstate";
+import { assign, send, actions } from "xstate";
+const choose = actions.choose;
 import {
   UserfrontApiErrorEvent,
   AuthContext,
@@ -212,65 +213,59 @@ export const redirectIfSignedIn = () => {
   callUserfront({ method: "redirectIfLoggedIn", args: [] });
 };
 
-// Set the tenantId based on what was returned from the Userfront API, or set isDevMode = true if
+// Set the tenantId based on what was returned from the Userfront API, or set shouldFetchFlow = false if
 // there is no tenantId set in the local Userfront SDK instance
-export const setTenantIdOrDevMode = (
-  context: AuthContext<any>,
-  event: UserfrontApiGetTenantIdEvent
-) => {
-  if (hasValue(event.data.tenantId)) {
-    return assign({
-      config: {
-        ...context.config,
-        tenantId: event.data.tenantId,
-      },
-    });
-  } else {
-    return assign({
-      config: {
-        ...context.config,
-        devMode: true,
-      },
-    });
+export const setTenantIdIfPresent = assign(
+  (context: AuthContext<any>, event: UserfrontApiGetTenantIdEvent) => {
+    if (hasValue(event.data)) {
+      return {
+        config: {
+          ...context.config,
+          tenantId: event.data,
+        },
+      };
+    } else {
+      return {
+        config: {
+          ...context.config,
+          shouldFetchFlow: false,
+        },
+      };
+    }
   }
-};
+);
 
 // Set the auth flow based on what was returned from the Userfront API
-export const setFlowFromUserfrontApi = (
-  context: AuthContext<any>,
-  event: UserfrontApiFetchFlowEvent
-) =>
-  assign({
-    config: {
-      ...context.config,
-      flow: event.data,
-    },
-  });
+export const setFlowFromUserfrontApi = assign(
+  (context: AuthContext<any>, event: UserfrontApiFetchFlowEvent) => {
+    if (!event.data) {
+      console.warn(`Received no data from Userfront.setMode.`);
+      return {};
+    }
+    return {
+      config: {
+        ...context.config,
+        mode: event.data.mode,
+        flow: event.data.authentication,
+      },
+    };
+  }
+);
 
 // Once we've gotten the auth flow from the Userfront server,
 // if we're in preview mode we need to set the auth flow in the context
 // and then, if the user had already clicked a factor button, continue
 // the flow if that factor is still available.
-export const setFlowFromUserfrontApiAndResume = (
-  context: AuthContext<any>,
-  event: UserfrontApiFetchFlowEvent
-) => {
-  const actionList = [];
-  actionList.push(
-    assign({
-      config: {
-        ...context.config,
-        flow: event.data,
-      },
-    })
-  );
-  // TODO could be a factor not available in the server flow
-  if (context.activeFactor) {
-    const target = getTargetForFactor(context.activeFactor);
-    actionList.push(send(target));
-  }
-  return actionList;
-};
+export const resumeIfNeeded = choose([
+  {
+    cond: (context: AuthContext<any>) => !!context.activeFactor,
+    actions: [
+      send((context: AuthContext<any>) => ({
+        type: getTargetForFactor(<Factor>context.activeFactor),
+      })),
+    ],
+  },
+]);
 
 // Set the active factor, the factor that we're currently viewing.
 // This is really just for the specific case when we're in "preview mode"
@@ -335,39 +330,41 @@ if (import.meta.vitest) {
         });
       });
     });
-    describe("setTenantIdOrDevMode", () => {
+    describe("setTenantIdIfPresent", () => {
       it("should set the tenantId if one is available", () => {
         const event = {
           type: "done" as any,
-          data: {
-            tenantId: "demo1234",
-          },
+          data: "demo1234",
         };
         const context = createAuthContextForFactor("password");
-        const expected = assign({
+        const expected = {
           config: {
             ...context.config,
             tenantId: "demo1234",
           },
-        });
-        const actual = setTenantIdOrDevMode(context, event);
+        };
+        const actual = (<Function>setTenantIdIfPresent.assignment)(
+          context,
+          event
+        );
         expect(actual).toEqual(expected);
       });
-      it("should set dev mode if no tenantId is available", () => {
+      it("should set shouldFetchFlow = false if no tenantId is available", () => {
         const event = {
           type: "done" as any,
-          data: {
-            tenantId: "",
-          },
+          data: "",
         };
         const context = createAuthContextForFactor("password");
-        const expected = assign({
+        const expected = {
           config: {
             ...context.config,
-            devMode: true,
+            shouldFetchFlow: false,
           },
-        });
-        const actual = setTenantIdOrDevMode(context, event);
+        };
+        const actual = (<Function>setTenantIdIfPresent.assignment)(
+          context,
+          event
+        );
         expect(actual).toEqual(expected);
       });
     });

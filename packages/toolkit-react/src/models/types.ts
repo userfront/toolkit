@@ -23,9 +23,6 @@ export type FormError = {
   };
 };
 
-// Config for future optional fields on the form (name etc.)
-export type OptionalFieldConfig = "hide" | "allow" | "require";
-
 // Types of form in the toolkit
 export type FormType = "signup" | "login";
 
@@ -35,14 +32,10 @@ export interface FormConfig {
   type: FormType;
   tenantId?: string;
   flow?: Flow;
-  nameConfig: OptionalFieldConfig;
-  usernameConfig: OptionalFieldConfig;
-  phoneNumberConfig: OptionalFieldConfig;
+  mode?: string;
   // Is this in compact mode i.e. hide password behind a button
   compact: boolean;
   locale: string;
-  // Is this in dev mode i.e. don't call the API, use dummy data
-  devMode: boolean;
   // Should we fetch the tenant's default flow from the server,
   // even if a flow was provided inline?
   shouldFetchFlow: boolean;
@@ -213,7 +206,10 @@ export type UserfrontApiGetTenantIdEvent = {
 
 export type UserfrontApiFetchFlowEvent = {
   type: "done";
-  data: Flow;
+  data: {
+    authentication: Flow;
+    mode: "live" | "test";
+  };
 };
 
 export type UserfrontApiFactorResponseEvent = {
@@ -230,7 +226,6 @@ export type UserfrontApiFactorResponseEvent = {
 export type UserfrontApiErrorEvent = {
   type: "error";
   data: {
-    _isError: boolean;
     error: FormError;
   };
 };

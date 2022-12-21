@@ -278,6 +278,23 @@ const mockUserfront = {
       },
     };
   },
+  setMode: async () => {
+    return {
+      mode: "live",
+      authentication: {
+        firstFactors: [
+          { channel: "email", strategy: "link" },
+          { channel: "email", strategy: "azure" },
+          { channel: "email", strategy: "verificationCode" },
+          { channel: "email", strategy: "password" },
+          { channel: "sms", strategy: "verificationCode" },
+          { channel: "email", strategy: "google" },
+          { channel: "email", strategy: "apple" },
+          { channel: "email", strategy: "github" },
+        ],
+      },
+    };
+  },
 };
 
 export default mockUserfront;

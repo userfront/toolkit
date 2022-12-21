@@ -1,5 +1,5 @@
 import {
-  SignupForm as UnboundSignupForm,
+  UnboundSignupForm,
   createSignupFormModel,
   defaultSignupFormContext,
 } from "../../../../packages/toolkit-react/src/index.js";
@@ -9,19 +9,15 @@ import Urlon from "urlon";
 import { useState, useEffect } from "react";
 import { useMockUserfront } from "../hooks.js";
 
-const signupFormModel = createSignupFormModel(defaultSignupFormContext);
-
-const childIdForStep = (stepName) => {
-  switch (stepName) {
-    case "smsCodeSecondFactor":
-      return "smsCode";
-    case null:
-    case undefined:
-      return null;
-    default:
-      return stepName;
-  }
+const config = {
+  ...defaultSignupFormContext.config,
+  shouldFetchFlow: true,
 };
+const context = {
+  ...defaultSignupFormContext,
+  config,
+};
+const signupFormModel = createSignupFormModel(context);
 
 function App() {
   useMockUserfront();
@@ -68,10 +64,7 @@ function App() {
     setStateUrlon(newUrlon);
   }, [state]);
 
-  console.log("state", state);
-
   const handleEvent = (event) => {
-    console.log("event", event);
     send(event);
   };
 

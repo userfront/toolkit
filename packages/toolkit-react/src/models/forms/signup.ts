@@ -1,12 +1,12 @@
 import { createMachine, assign } from "xstate";
 import {
   setActiveFactor,
-  setFlowFromUserfrontApiAndResume,
+  resumeIfNeeded,
   setFlowFromUserfrontApi,
   setEmail,
   setPassword,
   setPhoneNumber,
-  setTenantIdOrDevMode,
+  setTenantIdIfPresent,
   setTotpCode,
   setQrCode,
   redirectIfSignedIn,
@@ -29,8 +29,8 @@ import {
   hasNoActiveFactor,
   isLocalMode,
   isMissingFlow,
+  isMissingFlowFromServer,
   isLocalModeWithoutFlow,
-  isDevModeWithoutFlow,
   isMissingTenantId,
   passwordsMatch,
   isReturningFromEmailLink,
@@ -47,11 +47,11 @@ import smsCodeConfig from "../views/smsCode";
 import {
   AuthContext,
   SelectFactorEvent,
-  OptionalFieldConfig,
   Loading,
   AuthMachineConfig,
   View,
   SignupMachineEvent,
+  FormType,
 } from "../types";
 import { callUserfront, getUserfrontProperty } from "../../services/userfront";
 import {
@@ -155,8 +155,8 @@ export const defaultSignupOptions = {
     hasNoActiveFactor,
     isLocalMode,
     isMissingFlow,
+    isMissingFlowFromServer,
     isLocalModeWithoutFlow,
-    isDevModeWithoutFlow,
     isMissingTenantId,
     passwordsMatch,
     isReturningFromEmailLink,
@@ -168,12 +168,12 @@ export const defaultSignupOptions = {
   },
   actions: {
     setActiveFactor,
-    setFlowFromUserfrontApiAndResume,
+    resumeIfNeeded,
     setFlowFromUserfrontApi,
     setEmail,
     setPassword,
     setPhoneNumber,
-    setTenantIdOrDevMode,
+    setTenantIdIfPresent,
     setTotpCode,
     setQrCode,
     redirectIfSignedIn,
@@ -198,32 +198,13 @@ export const defaultAuthContext = {
     email: "",
   },
   config: {
-    flow: {
-      firstFactors: [
-        { channel: "email", strategy: "link" },
-        { channel: "email", strategy: "azure" },
-        { channel: "email", strategy: "verificationCode" },
-        { channel: "email", strategy: "password" },
-        { channel: "sms", strategy: "verificationCode" },
-        { channel: "email", strategy: "google" },
-        { channel: "email", strategy: "apple" },
-        { channel: "email", strategy: "github" },
-      ],
-      secondFactors: [
-        { channel: "sms", strategy: "verificationCode" },
-        { channel: "authenticator", strategy: "totp" },
-      ],
-      isMfaRequired: true,
-    },
-    tenantId: "demo1234",
-    shouldFetchFlow: false,
-    devMode: true,
-    nameConfig: "hide" as OptionalFieldConfig,
-    usernameConfig: "hide" as OptionalFieldConfig,
-    phoneNumberConfig: "hide" as OptionalFieldConfig,
+    flow: null,
+    tenantId: null,
+    shouldFetchFlow: true,
+    mode: "live",
     compact: false,
     locale: "en-US",
-    type: "signup",
+    type: "signup" as FormType,
   },
   view: {} as Loading,
   isSecondFactor: false,
@@ -277,18 +258,18 @@ const signupMachineConfig: AuthMachineConfig = {
         // Method does not yet exist on userfront-core but will
         // @ts-ignore
         src: () => getUserfrontProperty("tenantId"),
-        // Set the tenant ID if one was present, otherwise set isDevMode = true.
+        // Set the tenant ID if one was present, otherwise set shouldFetchFlow = false
         // Then proceed to start the flow.
         onDone: [
           {
             target: "initFlow",
-            actions: "setTenantIdOrDevMode",
+            actions: "setTenantIdIfPresent",
           },
         ],
         onError: [
           {
             target: "initFlow",
-            actions: "setTenantIdOrDevMode",
+            actions: "setTenantIdIfPresent",
           },
         ],
       },
@@ -296,12 +277,6 @@ const signupMachineConfig: AuthMachineConfig = {
     // Start the flow, if possible, or report an error.
     initFlow: {
       always: [
-        // If isDevMode = true but we don't have a flow, we can't proceed.
-        // Report the error.
-        {
-          target: "missingFlowInDevModeError",
-          cond: "isDevModeWithoutFlow",
-        },
         // If shouldFetchFlow = false but we don't have a flow, we can't proceed.
         // Report the error.
         {
@@ -328,9 +303,6 @@ const signupMachineConfig: AuthMachineConfig = {
       ],
     },
     // Report the errors above
-    missingFlowInDevModeError: {
-      entry: assign({ error: missingFlowError("Missing flow in dev mode") }),
-    },
     missingFlowInLocalModeError: {
       entry: assign({ error: missingFlowError("Missing flow in local mode") }),
     },
@@ -344,15 +316,19 @@ const signupMachineConfig: AuthMachineConfig = {
     // Show the placeholder while fetching the flow from Userfront servers.
     showPlaceholderAndFetchFlow: {
       invoke: {
-        // Method does not yet exist on userfront-core but will
+        // Will retrieve mode & flow after userfront-core update
         // @ts-ignore
-        src: () => callUserfront({ method: "getDefaultAuthFlow" }),
+        src: () => callUserfront({ method: "setMode" }),
         // On failure, report an error.
         onError: {
           target: "missingFlowFromServerError",
         },
         // On success, proceed to the first step
         onDone: [
+          {
+            target: "missingFlowFromServerError",
+            cond: "isMissingFlowFromServer",
+          },
           {
             target: "beginFlow",
             actions: "setFlowFromUserfrontApi",
@@ -364,9 +340,9 @@ const signupMachineConfig: AuthMachineConfig = {
     // while fetching the updated flow from Userfront servers
     showPreviewAndFetchFlow: {
       invoke: {
-        // Method does not yet exist on userfront-core but will
+        // Will retrieve mode & flow after userfront-core update
         // @ts-ignore
-        src: () => callUserfront({ method: "getDefaultAuthFlow" }),
+        src: () => callUserfront({ method: "setMode" }),
         // Report errors.
         onError: {
           target: "missingFlowFromServerError",
@@ -380,7 +356,7 @@ const signupMachineConfig: AuthMachineConfig = {
             actions: "setFlowFromUserfrontApi",
           },
           {
-            actions: "setFlowFromUserfrontApiAndResume",
+            actions: ["setFlowFromUserfrontApi", "resumeIfNeeded"],
           },
         ],
       },

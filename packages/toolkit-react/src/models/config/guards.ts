@@ -7,6 +7,7 @@ import {
   UserfrontApiFactorResponseEvent,
   UserfrontApiErrorEvent,
   View,
+  UserfrontApiFetchFlowEvent,
 } from "../types";
 import { isMissing } from "./utils";
 
@@ -56,12 +57,6 @@ export const passwordsMatch = (
 export const isMissingTenantId = (context: AuthContext<any>) =>
   isMissing(context.config.tenantId);
 
-// Are we in dev mode (isDevMode = true) without a flow set locally?
-// This is an error state.
-export const isDevModeWithoutFlow = (context: AuthContext<any>) => {
-  return context.config.devMode && context.config.flow == null;
-};
-
 // Are we in local mode (shouldFetchFlow = false) without a flow set locally?
 // This is an error state.
 export const isLocalModeWithoutFlow = (context: AuthContext<any>) => {
@@ -71,6 +66,17 @@ export const isLocalModeWithoutFlow = (context: AuthContext<any>) => {
 // Is the auth flow absent?
 export const isMissingFlow = (context: AuthContext<any>) => {
   return context.config.flow == null;
+};
+
+export const isMissingFlowFromServer = (
+  context: AuthContext<any>,
+  event: UserfrontApiFetchFlowEvent
+) => {
+  const firstFactors = event.data?.authentication?.firstFactors;
+  if (!Array.isArray(firstFactors) || firstFactors.length === 0) {
+    return isMissingFlow(context);
+  }
+  return false;
 };
 
 // Is the form in local mode (shouldFetchFlow = false)?

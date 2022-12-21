@@ -29,6 +29,7 @@ const componentForStep = (state) => {
   } else {
     typeString = type;
   }
+  const canShowFlow = state.context.config.flow?.firstFactors;
   switch (typeString) {
     // While flow is being set up, show placeholder or preview as appropriate
     // TODO might need to tweak a little for placeholder vs preview? Not super important.
@@ -38,19 +39,25 @@ const componentForStep = (state) => {
     case "beginFlow":
     case "showPreviewAndFetchFlow":
     case "showPlaceholderAndFetchFlow":
-      return {
-        title: "Log in",
-        Component: SelectFactor,
-        props: {
-          isPlaceholder: !!state.context.config.flow,
-          isCompact: state.context.config.compact,
-          loadingFactor: state.context.activeFactor,
-          flow: state.context.config.flow,
-          isSecondFactor: false,
-          tenantId: state.context.tenantId,
-          isLogin: true,
-        },
-      };
+      if (canShowFlow) {
+        return {
+          title: "Sign up",
+          Component: SelectFactor,
+          props: {
+            isPlaceholder: !!state.context.config.flow,
+            isCompact: state.context.config.compact,
+            loadingFactor: state.context.activeFactor,
+            flow: state.context.config.flow,
+            isSecondFactor: false,
+            tenantId: state.context.tenantId,
+            isLogin: true,
+          },
+        };
+      } else {
+        return {
+          Component: Placeholder,
+        };
+      }
 
     // SelectFactor flow, with password possibly included inline
     case "selectFirstFactor.showForm":
@@ -329,7 +336,7 @@ const SignupForm = ({ state, onEvent }) => {
       <h2>{title}</h2>
       <Component onEvent={_onEvent} {...defaultProps} {...props} />
       <div>
-        <SecuredByUserfront />
+        <SecuredByUserfront mode={state.config?.mode} />
       </div>
     </div>
   );

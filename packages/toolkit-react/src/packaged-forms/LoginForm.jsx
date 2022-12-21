@@ -8,7 +8,6 @@ function PackagedLoginForm({
   tenantId,
   flow,
   compact,
-  devMode,
   shouldFetchFlow = true,
 }) {
   const [state, send] = useMachine(() => {
@@ -22,7 +21,6 @@ function PackagedLoginForm({
       config.flow = flow;
     }
     config.compact = !!compact;
-    config.devMode = !!devMode;
     config.shouldFetchFlow = !!shouldFetchFlow;
     const context = {
       ...defaultAuthContext,

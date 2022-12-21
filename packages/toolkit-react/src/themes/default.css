@@ -250,6 +250,9 @@
 
   /* Background color for test mode banner */
   --uf-toolkit-test-mode-background-color: #ffda96;
+
+  /* Height of the placeholder, if no flow is available to be shown */
+  --uf-toolkit-placeholder-height: 300px;
 }
 
 /* Styles for a free-standing toolkit element */
@@ -664,4 +667,9 @@
   width: max-content;
   border-radius: var(--uf-toolkit-border-radius);
   font-size: 0.8em;
+}
+
+/* Placeholder for when we're loading form */
+.uf-toolkit .uf-toolkit-placeholder {
+  height: var(--uf-toolkit-placeholder-height);
 }

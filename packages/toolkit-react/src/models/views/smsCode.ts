@@ -24,7 +24,6 @@ const smsCodeConfig: AuthMachineConfig = {
       invoke: {
         src: (context) => {
           const arg: Record<string, string> = {
-            method: "verificationCode",
             channel: "sms",
             phoneNumber: (<SmsCodeContext>context).view.phoneNumber,
           };
@@ -35,7 +34,7 @@ const smsCodeConfig: AuthMachineConfig = {
             arg.username = context.user.username;
           }
           return callUserfront({
-            method: context.config.type,
+            method: "sendVerificationCode",
             args: [arg],
           });
         },
@@ -65,11 +64,12 @@ const smsCodeConfig: AuthMachineConfig = {
       invoke: {
         src: (context) =>
           callUserfront({
-            method: "sendVerificationCode",
+            method: context.config.type,
             args: [
               {
                 method: "verificationCode",
                 channel: "sms",
+                phoneNumber: context.user.phoneNumber,
                 verificationCode: (<SmsCodeContext>context).view.code,
               },
             ],

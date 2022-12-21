@@ -9,7 +9,16 @@ import Urlon from "urlon";
 import { useState, useEffect } from "react";
 import { useMockUserfront } from "../hooks.js";
 
-const LoginFormModel = createLoginFormModel(defaultLoginFormContext);
+const config = {
+  ...defaultLoginFormContext.config,
+  shouldFetchFlow: false,
+};
+const context = {
+  ...defaultLoginFormContext,
+  config,
+};
+
+const LoginFormModel = createLoginFormModel(context);
 
 function App() {
   useMockUserfront();
