@@ -1,13 +1,12 @@
-import {
-  UnboundSignupForm,
-  createSignupFormModel,
-  defaultSignupFormContext,
-} from "../../../../packages/toolkit-react/src/index.js";
+import { _devTools } from "../../../../packages/toolkit-react/src/index.js";
 import { Link } from "react-router-dom";
 import { useMachine } from "@xstate/react";
 import Urlon from "urlon";
 import { useState, useEffect } from "react";
 import { useMockUserfront } from "../hooks.js";
+
+const { UnboundSignupForm, createSignupFormModel, defaultSignupFormContext } =
+  _devTools;
 
 const config = {
   ...defaultSignupFormContext.config,

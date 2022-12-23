@@ -1,13 +1,12 @@
-import {
-  LoginForm as UnboundLoginForm,
-  createLoginFormModel,
-  defaultLoginFormContext,
-} from "../../../../packages/toolkit-react/src/index.js";
+import { _devTools } from "../../../../packages/toolkit-react/src/index.js";
 import { Link } from "react-router-dom";
 import { useMachine } from "@xstate/react";
 import Urlon from "urlon";
 import { useState, useEffect } from "react";
 import { useMockUserfront } from "../hooks.js";
+
+const { UnboundLoginForm, createLoginFormModel, defaultLoginFormContext } =
+  _devTools;
 
 const config = {
   ...defaultLoginFormContext.config,
