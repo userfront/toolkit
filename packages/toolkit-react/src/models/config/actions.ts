@@ -72,16 +72,16 @@ function getQueryAttr(attrName: string): string {
 }
 
 // Transfer the uuid and token query params to context, if present
-export const readQueryParams = () => {
+export const readQueryParams = assign(() => {
   const uuid = getQueryAttr("uuid");
   const token = getQueryAttr("token");
-  return assign({
+  return {
     query: {
       uuid,
       token,
     },
-  });
-};
+  };
+});
 
 // Set up the view for the selected factor
 export const setupView = (

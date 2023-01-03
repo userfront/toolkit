@@ -95,7 +95,7 @@ export const hasNoActiveFactor = (context: AuthContext<any>) =>
 // If so, we need to check if a second factor is required to log in.
 export const hasLinkQueryParams = (context: AuthContext<any>) => {
   // TODO better off in userfront-core?
-  return context.query.token && context.query.uuid;
+  return !!(context.query.token && context.query.uuid);
 };
 
 export const isLoggedIn = () => {

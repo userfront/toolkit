@@ -39,9 +39,10 @@ const componentForStep = (state) => {
     case "beginFlow":
     case "showPreviewAndFetchFlow":
     case "showPlaceholderAndFetchFlow":
+    case "handleLoginWithLink":
       if (canShowFlow) {
         return {
-          title: "Sign up",
+          title: "Log in",
           Component: SelectFactor,
           props: {
             isPlaceholder: !!state.context.config.flow,
@@ -297,8 +298,10 @@ const componentForStep = (state) => {
     // Shouldn't get here.
     // TODO in prod this should be a GeneralErrorMessage
     default:
-      return () => {
-        return <div>NO COMPONENT</div>;
+      return {
+        title: "Oops, something went wrong",
+        Component: GeneralErrorMessage,
+        props: {},
       };
   }
 };
