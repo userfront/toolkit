@@ -103,22 +103,6 @@ export const callUserfront = async ({ method, args = [] }: CallUserfront) => {
   }
   if (!singleton[method] || !(typeof singleton[method] === "function")) {
     console.warn(`Method ${method} not found on Userfront object.`);
-    // TODO: let us get past the form setup step by returning a dummy object
-    // @ts-ignore
-    if (method === "setMode") {
-      console.log("returning for setMode");
-      return Promise.resolve({
-        authentication: {
-          firstFactors: [
-            { channel: "email", strategy: "password" },
-            { channel: "email", strategy: "link" },
-            { channel: "email", strategy: "verificationCode" },
-            { channel: "sms", strategy: "verificationCode" },
-          ],
-        },
-        mode: "test",
-      });
-    }
     return Promise.reject();
   }
   try {

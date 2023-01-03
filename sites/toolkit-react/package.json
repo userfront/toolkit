@@ -9,8 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@userfront/core": "^0.4.6",
-    "@userfront/react": "^0.3.1",
     "@xstate/react": "^3.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
