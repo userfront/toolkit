@@ -29,6 +29,10 @@ export const createAuthContextForFactor = (name: string): AuthContext<any> => {
     view,
     isSecondFactor: false,
     allowBack: false,
+    query: {
+      token: "",
+      uuid: "",
+    },
   };
   return context;
 };
