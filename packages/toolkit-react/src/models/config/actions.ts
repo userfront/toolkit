@@ -55,6 +55,33 @@ export const enableBack = assign({
   allowBack: true,
 });
 
+// Safely read a query param.
+function getQueryAttr(attrName: string): string {
+  if (
+    typeof window !== "object" ||
+    typeof window.location !== "object" ||
+    !window.location.href ||
+    window.location.href.indexOf(`${attrName}=`) < 0
+  ) {
+    return "";
+  }
+  return decodeURIComponent(
+    window.location.href.split(`${attrName}=`)[1].split("&")[0]
+  );
+}
+
+// Transfer the uuid and token query params to context, if present
+export const readQueryParams = () => {
+  const uuid = getQueryAttr("uuid");
+  const token = getQueryAttr("token");
+  return assign({
+    query: {
+      uuid,
+      token,
+    },
+  });
+};
+
 // Set up the view for the selected factor
 export const setupView = (
   context: AuthContext<View>,
@@ -164,17 +191,22 @@ export const setUseBackupCode = assign(
   })
 );
 
+// For the TOTP code entry, if it's the first factor, we need to gather
+// the user's emailOrUsername. If it's the second factor, we already have it from the first factor.
 export const setShowEmailOrUsernameIfFirstFactor = (
   context: TotpCodeContext
 ) => {
   return assign({
     view: {
       ...context.view,
-      showEmailOrUsername: context.isSecondFactor,
+      showEmailOrUsername: !context.isSecondFactor,
     },
   });
 };
 
+// For TOTP code on signup, if it's the first factor, we don't proceed directly to the second factor
+// on success, because we need to show the user their backup codes first. In this case, store the
+// response so we can use it afterward.
 export const storeFactorResponse = assign(
   (context: TotpCodeContext, event: UserfrontApiFactorResponseEvent) => ({
     view: {
@@ -196,7 +228,7 @@ export const setAllowedSecondFactors = assign(
 
 // Same as above, but set from context.view instead of event.data
 // for views that don't proceed directly from the API request to
-// the second factor selection
+// the second factor selection (i.e. TOTP code as first factor)
 export const setAllowedSecondFactorsFromView = assign(
   (context: TotpCodeContext) => ({
     allowedSecondFactors: context.view.allowedSecondFactors,
@@ -270,10 +302,8 @@ export const resumeIfNeeded = choose([
 // Set the active factor, the factor that we're currently viewing.
 // This is really just for the specific case when we're in "preview mode"
 // (a local auth flow was provided, and we were told to fetch the flow from the server)
-// and the user clicks a factor.
-
-// The factor that we're currently viewing is almost always dictated
-// by the state node we're in rather than context, this
+// and the user clicks a factor, so we can proceed to that factor when
+// the flow has been fetched.
 export const setActiveFactor = (
   context: AuthContext<any>,
   event: SelectFactorEvent

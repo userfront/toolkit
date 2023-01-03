@@ -21,6 +21,7 @@ import {
   disableBack,
   enableBack,
   setupView,
+  readQueryParams,
 } from "../config/actions";
 import emailCodeConfig from "../views/emailCode";
 import emailLinkConfig from "../views/emailLink";
@@ -33,11 +34,10 @@ import {
   isLocalModeWithoutFlow,
   isMissingTenantId,
   passwordsMatch,
-  isReturningFromEmailLink,
-  isReturningFromSsoFirstFactor,
+  hasLinkQueryParams,
   secondFactorRequired,
   secondFactorRequiredFromView,
-  secondFactorNotRequired,
+  isLoggedIn,
   isSecondFactor,
 } from "../config/guards";
 import passwordConfig from "../views/passwordSignUp";
@@ -159,11 +159,10 @@ export const defaultSignupOptions = {
     isLocalModeWithoutFlow,
     isMissingTenantId,
     passwordsMatch,
-    isReturningFromEmailLink,
-    isReturningFromSsoFirstFactor,
+    hasLinkQueryParams,
     secondFactorRequired,
     secondFactorRequiredFromView,
-    secondFactorNotRequired,
+    isLoggedIn,
     isSecondFactor,
   },
   actions: {
@@ -188,6 +187,7 @@ export const defaultSignupOptions = {
     disableBack,
     enableBack,
     setupView,
+    readQueryParams,
   },
 };
 
@@ -276,6 +276,7 @@ const signupMachineConfig: AuthMachineConfig = {
     },
     // Start the flow, if possible, or report an error.
     initFlow: {
+      entry: ["readQueryParams"],
       always: [
         // If shouldFetchFlow = false but we don't have a flow, we can't proceed.
         // Report the error.
@@ -372,15 +373,11 @@ const signupMachineConfig: AuthMachineConfig = {
     beginFlow: {
       entry: "setupView",
       always: [
-        // If we're returning from authenticating via SSO, proceed to the second factor.
+        // If we're returning from a passwordless/email link or SSO first factor, attempt to use
+        // the query params to proceed.
         {
-          target: "beginSecondFactor",
-          cond: "isReturningFromSsoFirstFactor",
-        },
-        // If we're returning from a passwordless/email link, proceed to the second factor.
-        {
-          target: "beginSecondFactor",
-          cond: "isReturningFromEmailLink",
+          target: "handleLoginWithLink",
+          cond: "hasLinkQueryParams",
         },
         // If there are multiple first factors, then show the factor selection view
         {
@@ -466,6 +463,43 @@ const signupMachineConfig: AuthMachineConfig = {
         },
       },
     },
+    handleLoginWithLink: {
+      id: "handleLoginWithLink",
+      invoke: {
+        src: (context) => {
+          return callUserfront({
+            method: "signup",
+            args: [
+              {
+                method: "link",
+                token: context.query.token,
+                uuid: context.query.uuid,
+              },
+            ],
+          });
+        },
+        onDone: [
+          // If we need to enter a second factor, proceed to that step
+          {
+            actions: "setAllowedSecondFactors",
+            target: "beginSecondFactor",
+            cond: "secondFactorRequired",
+          },
+          // Otherwise, we're logged in
+          {
+            target: "finish",
+          },
+        ],
+        onError: [
+          // If there was a problem logging in with the link token and uuid,
+          // go back to first factor selection and show the error.
+          {
+            actions: "setErrorFromApiError",
+            target: "beginFlow",
+          },
+        ],
+      },
+    },
     // Check to see if a second factor is needed, and if so, proceed to the appropriate view
     beginSecondFactor: {
       id: "beginSecondFactor",
@@ -474,7 +508,7 @@ const signupMachineConfig: AuthMachineConfig = {
         // If a second factor isn't needed, finish the flow.
         {
           target: "finish",
-          cond: "secondFactorNotRequired",
+          cond: "isLoggedIn",
         },
         // These are identical to the first factor cases:
         // If there's multiple possible second factors, proceed to factor selection

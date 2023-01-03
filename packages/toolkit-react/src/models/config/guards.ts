@@ -10,6 +10,7 @@ import {
   UserfrontApiFetchFlowEvent,
 } from "../types";
 import { isMissing } from "./utils";
+import { getUserfrontPropertySync } from "../../services/userfront";
 
 // GUARDS / PREDICATES
 
@@ -63,11 +64,13 @@ export const isLocalModeWithoutFlow = (context: AuthContext<any>) => {
   return !context.config.shouldFetchFlow && context.config.flow == null;
 };
 
-// Is the auth flow absent?
+// Is the auth flow absent from the context?
 export const isMissingFlow = (context: AuthContext<any>) => {
   return context.config.flow == null;
 };
 
+// Given an event that may contain the flow from the server,
+// is there a flow from the server OR a flow set locally?
 export const isMissingFlowFromServer = (
   context: AuthContext<any>,
   event: UserfrontApiFetchFlowEvent
@@ -90,22 +93,13 @@ export const hasNoActiveFactor = (context: AuthContext<any>) =>
 
 // Are we returning to the signup/login form after clicking a passwordless email link?
 // If so, we need to check if a second factor is required to log in.
-export const isReturningFromEmailLink = (context: AuthContext<any>) => {
-  // TODO implementation based off reading query string -> in UserfrontCore
-  return false;
+export const hasLinkQueryParams = (context: AuthContext<any>) => {
+  // TODO better off in userfront-core?
+  return context.query.token && context.query.uuid;
 };
 
-// Are we returning to the signup/login form after authenticating with an SSO provider?
-// If so, we need to check if a second factor is required to log in.
-export const isReturningFromSsoFirstFactor = (context: AuthContext<any>) => {
-  // TODO implementation based off reading query string -> in UserfrontCore
-  return false;
-};
-
-// Is a second factor *not* required to signup/login?
-// This effectively checks if we're signed in.
-export const secondFactorNotRequired = (context: AuthContext<any>) => {
-  // TODO implementation -> in UserfrontCore
-  // effectively checking if we are signed in
-  return false;
+export const isLoggedIn = () => {
+  // TypeScript doesn't recognize that this is Userfront.tokens which is an object
+  // @ts-ignore
+  return !!getUserfrontPropertySync("tokens")?.accessToken;
 };

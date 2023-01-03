@@ -17,6 +17,14 @@ import "./themes/default.css";
  * The Userfront CoreJS library is the default export
  */
 import Userfront from "@userfront/core";
+
+// TODO #9: add link to upgrade guide
+Userfront.build = (toolId) => {
+  console.error(`Userfront.build(${toolId}) has been removed. Instead, import the component directly:
+    import { SignupForm, LoginForm, PasswordResetForm, SetNewPasswordForm, LogoutButton } from "@userfront/react"
+  See TODO DOCS LINK for more information about upgrading to the new toolkit.`);
+};
+
 export default Userfront;
 
 /*

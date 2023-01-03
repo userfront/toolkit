@@ -127,6 +127,11 @@ export type View =
   | Message
   | Loading;
 
+export type Query = {
+  token?: string;
+  uuid?: string;
+};
+
 // The full context for the signup form state machine,
 // with view data parameterized by the type of view we're
 // currently on.
@@ -145,6 +150,9 @@ export interface AuthContext<ViewType> {
   activeFactor?: Factor;
   allowedSecondFactors?: Factor[];
   allowBack: boolean;
+
+  // Query params present, to be filled at start
+  query: Query;
 
   // Current error (if any)
   error?: FormError;
