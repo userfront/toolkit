@@ -18,7 +18,12 @@
     "types": [
       "vitest/importMeta",
       "vitest/globals"
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@": ["src"],
+      "@test": ["test"]
+    }
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

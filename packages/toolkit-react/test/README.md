@@ -8,46 +8,9 @@ We use the Vitest test runner, which exposes an API very similar to Jest's, but 
 - `@xstate/test`: https://graph-docs.vercel.app/model-based-testing/quickstart
   -- **not** the section on the official XState site's docs - we're using the latest pre-release version of `@xstate/test`, which has a substantially different API.
 
-## In-source testing
+## Unit tests
 
-Vitest allows tests to be placed in source files. We are _experimentally_ placing unit tests alongside the systems they are testing.
-
-To add tests for a system, at the bottom of its file, add something like this:
-
-```js
-// path/to/this/system.ts
-import { something } from "somewhere";
-
-class System {
-  /* implementation... */
-}
-
-export default System;
-
-/* UNIT TESTS */
-import { onlyNeedThisInTests } from "../some/otherFile.ts";
-
-// (import.meta.vitest is only defined if we're running tests)
-// (this all gets tree-shaken out by Vite when we build for prod)
-if (import.meta.vitest) {
-  // (The full Vitest API is available on the import.meta.vitest object.)
-  const { describe, it, expect, beforeEach } = import.meta.vitest;
-  // (Tests can be written as normal)
-  describe("path/to/this/system.ts", () => {
-    let system;
-    beforeEach(() => {
-      system = new System();
-    });
-    describe("somePartOfTheSystem", () => {
-      it("should do foo", () => {
-        const result = system.doFoo();
-        expect(result).toEqual("did foo");
-        expect(system.fooLevel).toBeGreaterThan(9000);
-      });
-    });
-  });
-}
-```
+Unit tests are with Vitest (which exposes a very similar API to Jest) and located in `test/unit/*`.
 
 ## Model-based testing
 

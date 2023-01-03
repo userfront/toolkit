@@ -6,7 +6,12 @@
     "allowSyntheticDefaultImports": true,
     "types": [
       "vitest/importMeta"
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@": ["src"],
+      "@test": ["test"]
+    }
   },
   "include": ["vite.config.js"]
 }

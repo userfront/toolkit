@@ -62,49 +62,7 @@ Some parts of the project are in TypeScript `.ts/.tsx` and other parts are in Ja
 
 **Testing**
 
-[Vitest](https://vitest.dev/) is used for unit tests. Its interface is similar to Jest, with a few additional features. One that we use is [in-source testing](https://vitest.dev/guide/in-source.html) to locate unit tests alongside the code they test. In a code file:
-
-```js
-// src/dir/some-code.js
-
-// implementations
-export function foo(args) {
-  /* ... */
-}
-
-export function bar(args) {
-  /* ... */
-}
-
-/* Unit tests */
-// The special property import.meta.vitest is only true when running tests.
-// For readability, we prefer to put test-only imports just above the tests.
-import { thingForTestsOnly } from "./other-code.js";
-
-// Vite eliminates this from the production bundle.
-if (import.meta.vitest) {
-  // The full Vitest API is available on the import.meta.vitest object
-  const { describe, it, expect, beforeEach } = import.meta.vitest;
-
-  // These are run like any other unit tests.
-  // Put the location in a top-level describe block so it's easy to find.
-  describe("/dir/some-code.js", () => {
-    beforeEach(() => {
-      /* test setup code */
-    });
-    describe("foo()", () => {
-      it("should do something", () => {
-        /* assertions with expect */
-      });
-    });
-    describe("bar()", () => {
-      it("should do something else", () => {
-        /* assertions with expect */
-      });
-    });
-  });
-}
-```
+[Vitest](https://vitest.dev/) is used for unit tests. Its interface is similar to Jest, with a few additional features.
 
 There is a useful [VS Code extension](https://marketplace.visualstudio.com/items?itemName=ZixuanChen.vitest-explorer) for Vitest to run tests and view results directly in the editor.
 
