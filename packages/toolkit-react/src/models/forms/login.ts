@@ -207,6 +207,10 @@ export const defaultAuthContext = {
   isSecondFactor: false,
   allowBack: true,
   error: null,
+  query: {
+    token: "",
+    uuid: "",
+  },
 };
 
 // Signup machine top-level configuration
