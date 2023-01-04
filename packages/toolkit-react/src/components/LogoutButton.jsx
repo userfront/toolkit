@@ -1,16 +1,16 @@
 import { callUserfront } from "../services/userfront";
 
-const LogoutButton = ({ redirect = true, disabled = false, children }) => {
+const LogoutButton = ({ redirect, disabled = false, children }) => {
   const _children = children || "Log out";
   const handleClick = async () => {
     try {
+      const arg = {};
+      if (redirect != null) {
+        arg.redirect = redirect;
+      }
       callUserfront({
         method: "logout",
-        args: [
-          {
-            redirect,
-          },
-        ],
+        args: [arg],
       });
     } catch (err) {
       // ...can this method even error, short of being disconnected or Userfront being down?
