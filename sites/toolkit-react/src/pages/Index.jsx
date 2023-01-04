@@ -1,5 +1,21 @@
 import { Link } from "react-router-dom";
 
+function clearCookies() {
+  document.cookie.replace(/(?<=^|;).+?(?=\=|;|$)/g, (name) =>
+    location.hostname
+      .split(/\.(?=[^\.]+\.)/)
+      .reduceRight(
+        (acc, val, i, arr) =>
+          i ? (arr[i] = "." + val + acc) : ((arr[i] = ""), arr),
+        ""
+      )
+      .map(
+        (domain) =>
+          (document.cookie = `${name}=;max-age=0;path=/;domain=${domain}`)
+      )
+  );
+}
+
 const Index = () => {
   return (
     <div>
@@ -52,6 +68,9 @@ const Index = () => {
           <Link to="/live/logout">Logout button (live)</Link>
         </li>
       </ul>
+      <p>
+        <button onClick={clearCookies}>Clear all cookies</button>
+      </p>
     </div>
   );
 };
