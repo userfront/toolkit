@@ -40,7 +40,7 @@ import {
   isLoggedIn,
   isSecondFactor,
 } from "../config/guards";
-import passwordConfig from "../views/passwordSignUp";
+import passwordConfig from "../views/password";
 import selectFactorConfig from "../views/selectFactor";
 import totpCodeConfig from "../views/setUpTotp";
 import smsCodeConfig from "../views/smsCode";

@@ -1,4 +1,4 @@
-import passwordConfig from "./passwordSignUp";
+import passwordConfig from "./password";
 import { AuthMachineConfig } from "../types";
 import { factorConfig } from "../config/utils";
 

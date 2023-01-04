@@ -36,6 +36,7 @@ const passwordConfig: AuthMachineConfig = {
       invoke: {
         // Set email, password, and possibly name and/or username as arguments and call the method
         src: (context) => {
+          console.log(context);
           const arg: Record<string, string> = {
             method: "password",
             email: context.user.email,
@@ -47,6 +48,11 @@ const passwordConfig: AuthMachineConfig = {
           if (hasValue(context.user.username)) {
             arg.username = context.user.username;
           }
+          if (hasValue(context.user.emailOrUsername)) {
+            arg.emailOrUsername = context.user.emailOrUsername;
+          }
+          console.log(context.config.type);
+          console.log(arg);
           return callUserfront({
             method: context.config.type,
             args: [arg],

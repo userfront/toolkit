@@ -47,6 +47,7 @@ export interface UserData {
   name?: string;
   username?: string;
   phoneNumber?: string;
+  emailOrUsername?: string;
 }
 
 // TYPES FOR FACTORS
@@ -259,6 +260,7 @@ export type PasswordSubmitEvent = {
   confirmPassword: string;
   name?: string;
   username?: string;
+  emailOrUsername?: string;
 };
 
 export type PhoneNumberSubmitEvent = {

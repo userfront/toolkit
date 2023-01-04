@@ -40,7 +40,7 @@ import {
   isSecondFactor,
   alwaysSucceed,
 } from "../config/guards";
-import passwordConfig from "../views/passwordSignUp";
+import passwordConfig from "../views/password";
 import selectFactorConfig from "../views/selectFactor";
 import totpCodeConfig from "../views/totpCode";
 import smsCodeConfig from "../views/smsCode";

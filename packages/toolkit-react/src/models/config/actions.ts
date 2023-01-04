@@ -143,6 +143,7 @@ export const setPassword = assign(
       email: event.email,
       name: event.name,
       username: event.username,
+      emailOrUsername: event.emailOrUsername,
     },
     view: {
       ...context.view,
