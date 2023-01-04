@@ -51,7 +51,7 @@ import {
   View,
   SignupMachineEvent,
 } from "../types";
-import { callUserfront } from "../../services/userfront";
+import { callUserfront, getUserfrontProperty } from "../../services/userfront";
 import {
   createOnlyFactorCondition,
   matchFactor,
