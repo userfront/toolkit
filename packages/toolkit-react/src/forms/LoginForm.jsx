@@ -339,7 +339,7 @@ const SignupForm = ({ state, onEvent }) => {
       <h2>{title}</h2>
       <Component onEvent={_onEvent} {...defaultProps} {...props} />
       <div>
-        <SecuredByUserfront mode={state.config?.mode} />
+        <SecuredByUserfront mode={state.context.config?.mode} />
       </div>
     </div>
   );
