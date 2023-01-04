@@ -33,12 +33,12 @@ import {
   isMissingFlow,
   isLocalModeWithoutFlow,
   isMissingTenantId,
-  passwordsMatch,
   hasLinkQueryParams,
   secondFactorRequired,
   secondFactorRequiredFromView,
   isLoggedIn,
   isSecondFactor,
+  alwaysSucceed,
 } from "../config/guards";
 import passwordConfig from "../views/passwordSignUp";
 import selectFactorConfig from "../views/selectFactor";
@@ -156,7 +156,7 @@ export const defaultSignupOptions = {
     isMissingFlow,
     isLocalModeWithoutFlow,
     isMissingTenantId,
-    passwordsMatch,
+    passwordsMatch: alwaysSucceed,
     hasLinkQueryParams,
     secondFactorRequired,
     secondFactorRequiredFromView,

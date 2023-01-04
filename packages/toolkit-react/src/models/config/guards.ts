@@ -54,6 +54,9 @@ export const passwordsMatch = (
   event: PasswordSubmitEvent
 ) => event.password === event.confirmPassword;
 
+// Guard that always succeeds, for guards that aren't relevant in a certain context
+export const alwaysSucceed = () => true;
+
 // Is the tenantId absent?
 export const isMissingTenantId = (context: AuthContext<any>) =>
   isMissing(context.config.tenantId);
