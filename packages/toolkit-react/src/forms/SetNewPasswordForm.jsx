@@ -6,7 +6,7 @@ import SecuredByUserfront from "../components/SecuredByUserfront";
 import { useState } from "react";
 import { useSizeClass } from "../utils/hooks";
 
-const SetNewPasswordForm = () => {
+const SetNewPasswordForm = ({ shouldConfirmPassword = false }) => {
   const [containerRef, setContainerRef] = useState();
   const [error, setError] = useState();
   const [loading, setLoading] = useState();
@@ -22,7 +22,10 @@ const SetNewPasswordForm = () => {
     setLoading(true);
     setError(undefined);
     const password = event.target.elements.password.value;
-    const confirmPassword = event.target.elements.confirmPassword.value;
+    // Only compare if we're asking users to confirm their password
+    const confirmPassword = shouldConfirmPassword
+      ? event.target.elements.confirmPassword.value
+      : event.target.elements.password.value;
     if (password !== confirmPassword) {
       setError({
         message:
@@ -65,14 +68,16 @@ const SetNewPasswordForm = () => {
               name="password"
             ></input>
           </div>
-          <div className="uf-toolkit-form-row">
-            <label htmlFor="confirmPassword">Confirm your new password</label>
-            <input
-              className="uf-toolkit-input"
-              type="password"
-              name="confirmPassword"
-            ></input>
-          </div>
+          {shouldConfirmPassword && (
+            <div className="uf-toolkit-form-row">
+              <label htmlFor="confirmPassword">Confirm your new password</label>
+              <input
+                className="uf-toolkit-input"
+                type="password"
+                name="confirmPassword"
+              ></input>
+            </div>
+          )}
           <ErrorMessage error={error} />
           <div className="uf-toolkit-button-row">
             <SubmitButton />
