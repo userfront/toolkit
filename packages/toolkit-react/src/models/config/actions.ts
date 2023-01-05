@@ -223,9 +223,13 @@ export const storeFactorResponse = assign(
 // allowedSecondFactors is not necessarily identical to config.flow.secondFactors, because
 // the user could have specific second factors set.
 export const setAllowedSecondFactors = assign(
-  (context: AuthContext<any>, event: UserfrontApiFactorResponseEvent) => ({
-    allowedSecondFactors: event.data.authentication.secondFactors,
-  })
+  (context: AuthContext<any>, event: UserfrontApiFactorResponseEvent) => {
+    console.log("event at setAllowedSecondFactors");
+    console.log(event);
+    return {
+      allowedSecondFactors: event.data.authentication.secondFactors,
+    };
+  }
 );
 
 // Same as above, but set from context.view instead of event.data
