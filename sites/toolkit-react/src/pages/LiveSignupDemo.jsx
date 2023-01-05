@@ -1,4 +1,7 @@
-import { SignupForm } from "../../../../packages/toolkit-react/src/index.js";
+import { useEffect } from "react";
+import Userfront, {
+  SignupForm,
+} from "../../../../packages/toolkit-react/src/index.js";
 
 // TODO this should come from server when we have the flows/default endpoint up
 const flow = {
@@ -11,6 +14,12 @@ const flow = {
 };
 
 function LiveSignupDemo() {
+  useEffect(() => {
+    window.Userfront = Userfront;
+    return () => {
+      window.Userfront = undefined;
+    };
+  }, []);
   return <SignupForm flow={flow} compact={true} xstateDevTools={true} />;
 }
 
