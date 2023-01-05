@@ -104,7 +104,7 @@ export const createOnlyFactorCondition = (
   return (context: any) => {
     let onlyFactor;
     if (asSecondFactor) {
-      onlyFactor = context.flow.secondFactors[0];
+      onlyFactor = context.allowedSecondFactors?.[0];
     } else {
       onlyFactor = context.flow.firstFactors[0];
     }

@@ -103,7 +103,7 @@ export const defaultSignupOptions = {
     // Predicates for second factors
     hasMultipleSecondFactors: (context: AuthContext<any>, event: any) => {
       console.log("context at hasMultipleSecondFactors", context);
-      return (context.config.flow?.secondFactors?.length ?? 0) > 1;
+      return (context.allowedSecondFactors?.length ?? 0) > 1;
     },
     hasOnlyEmailLinkSecondFactor: createOnlyFactorCondition({
       channel: "email",
@@ -127,7 +127,7 @@ export const defaultSignupOptions = {
     }),
     hasOnlySsoSecondFactor: (context: AuthContext<any>) => {
       console.log("context at hasOnlySsoSecondFactor", context);
-      const factor = context.config.flow?.secondFactors[0];
+      const factor = context.allowedSecondFactors?.[0];
       if (!factor) {
         return false;
       }

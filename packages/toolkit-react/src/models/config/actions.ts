@@ -220,8 +220,6 @@ export const storeFactorResponse = assign(
 );
 
 // Store the allowed second factors, from the response to a successful first factor login.
-// allowedSecondFactors is not necessarily identical to config.flow.secondFactors, because
-// the user could have specific second factors set.
 export const setAllowedSecondFactors = assign(
   (context: AuthContext<any>, event: UserfrontApiFactorResponseEvent) => {
     console.log("event at setAllowedSecondFactors");

@@ -10,8 +10,6 @@ export type Factor = {
 // An auth flow, per the Userfront API
 export type Flow = {
   firstFactors: Factor[];
-  secondFactors: Factor[];
-  isMfaRequired: boolean;
 };
 
 // An error object as returned by the Userfront API

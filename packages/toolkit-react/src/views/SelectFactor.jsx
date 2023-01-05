@@ -18,9 +18,7 @@ const SelectFactor = ({
   error,
 }) => {
   const _onEvent = onEvent || ((evt) => log("event", evt));
-  const factors = isSecondFactor
-    ? allowedSecondFactors || flow.secondFactors
-    : flow.firstFactors;
+  const factors = isSecondFactor ? allowedSecondFactors : flow.firstFactors;
   const displayItems = [];
 
   const handleSelectFactor = (factor) => {
