@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "@react-hook/resize-observer": "^1.2.6",
-    "@userfront/core": "^0.5.0-alpha.0",
+    "@userfront/core": "git+https://github.com/userfront/userfront-core.git#848d63ab5a41241b4ad489b23bb02a742dbacf15",
     "@xstate/react": "^3.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
