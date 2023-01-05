@@ -17,7 +17,7 @@ const setUpTotpConfig: AuthMachineConfig = {
       invoke: {
         // Method will exist on userfront-core when published
         // @ts-ignore
-        src: () => callUserfront({ method: "getTotp" }),
+        src: () => callUserfront({ method: "store.user.getTotp" }),
         // If there's a problem getting the QR code, show an error message
         onError: {
           actions: "setErrorFromApiError",

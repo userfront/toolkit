@@ -3,6 +3,7 @@
 // need a state machine to describe their behavior.
 
 import Userfront from "@userfront/core";
+import get from "lodash.get";
 
 interface Store {
   tenantId?: string;
@@ -34,12 +35,13 @@ export interface CallUserfront {
 }
 
 /**
- * Get a property by key from Userfront or Userfront.store, wrapped in a Promise
+ * Get a property by key from the Userfront singleton, wrapped in a Promise
  * so that this can be invoked as an XState service.
+ * The key may be a path ("path.to.value" -> Userfront.path.to.value)
  * The target singleton can be changed with overrideUserfrontSingleton.
  *
- * @param key key of the property to get from Userfront or Userfront.store
- * @returns value of Userfront[key] or Userfront.store[key]
+ * @param key key of the property to get from Userfront
+ * @returns value of Userfront[key]
  */
 export const getUserfrontProperty = async (key: string) => {
   if (!key) {
@@ -48,10 +50,8 @@ export const getUserfrontProperty = async (key: string) => {
     );
     return Promise.reject();
   }
-  if (key in singleton) {
+  if (get(singleton, key)) {
     return singleton[<keyof typeof singleton>key];
-  } else if (key in singleton.store) {
-    return singleton.store[<keyof typeof singleton.store>key];
   }
   console.warn(
     `Tried to read key ${key} from the Userfront object, but no such key was found in the object or object.store.`
@@ -60,11 +60,12 @@ export const getUserfrontProperty = async (key: string) => {
 };
 
 /**
- * Get a property by key from Userfront or Userfront.store without wrapping in a Promise.
+ * Get a property by key from the Userfront singleton without wrapping in a Promise.
+ * The key may be a path ("path.to.value" -> Userfront.path.to.value)
  * The target singleton can be changed with overrideUserfrontSingleton.
  *
  * @param key key to retrieve
- * @returns value of Userfront[key] or Userfront.store[key]
+ * @returns value of Userfront[key]
  */
 export const getUserfrontPropertySync = (key: string) => {
   if (!key) {
@@ -73,10 +74,8 @@ export const getUserfrontPropertySync = (key: string) => {
     );
     throw new Error();
   }
-  if (key in singleton) {
+  if (get(singleton, key)) {
     return singleton[<keyof typeof singleton>key];
-  } else if (key in singleton.store) {
-    return singleton.store[<keyof typeof singleton.store>key];
   }
   console.warn(
     `Tried to read key ${key} from the Userfront object, but no such key was found in the object or object.store.`
@@ -90,7 +89,7 @@ export const getUserfrontPropertySync = (key: string) => {
  * The target singleton can be changed with overrideUserfrontSingleton.
  *
  * @param {object} config
- * @param {string} config.method method name to call
+ * @param {string} config.method method name to call; may be a path ("path.to.method" -> Userfront.path.to.method())
  * @param {Array} config.args arguments to pass to the method
  * @returns {Promise} result of the call, wrapped in a Promise even if the method is sync
  */
@@ -101,12 +100,13 @@ export const callUserfront = async ({ method, args = [] }: CallUserfront) => {
     );
     return Promise.reject();
   }
-  if (!singleton[method] || !(typeof singleton[method] === "function")) {
+  const _method = get(singleton, method);
+  if (!_method || !(typeof _method === "function")) {
     console.warn(`Method ${method} not found on Userfront object.`);
     return Promise.reject();
   }
   try {
-    return await (<any>singleton[method])(...args);
+    return await (<any>_method)(...args);
   } catch (err: any) {
     console.warn(
       `Method ${method} on Userfront object threw. Error: ${err.message}`
@@ -119,7 +119,7 @@ export const callUserfront = async ({ method, args = [] }: CallUserfront) => {
  * Call a method on the Userfront singleton, immediately returning the result (which may be a Promise).
  * The target singleton can be changed with overrideUserfrontSingleton.
  * @param {object} config
- * @param {string} config.method method name to call
+ * @param {string} config.method method name to call; may be a path ("path.to.method" -> Userfront.path.to.method())
  * @param {Array} config.args arguments to pass to the method
  * @returns result of the call, which may be a Promise if the method is async
  */
@@ -130,12 +130,13 @@ export const callUserfrontSync = ({ method, args = [] }: CallUserfront) => {
     );
     throw new Error();
   }
-  if (!singleton[method] || !(typeof singleton[method] === "function")) {
+  const _method = get(singleton, method);
+  if (!_method || !(typeof _method === "function")) {
     console.warn(`Method ${method} not found on Userfront object.`);
     throw new Error();
   }
   try {
-    return (<any>singleton[method])(...args);
+    return (<any>_method)(...args);
   } catch (err: any) {
     console.warn(
       `Method ${method} on Userfront object threw. Error: ${err.message}`
