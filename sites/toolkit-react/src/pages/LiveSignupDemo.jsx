@@ -11,7 +11,7 @@ const flow = {
 };
 
 function LiveSignupDemo() {
-  return <SignupForm flow={flow} compact={true} />;
+  return <SignupForm flow={flow} compact={true} xstateDevTools={true} />;
 }
 
 export default LiveSignupDemo;

@@ -2,6 +2,7 @@ import "./App.css";
 import "../../../packages/toolkit-react/src/themes/default.css";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { inspect } from "@xstate/inspect";
 import SignupDemo from "./pages/SignupDemo";
 import LoginDemo from "./pages/LoginDemo";
 import ResetDemo from "./pages/ResetDemo";
@@ -16,6 +17,10 @@ import LiveLogoutDemo from "./pages/LiveLogoutDemo";
 import LiveSetNewPasswordDemo from "./pages/LiveSetNewPasswordDemo";
 
 import Userfront from "../../../packages/toolkit-react/src/index.js";
+
+inspect({
+  iframe: false,
+});
 
 Userfront.init("6bg66q7n");
 

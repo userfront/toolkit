@@ -9,25 +9,29 @@ function PackagedSignupForm({
   flow,
   compact,
   shouldFetchFlow = true,
+  xstateDevTools = false,
 }) {
-  const [state, send] = useMachine(() => {
-    const config = {
-      ...defaultAuthContext.config,
-    };
-    if (tenantId) {
-      config.tenantId = tenantId;
-    }
-    if (flow) {
-      config.flow = flow;
-    }
-    config.compact = !!compact;
-    config.shouldFetchFlow = !!shouldFetchFlow;
-    const context = {
-      ...defaultAuthContext,
-      config,
-    };
-    return createSignupFormMachine(context);
-  });
+  const [state, send] = useMachine(
+    () => {
+      const config = {
+        ...defaultAuthContext.config,
+      };
+      if (tenantId) {
+        config.tenantId = tenantId;
+      }
+      if (flow) {
+        config.flow = flow;
+      }
+      config.compact = !!compact;
+      config.shouldFetchFlow = !!shouldFetchFlow;
+      const context = {
+        ...defaultAuthContext,
+        config,
+      };
+      return createSignupFormMachine(context);
+    },
+    { devTools: xstateDevTools }
+  );
 
   return <SignupForm state={state} onEvent={send} />;
 }
