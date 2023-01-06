@@ -69,7 +69,7 @@ const smsCodeConfig: AuthMachineConfig = {
               {
                 method: "verificationCode",
                 channel: "sms",
-                phoneNumber: context.user.phoneNumber,
+                phoneNumber: (<SmsCodeContext>context).view.phoneNumber,
                 verificationCode: (<SmsCodeContext>context).view.code,
               },
             ],
