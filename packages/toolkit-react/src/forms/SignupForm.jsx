@@ -260,7 +260,7 @@ const componentForStep = (state) => {
         title: "Set up two-factor authentication",
         Component: SetUpTotp,
         props: {
-          isLoading: true,
+          qrCode: state.context.view.qrCode || "",
         },
       };
     case "totpCode.confirmTotpCode":
@@ -268,7 +268,7 @@ const componentForStep = (state) => {
         title: "Set up two-factor authentication",
         Component: SetUpTotp,
         props: {
-          isLoading: true,
+          qrCode: state.context.view.qrCode || "",
         },
       };
     case "totpCode.showBackupCodes":
