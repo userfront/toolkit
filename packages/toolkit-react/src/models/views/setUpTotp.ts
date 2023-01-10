@@ -50,7 +50,8 @@ const setUpTotpConfig: AuthMachineConfig = {
         // Set the code and call the API method
         src: (context: any, event: SignupMachineEvent) =>
           callUserfront({
-            method: context.config.type,
+            // Should ALWAYS be Userfront.login here
+            method: "login",
             args: [
               {
                 method: "totp",

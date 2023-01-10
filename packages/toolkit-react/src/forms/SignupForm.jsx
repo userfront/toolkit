@@ -252,7 +252,7 @@ const componentForStep = (state) => {
         title: "Set up two-factor authentication",
         Component: SetUpTotp,
         props: {
-          isLoadingQrCode: true,
+          qrCode: state.context.view.qrCode || "",
         },
       };
     case "totpCode.showQrCode":
