@@ -1,7 +1,9 @@
 import { callUserfront } from "../../services/userfront";
 import {
+  AuthContext,
   AuthMachineConfig,
   SignupMachineEvent,
+  TotpCodeContext,
   TotpCodeSubmitEvent,
 } from "../types";
 
@@ -48,7 +50,7 @@ const setUpTotpConfig: AuthMachineConfig = {
       entry: "clearError",
       invoke: {
         // Set the code and call the API method
-        src: (context: any, event: SignupMachineEvent) =>
+        src: (context: AuthContext<any>, event: SignupMachineEvent) =>
           callUserfront({
             // Should ALWAYS be Userfront.login here
             method: "login",
@@ -56,6 +58,7 @@ const setUpTotpConfig: AuthMachineConfig = {
               {
                 method: "totp",
                 totpCode: (<TotpCodeSubmitEvent>event).totpCode,
+                email: context.user.email,
               },
             ],
           }),
