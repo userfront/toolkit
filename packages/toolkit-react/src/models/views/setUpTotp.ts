@@ -59,6 +59,7 @@ const setUpTotpConfig: AuthMachineConfig = {
                 method: "totp",
                 totpCode: (<TotpCodeSubmitEvent>event).totpCode,
                 email: context.user.email,
+                redirect: false,
               },
             ],
           }),
