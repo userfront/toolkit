@@ -38,9 +38,16 @@ const totpCodeConfig: AuthMachineConfig = {
           }
           if (context.view.emailOrUsername) {
             arg.emailOrUsername = context.view.emailOrUsername;
+          } else if (context.user.email) {
+            arg.emailOrUsername = context.user.email;
+          } else if (context.user.username) {
+            arg.emailOrUsername = context.user.username;
+          } else if (context.user.emailOrUsername) {
+            arg.emailOrUsername = context.user.emailOrUsername;
           }
           return callUserfront({
-            method: context.config.type,
+            // Method is ALWAYS login for TOTP code
+            method: "login",
             args: [arg],
           });
         },
@@ -77,9 +84,16 @@ const totpCodeConfig: AuthMachineConfig = {
           };
           if (context.view.emailOrUsername) {
             arg.emailOrUsername = context.view.emailOrUsername;
+          } else if (context.user.email) {
+            arg.emailOrUsername = context.user.email;
+          } else if (context.user.username) {
+            arg.emailOrUsername = context.user.username;
+          } else if (context.user.emailOrUsername) {
+            arg.emailOrUsername = context.user.emailOrUsername;
           }
           return callUserfront({
-            method: context.config.type,
+            // Method is ALWAYS login for TOTP code
+            method: "login",
             args: [arg],
           });
         },
