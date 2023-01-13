@@ -217,7 +217,7 @@ export const useMockUserfront = () => {
 };
 
 /**
- * Add a state with id "backToFactors" to a machine config.
+ * Add states with id "backToFactors" and "beginSecondFactor" to a machine config.
  * Convenience function. The form machines each have a backToFactors state
  * that every view's machine references by id if its "Back" button is pressed
  * when on the view's first screen. This adds the appropriate state to a view
@@ -226,13 +226,16 @@ export const useMockUserfront = () => {
  * @param machineConfig the machine config to augment
  * @returns {object} the machine config with a "backToFactors" state added
  */
-export function addBackToFactorsState<T extends { states?: object }>(
+export function addGlobalStates<T extends { states?: object }>(
   machineConfig: T
 ): T {
   const states = {
     ...machineConfig.states,
     backToFactors: {
       id: "backToFactors",
+    },
+    beginSecondFactor: {
+      id: "beginSecondFactor",
     },
   };
   return {

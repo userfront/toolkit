@@ -2,23 +2,16 @@ import { describe, it, beforeEach, expect } from "vitest";
 import emailLinkConfig from "../../../../src/models/views/emailLink";
 import { createMachine, interpret } from "xstate";
 import { createTestMachine, createTestModel } from "@xstate/test";
-import * as realActions from "../../../../src/models/config/actions";
-import { useMockUserfront, addBackToFactorsState } from "../../../utils";
+import * as actions from "../../../../src/models/config/actions";
+import { useMockUserfront, addGlobalStates } from "../../../utils";
 import { defaultAuthContext } from "../../../../src/models/forms/signup";
 
 const machineOptions = {
-  actions: {
-    setEmail: realActions.setEmail,
-    clearError: realActions.clearError,
-    setupView: realActions.setupView,
-    setErrorFromApiError: realActions.setErrorFromApiError,
-    setResentMessage: realActions.setResentMessage,
-    clearResentMessage: realActions.clearResentMessage,
-  },
+  actions,
 };
 
 const emailLinkMachine = createMachine(
-  addBackToFactorsState(emailLinkConfig),
+  addGlobalStates(emailLinkConfig),
   <any>machineOptions
 ).withContext(defaultAuthContext);
 
