@@ -152,7 +152,17 @@ const componentForStep = (state) => {
       return {
         title: "Check your email",
         Component: EmailLinkSent,
-        props: {},
+        props: {
+          message: state.context.view.message,
+        },
+      };
+    case "emailLink.resend":
+      return {
+        title: "Check your email",
+        Component: EmailLinkSent,
+        props: {
+          message: state.context.view.message,
+        },
       };
 
     // EmailCode flow

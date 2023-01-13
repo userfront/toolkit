@@ -110,6 +110,15 @@
   /* Border color for error messages */
   --uf-toolkit-error-border-color: #f7dcdc;
 
+  /* Color for informational update text */
+  --uf-toolkit-info-color: var(--uf-toolkit-secondary-color-text);
+
+  /* Background color for informational updates */
+  --uf-toolkit-info-background-color: #e6ffe5;
+
+  /* Border color for informational updates */
+  --uf-toolkit-info-border-color: #edf4ec;
+
   /* Rounding for edges of buttons and inputs */
   --uf-toolkit-border-radius: 4px;
 
@@ -653,6 +662,28 @@
 
 .uf-toolkit-error .uf-toolkit-error-text {
   color: var(--uf-toolkit-error-color);
+  display: block;
+  flex: 0 1 auto;
+}
+
+/* Info message */
+.uf-toolkit-info-message {
+  margin-bottom: var(--uf-toolkit-spacing);
+  border-radius: var(--uf-toolkit-border-radius);
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.uf-toolkit-info-message.uf-toolkit-has-info-message {
+  background-color: var(--uf-toolkit-info-background-color);
+  padding: calc(var(--uf-toolkit-spacing) / 2);
+  border: 1px solid var(--uf-toolkit-info-border-color);
+}
+
+.uf-toolkit-info-message .uf-toolkit-info-message-text {
+  color: var(--uf-toolkit-info-color);
   display: block;
   flex: 0 1 auto;
 }

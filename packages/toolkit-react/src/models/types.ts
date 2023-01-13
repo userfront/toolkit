@@ -55,6 +55,7 @@ export interface CommonFormData {}
 
 export interface EmailLink extends CommonFormData {
   type: "emailLink";
+  message: string;
 }
 
 export interface EmailCode extends CommonFormData {

@@ -12,6 +12,8 @@ const machineOptions = {
     clearError: realActions.clearError,
     setupView: realActions.setupView,
     setErrorFromApiError: realActions.setErrorFromApiError,
+    setResentMessage: realActions.setResentMessage,
+    clearResentMessage: realActions.clearResentMessage,
   },
 };
 
@@ -113,12 +115,13 @@ describe("model-based: models/signup/emailLink", () => {
             expect(state.context.error).toBeFalsy();
             expect(state.context.user.email).toEqual(email);
           },
-          // TODO should be a new state?
           submittingFromEmailSent: () => {
             const state = emailLinkService.getSnapshot();
-            expect(state.value).toEqual("send");
+            expect(state.value).toEqual("resend");
             expect(state.context.error).toBeFalsy();
             expect(state.context.user.email).toEqual(email);
+            const view = <any>state.context.view;
+            expect(view.message).toBeFalsy();
             expect(mockUserfront.lastCall.method).toEqual("signup");
             const arg = mockUserfront.lastCall.args[0];
             expect(arg.method).toEqual("passwordless");
@@ -127,6 +130,8 @@ describe("model-based: models/signup/emailLink", () => {
           showingEmailResent: () => {
             const state = emailLinkService.getSnapshot();
             expect(state.value).toEqual("showEmailSent");
+            const view = <any>state.context.view;
+            expect(view.message).not.toBeFalsy();
             expect(state.context.error).toBeFalsy();
             expect(state.context.user.email).toEqual(email);
           },

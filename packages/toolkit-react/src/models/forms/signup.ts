@@ -22,6 +22,8 @@ import {
   enableBack,
   setupView,
   readQueryParams,
+  setResentMessage,
+  clearResentMessage,
 } from "../config/actions";
 import emailCodeConfig from "../views/emailCode";
 import emailLinkConfig from "../views/emailLink";
@@ -190,6 +192,8 @@ export const defaultSignupOptions = {
     enableBack,
     setupView,
     readQueryParams,
+    setResentMessage,
+    clearResentMessage,
   },
 };
 

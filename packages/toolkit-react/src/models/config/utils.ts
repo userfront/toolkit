@@ -19,6 +19,7 @@ export const factorConfig = {
     testOnlySecond: "hasOnlyEmailLinkSecondFactor",
     viewContext: {
       type: "emailLink",
+      message: "",
     },
   },
   emailCode: {

@@ -3,7 +3,6 @@ const choose = actions.choose;
 import {
   UserfrontApiErrorEvent,
   AuthContext,
-  Password,
   View,
   SelectFactorEvent,
   CommonFormData,
@@ -22,6 +21,7 @@ import {
   UserfrontApiFetchFlowEvent,
   UseBackupCodeEvent,
   Factor,
+  EmailLinkContext,
 } from "../types";
 import { getTargetForFactor, factorConfig, hasValue } from "./utils";
 // @ts-ignore
@@ -308,12 +308,27 @@ export const resumeIfNeeded = choose([
 // (a local auth flow was provided, and we were told to fetch the flow from the server)
 // and the user clicks a factor, so we can proceed to that factor when
 // the flow has been fetched.
-export const setActiveFactor = (
-  context: AuthContext<any>,
-  event: SelectFactorEvent
-) => ({
-  config: {
-    ...context.config,
-    activeFactor: event.factor,
+export const setActiveFactor = assign(
+  (context: AuthContext<any>, event: SelectFactorEvent) => ({
+    config: {
+      ...context.config,
+      activeFactor: event.factor,
+    },
+  })
+);
+
+// Set a message to confirm that an email was resent.
+export const setResentMessage = assign((context: EmailLinkContext) => ({
+  view: {
+    ...context.view,
+    message: "Email resent.",
   },
-});
+}));
+
+// Clear any message confirming that an email was resent.
+export const clearResentMessage = assign((context: EmailLinkContext) => ({
+  view: {
+    ...context.view,
+    message: "",
+  },
+}));

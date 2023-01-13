@@ -150,7 +150,17 @@ const componentForStep = (state) => {
       return {
         title: "Check your email",
         Component: EmailLinkSent,
-        props: {},
+        props: {
+          message: state.context.view.message,
+        },
+      };
+    case "emailLink.resend":
+      return {
+        title: "Check your email",
+        Component: EmailLinkSent,
+        props: {
+          message: state.context.view.message,
+        },
       };
 
     // EmailCode flow
@@ -172,13 +182,24 @@ const componentForStep = (state) => {
       return {
         title: "Enter your verification code",
         Component: EnterVerificationCode,
-        props: {},
+        props: {
+          message: state.context.view.message,
+        },
+      };
+    case "emailCode.resend":
+      return {
+        title: "Enter your verification code",
+        Component: EnterVerificationCode,
+        props: {
+          message: state.context.view.message,
+        },
       };
     case "emailCode.verifyCode":
       return {
         title: "Enter your verification code",
         Component: EnterVerificationCode,
         props: {
+          message: state.context.view.message,
           isLoading: true,
         },
       };
