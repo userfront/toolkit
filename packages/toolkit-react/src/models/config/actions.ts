@@ -245,8 +245,10 @@ export const markAsSecondFactor = assign({
 });
 
 // Redirect to the afterLoginPath etc. after signed in, just an alias for the Userfront API method
-export const redirectIfLoggedIn = () => {
-  callUserfront({ method: "redirectIfLoggedIn", args: [] });
+export const redirectIfLoggedIn = (context: AuthContext<any>) => {
+  if (context.config.redirect !== false) {
+    callUserfront({ method: "redirectIfLoggedIn", args: [] });
+  }
 };
 
 // Set the tenantId based on what was returned from the Userfront API, or set shouldFetchFlow = false if

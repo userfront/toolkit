@@ -8,6 +8,7 @@ function PackagedLoginForm({
   tenantId,
   flow,
   compact,
+  redirect,
   shouldFetchFlow = true,
   xstateDevTools = false,
 }) {
@@ -24,6 +25,7 @@ function PackagedLoginForm({
       }
       config.compact = !!compact;
       config.shouldFetchFlow = !!shouldFetchFlow;
+      config.redirect = redirect;
       const context = {
         ...defaultAuthContext,
         config,

@@ -37,10 +37,11 @@ const passwordConfig: AuthMachineConfig = {
         // Set email, password, and possibly name and/or username as arguments and call the method
         src: (context) => {
           console.log(context);
-          const arg: Record<string, string> = {
+          const arg: Record<string, any> = {
             method: "password",
             email: context.user.email,
             password: (<PasswordContext>context).view.password,
+            redirect: context.config.redirect,
           };
           if (hasValue(context.user.name)) {
             arg.name = context.user.name;

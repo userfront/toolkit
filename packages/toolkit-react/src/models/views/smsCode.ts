@@ -71,6 +71,7 @@ const smsCodeConfig: AuthMachineConfig = {
                 channel: "sms",
                 phoneNumber: (<SmsCodeContext>context).view.phoneNumber,
                 verificationCode: (<SmsCodeContext>context).view.code,
+                redirect: context.config.redirect,
               },
             ],
           }),

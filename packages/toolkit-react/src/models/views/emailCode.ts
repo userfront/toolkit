@@ -79,6 +79,7 @@ const emailCodeConfig: AuthMachineConfig = {
                 channel: "email",
                 email: context.user.email,
                 verificationCode: (<EmailCodeContext>context).view.code,
+                redirect: context.config.redirect,
               },
             ],
           }),

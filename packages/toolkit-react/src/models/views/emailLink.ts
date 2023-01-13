@@ -28,9 +28,10 @@ const emailLinkConfig: AuthMachineConfig = {
       invoke: {
         // Set the method and email, and name and/or username if present, as arguments
         src: (context) => {
-          const arg: Record<string, string> = {
+          const arg: Record<string, any> = {
             method: "passwordless",
             email: context.user.email,
+            redirect: context.config.redirect,
           };
           if (hasValue(context.user.name)) {
             arg.name = context.user.name;

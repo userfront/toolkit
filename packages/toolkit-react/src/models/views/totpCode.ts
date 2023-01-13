@@ -28,8 +28,9 @@ const totpCodeConfig: AuthMachineConfig = {
         // Set totpCode or backupCode and possibly emailOrUsername as arguments and call the method
         src: (_context) => {
           const context = <TotpCodeContext>_context;
-          const arg: Record<string, string> = {
+          const arg: Record<string, any> = {
             method: "totp",
+            redirect: context.config.redirect,
           };
           if (context.view.useBackupCode) {
             arg.backupCode = <string>context.view.backupCode;
@@ -78,9 +79,10 @@ const totpCodeConfig: AuthMachineConfig = {
         // Set backupCode and possibly emailOrUsername as arguments and call the method
         src: (_context) => {
           const context = <TotpCodeContext>_context;
-          const arg: Record<string, string> = {
+          const arg: Record<string, any> = {
             method: "totp",
             backupCode: <string>context.view.backupCode,
+            redirect: context.config.redirect,
           };
           if (context.view.emailOrUsername) {
             arg.emailOrUsername = context.view.emailOrUsername;

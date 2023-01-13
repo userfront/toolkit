@@ -37,6 +37,8 @@ export interface FormConfig {
   // Should we fetch the tenant's default flow from the server,
   // even if a flow was provided inline?
   shouldFetchFlow: boolean;
+  // Destination to redirect to if user is logged in, or false to disable redirect.
+  redirect?: string | boolean;
 }
 
 // Data about the user
