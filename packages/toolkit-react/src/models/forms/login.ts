@@ -377,7 +377,7 @@ const signupMachineConfig: AuthMachineConfig = {
     },
     // Start the flow
     beginFlow: {
-      entry: "setupView",
+      entry: ["redirectIfLoggedIn", "setupView"],
       always: [
         // If we're returning from a passwordless/email link or SSO first factor, attempt to use
         // the query params to proceed.

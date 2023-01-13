@@ -222,8 +222,6 @@ export const storeFactorResponse = assign(
 // Store the allowed second factors, from the response to a successful first factor login.
 export const setAllowedSecondFactors = assign(
   (context: AuthContext<any>, event: UserfrontApiFactorResponseEvent) => {
-    console.log("event at setAllowedSecondFactors");
-    console.log(event);
     return {
       allowedSecondFactors: event.data.authentication.secondFactors,
     };
