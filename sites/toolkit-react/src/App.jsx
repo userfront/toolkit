@@ -17,10 +17,7 @@ import LiveLogoutDemo from "./pages/LiveLogoutDemo";
 import LiveSetNewPasswordDemo from "./pages/LiveSetNewPasswordDemo";
 
 import Userfront from "../../../packages/toolkit-react/src/index.js";
-
-inspect({
-  iframe: false,
-});
+import { useEffect } from "react";
 
 Userfront.init("6bg66q7n");
 
@@ -84,6 +81,15 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
+  useEffect(() => {
+    const params = new URL(document.location).searchParams;
+    if (params.get("inspect")) {
+      inspect({
+        iframe: false,
+      });
+    }
+  }, []);
+
   return <RouterProvider router={router} />;
 };
 
