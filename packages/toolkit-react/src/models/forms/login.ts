@@ -265,7 +265,7 @@ const signupMachineConfig: AuthMachineConfig = {
       invoke: {
         // Method does not yet exist on userfront-core but will
         // @ts-ignore
-        src: () => getUserfrontProperty("tenantId"),
+        src: () => getUserfrontProperty("store.tenantId"),
         // Set the tenant ID if one was present, otherwise set isDevMode = true.
         // Then proceed to start the flow.
         onDone: [
