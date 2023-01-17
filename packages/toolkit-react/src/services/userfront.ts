@@ -51,7 +51,7 @@ export const getUserfrontProperty = async (key: string) => {
     return Promise.reject();
   }
   if (get(singleton, key)) {
-    return singleton[<keyof typeof singleton>key];
+    return get(singleton, key);
   }
   console.warn(
     `Tried to read key ${key} from the Userfront object, but no such key was found in the object or object.store.`
@@ -75,7 +75,7 @@ export const getUserfrontPropertySync = (key: string) => {
     throw new Error();
   }
   if (get(singleton, key)) {
-    return singleton[<keyof typeof singleton>key];
+    return get(singleton, key);
   }
   console.warn(
     `Tried to read key ${key} from the Userfront object, but no such key was found in the object or object.store.`
