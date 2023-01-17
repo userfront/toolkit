@@ -14,13 +14,7 @@ const flow = {
 };
 
 function LiveSignupDemo() {
-  useEffect(() => {
-    window.Userfront = Userfront;
-    return () => {
-      window.Userfront = undefined;
-    };
-  }, []);
-  return <SignupForm flow={flow} compact={true} xstateDevTools={true} />;
+  return <SignupForm compact={true} xstateDevTools={true} />;
 }
 
 export default LiveSignupDemo;

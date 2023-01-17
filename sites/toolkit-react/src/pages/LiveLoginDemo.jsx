@@ -11,7 +11,7 @@ const flow = {
 };
 
 function LiveLoginDemo() {
-  return <LoginForm flow={flow} compact={true} xstateDevTools={true} />;
+  return <LoginForm compact={false} xstateDevTools={true} />;
 }
 
 export default LiveLoginDemo;
