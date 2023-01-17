@@ -88,6 +88,7 @@ const App = () => {
         iframe: false,
       });
     }
+    window.Userfront = Userfront;
   }, []);
 
   return <RouterProvider router={router} />;
