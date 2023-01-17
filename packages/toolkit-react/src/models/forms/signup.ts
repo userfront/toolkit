@@ -478,7 +478,7 @@ const signupMachineConfig: AuthMachineConfig = {
       invoke: {
         src: (context) => {
           return callUserfront({
-            method: "signup",
+            method: "login",
             args: [
               {
                 method: "link",
