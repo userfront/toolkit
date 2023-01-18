@@ -130,7 +130,7 @@ describe("model-based: models/signup/emailCode", () => {
             const state = emailCodeService.getSnapshot();
             expect(state.value).toEqual("verifyCode");
             expect(state.context.error).toBeFalsy();
-            expect(mockUserfront.lastCall.method).toEqual("signup");
+            expect(mockUserfront.lastCall.method).toEqual("login");
             const arg = mockUserfront.lastCall.args[0];
             expect(arg.channel).toEqual("email");
             expect(arg.method).toEqual("verificationCode");
