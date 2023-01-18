@@ -103,7 +103,6 @@ export const defaultSignupOptions = {
 
     // Predicates for second factors
     hasMultipleSecondFactors: (context: AuthContext<any>, event: any) => {
-      console.log("context at hasMultipleSecondFactors", context);
       return (context.allowedSecondFactors?.length ?? 0) > 1;
     },
     hasOnlyEmailLinkSecondFactor: createOnlyFactorCondition({
@@ -127,7 +126,6 @@ export const defaultSignupOptions = {
       strategy: "totp",
     }),
     hasOnlySsoSecondFactor: (context: AuthContext<any>) => {
-      console.log("context at hasOnlySsoSecondFactor", context);
       const factor = context.allowedSecondFactors?.[0];
       if (!factor) {
         return false;

@@ -275,7 +275,9 @@ export const setTenantIdIfPresent = assign(
 export const setFlowFromUserfrontApi = assign(
   (context: AuthContext<any>, event: UserfrontApiFetchFlowEvent) => {
     if (!event.data) {
-      console.warn(`Received no data from Userfront.setMode.`);
+      console.warn(
+        `Userfront toolkit: received no data from Userfront.setMode. This is likely a problem on Userfront's side.`
+      );
       return {};
     }
     return {

@@ -344,14 +344,8 @@ const componentForStep = (state) => {
 };
 
 const SignupForm = ({ state, onEvent }) => {
-  console.log("state", state);
   const [containerRef, setContainerRef] = useState();
   const sizeClass = useSizeClass(containerRef);
-  // const _onEvent = onEvent || ((evt) => log("event", evt));
-  const _onEvent = (evt) => {
-    console.log("event", evt);
-    onEvent(evt);
-  };
   // Get the view component, title text, and props corresponding to this state
   const { Component, props, title } = componentForStep(state);
   // Construct the default props that are passed to all views
@@ -368,7 +362,7 @@ const SignupForm = ({ state, onEvent }) => {
       className={`uf-toolkit uf-toolkit-container ${sizeClass}`}
     >
       <h2>{title}</h2>
-      <Component onEvent={_onEvent} {...defaultProps} {...props} />
+      <Component onEvent={onEvent} {...defaultProps} {...props} />
       <div>
         <SecuredByUserfront mode={state.context.config?.mode} />
       </div>
