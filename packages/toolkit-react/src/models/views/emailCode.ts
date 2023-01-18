@@ -72,7 +72,9 @@ const emailCodeConfig: AuthMachineConfig = {
         // Set the arguments and call the Userfront API method to check the verification code
         src: (context) =>
           callUserfront({
-            method: context.config.type,
+            // Always call Userfront.login when verifying a code.
+            // Userfront.signup sends another code instead.
+            method: "login",
             args: [
               {
                 method: "verificationCode",
