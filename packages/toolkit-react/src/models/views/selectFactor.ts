@@ -1,10 +1,8 @@
-import passwordConfig from "./passwordSignUp";
-import { AuthMachineConfig } from "./types";
-import { factorConfig } from "./utils";
+import passwordConfig from "./password";
+import { AuthMachineConfig } from "../types";
+import { factorConfig } from "../config/utils";
 
 const selectFactorConfig: AuthMachineConfig = {
-  // The SelectFactor config needs to extend the Password config,
-  // because the SelectFactor view could have the Password view inlined.
   id: "selectFactor",
   initial: "showForm",
   entry: ["setupView", "enableBack"],
@@ -26,31 +24,33 @@ const selectFactorConfig: AuthMachineConfig = {
           // matching a factor, that means the user selected a factor we don't have a view for.
 
           // Duplicates, should never be reached.
-          // Only here to help out the XCode visualizer.
-          {
-            target: "#emailLink",
-            cond: "isEmailLink",
-          },
-          {
-            target: "#emailCode",
-            cond: "isEmailCode",
-          },
-          {
-            target: "#smsCode",
-            cond: "isSmsCode",
-          },
-          {
-            target: "#password",
-            cond: "isPassword",
-          },
-          {
-            target: "#totpCode",
-            cond: "isTotp",
-          },
-          {
-            target: "#ssoProvider",
-            cond: "isSsoProvider",
-          },
+          // Only here to help out the XState visualizer.
+          // Uncomment if using the visualizer.
+
+          // {
+          //   target: "#emailLink",
+          //   cond: "isEmailLink",
+          // },
+          // {
+          //   target: "#emailCode",
+          //   cond: "isEmailCode",
+          // },
+          // {
+          //   target: "#smsCode",
+          //   cond: "isSmsCode",
+          // },
+          // {
+          //   target: "#password",
+          //   cond: "isPassword",
+          // },
+          // {
+          //   target: "#totpCode",
+          //   cond: "isTotp",
+          // },
+          // {
+          //   target: "#ssoProvider",
+          //   cond: "isSsoProvider",
+          // },
 
           // If we get here, it's an unhandled condition, show an error
           {

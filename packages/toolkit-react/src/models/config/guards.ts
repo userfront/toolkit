@@ -7,8 +7,10 @@ import {
   UserfrontApiFactorResponseEvent,
   UserfrontApiErrorEvent,
   View,
-} from "./types";
+  UserfrontApiFetchFlowEvent,
+} from "../types";
 import { isMissing } from "./utils";
+import { getUserfrontPropertySync } from "../../services/userfront";
 
 // GUARDS / PREDICATES
 
@@ -52,15 +54,12 @@ export const passwordsMatch = (
   event: PasswordSubmitEvent
 ) => event.password === event.confirmPassword;
 
+// Guard that always succeeds, for guards that aren't relevant in a certain context
+export const alwaysSucceed = () => true;
+
 // Is the tenantId absent?
 export const isMissingTenantId = (context: AuthContext<any>) =>
   isMissing(context.config.tenantId);
-
-// Are we in dev mode (isDevMode = true) without a flow set locally?
-// This is an error state.
-export const isDevModeWithoutFlow = (context: AuthContext<any>) => {
-  return context.config.devMode && context.config.flow == null;
-};
 
 // Are we in local mode (shouldFetchFlow = false) without a flow set locally?
 // This is an error state.
@@ -68,9 +67,22 @@ export const isLocalModeWithoutFlow = (context: AuthContext<any>) => {
   return !context.config.shouldFetchFlow && context.config.flow == null;
 };
 
-// Is the auth flow absent?
+// Is the auth flow absent from the context?
 export const isMissingFlow = (context: AuthContext<any>) => {
   return context.config.flow == null;
+};
+
+// Given an event that may contain the flow from the server,
+// is there a flow from the server OR a flow set locally?
+export const isMissingFlowFromServer = (
+  context: AuthContext<any>,
+  event: UserfrontApiFetchFlowEvent
+) => {
+  const firstFactors = event.data?.authentication?.firstFactors;
+  if (!Array.isArray(firstFactors) || firstFactors.length === 0) {
+    return isMissingFlow(context);
+  }
+  return false;
 };
 
 // Is the form in local mode (shouldFetchFlow = false)?
@@ -84,30 +96,13 @@ export const hasNoActiveFactor = (context: AuthContext<any>) =>
 
 // Are we returning to the signup/login form after clicking a passwordless email link?
 // If so, we need to check if a second factor is required to log in.
-export const isReturningFromEmailLink = (context: AuthContext<any>) => {
-  // TODO implementation based off reading query string -> in UserfrontCore
-  return false;
+export const hasLinkQueryParams = (context: AuthContext<any>) => {
+  // TODO better off in userfront-core?
+  return !!(context.query.token && context.query.uuid);
 };
 
-// Are we returning to the signup/login form after authenticating with an SSO provider?
-// If so, we need to check if a second factor is required to log in.
-export const isReturningFromSsoFirstFactor = (context: AuthContext<any>) => {
-  // TODO implementation based off reading query string -> in UserfrontCore
-  return false;
-};
-
-// Is a second factor *not* required to signup/login?
-// This effectively checks if we're signed in.
-export const secondFactorNotRequired = (context: AuthContext<any>) => {
-  // TODO implementation -> in UserfrontCore
-  // effectively checking if we are signed in
-  return false;
-};
-
-// Is this an error from a callUserfrontApi invocation?
-export const isUserfrontError = (
-  context: any,
-  event: UserfrontApiErrorEvent
-) => {
-  return event.data._isError;
+export const isLoggedIn = () => {
+  // TypeScript doesn't recognize that this is Userfront.tokens which is an object
+  // @ts-ignore
+  return !!getUserfrontPropertySync("tokens")?.accessToken;
 };

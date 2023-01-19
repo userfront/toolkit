@@ -2,6 +2,15 @@ import BackButton from "../components/BackButton";
 import RetryButton from "../components/RetryButton";
 import ErrorMessage from "../components/ErrorMessage";
 
+/**
+ * An error message specifically for cases where we encounter an error
+ * when trying to get the TOTP setup information (QR code).
+ *
+ * @param {object} props
+ * @param {boolean} props.allowBack - if true, show a Back button
+ * @param {object} error - a Userfront error to display
+ * @param {function} onEvent
+ */
 const TotpErrorMessage = ({ onEvent, allowBack, error }) => {
   const handleRetry = () => {
     onEvent({

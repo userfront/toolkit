@@ -1,12 +1,20 @@
-const SubmitButton = (props) => {
-  const children = props.children || "Submit";
+/**
+ * A submit button with appropriate styling.
+ * If no children are provided, contains the text "Submit".
+ * Props are passed through to the underlying <button>.
+ *
+ * @param {object} props
+ * @returns
+ */
+const SubmitButton = ({ children, ...props }) => {
+  const _children = children || "Submit";
   return (
     <button
       className="uf-toolkit-button uf-toolkit-button-primary"
       type="submit"
       {...props}
     >
-      {children}
+      {_children}
     </button>
   );
 };

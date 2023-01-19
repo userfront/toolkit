@@ -1,6 +1,6 @@
-import { AuthMachineConfig, EmailCodeContext } from "./types";
-import { callUserfrontApi } from "./userfrontApi";
-import { hasValue } from "./utils";
+import { AuthMachineConfig, EmailCodeContext } from "../types";
+import { callUserfront } from "../../services/userfront";
+import { hasValue } from "../config/utils";
 
 const emailCodeConfig: AuthMachineConfig = {
   id: "emailCode",
@@ -21,38 +21,35 @@ const emailCodeConfig: AuthMachineConfig = {
     },
     // Send the code email via the Userfront API
     send: {
+      // Clear any error that's being displayed
       entry: "clearError",
       invoke: {
-        src: callUserfrontApi,
         // Set method, email, and possibly name and username as arguments for the call
-        data: (context: EmailCodeContext, event: any) => {
-          const args = {
-            method: "verificationCode",
+        src: (context) => {
+          const arg: Record<string, string> = {
+            channel: "email",
             email: context.user.email,
-          } as any;
+          };
           if (hasValue(context.user.name)) {
-            args.name = context.user.name;
+            arg.name = context.user.name;
           }
           if (hasValue(context.user.username)) {
-            args.username = context.user.username;
+            arg.username = context.user.username;
           }
-          return {
-            method: "signup",
-            args,
-          };
+          return callUserfront({
+            method: "sendVerificationCode",
+            args: [arg],
+          });
+        },
+        // On failure, set the error message and return to the entry form
+        onError: {
+          actions: "setErrorFromApiError",
+          target: "showForm",
         },
         // On success, ask the user to enter the verification code
-        onDone: [
-          // On failure, set the error message and return to the entry form
-          {
-            actions: "setErrorFromApiError",
-            target: "showForm",
-            cond: "isUserfrontError",
-          },
-          {
-            target: "showCodeForm",
-          },
-        ],
+        onDone: {
+          target: "showCodeForm",
+        },
       },
     },
     // Show the form asking the user to enter the verification code
@@ -71,29 +68,31 @@ const emailCodeConfig: AuthMachineConfig = {
     },
     // Check the verification code via the Userfront API
     verifyCode: {
+      // Clear any error that's being displayed
       entry: "clearError",
       invoke: {
-        src: callUserfrontApi,
         // Set the arguments and call the Userfront API method to check the verification code
-        // TODO this is not quite right?
-        data: (context: EmailCodeContext, event: any) => {
-          const args = {
-            method: "verificationCode",
-            email: context.user.email,
-            verificationCode: context.view.code,
-          } as any;
-          return {
-            method: "sendVerificationCode",
-            args,
-          };
+        src: (context) =>
+          callUserfront({
+            // Always call Userfront.login when verifying a code.
+            // Userfront.signup sends another code instead.
+            method: "login",
+            args: [
+              {
+                method: "verificationCode",
+                channel: "email",
+                email: context.user.email,
+                verificationCode: (<EmailCodeContext>context).view.code,
+                redirect: context.config.redirect,
+              },
+            ],
+          }),
+        // On error, show the error message on the code entry form
+        onError: {
+          actions: "setErrorFromApiError",
+          target: "showCodeForm",
         },
         onDone: [
-          // On error, show the error message on the code entry form
-          {
-            actions: "setErrorFromApiError",
-            target: "showCodeForm",
-            cond: "isUserfrontError",
-          },
           // If we need to enter a second factor, proceed to that step
           {
             actions: "setAllowedSecondFactors",
@@ -103,7 +102,7 @@ const emailCodeConfig: AuthMachineConfig = {
           // Otherwise, we're signed in, redirect.
           // Show the "verified" view in case redirect fails.
           {
-            actions: "redirectIfSignedIn",
+            actions: "redirectIfLoggedIn",
             target: "showCodeVerified",
           },
         ],

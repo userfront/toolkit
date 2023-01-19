@@ -1,8 +1,8 @@
-import { assign, send } from "xstate";
+import { assign, send, actions } from "xstate";
+const choose = actions.choose;
 import {
   UserfrontApiErrorEvent,
   AuthContext,
-  Password,
   View,
   SelectFactorEvent,
   CommonFormData,
@@ -19,19 +19,20 @@ import {
   UserfrontApiFactorResponseEvent,
   UserfrontApiGetTenantIdEvent,
   UserfrontApiFetchFlowEvent,
-  TotpCode,
   UseBackupCodeEvent,
-} from "./types";
+  Factor,
+  EmailLinkContext,
+} from "../types";
 import { getTargetForFactor, factorConfig, hasValue } from "./utils";
 // @ts-ignore
-import callUserfront from "../services/userfront";
+import { callUserfront } from "../../services/userfront";
 
 // Clear the current error message, if any
 export const clearError = assign({ error: undefined });
 
 // Set the error message from a Userfront API error
 export const setErrorFromApiError = assign({
-  error: (context, event: UserfrontApiErrorEvent) => event.data.error,
+  error: (context, event: UserfrontApiErrorEvent) => event.data,
 });
 
 // Create & set the error message for a password mismatch (password !== confirmPassword)
@@ -53,6 +54,33 @@ export const disableBack = assign({
 // Enable back actions
 export const enableBack = assign({
   allowBack: true,
+});
+
+// Safely read a query param.
+function getQueryAttr(attrName: string): string {
+  if (
+    typeof window !== "object" ||
+    typeof window.location !== "object" ||
+    !window.location.href ||
+    window.location.href.indexOf(`${attrName}=`) < 0
+  ) {
+    return "";
+  }
+  return decodeURIComponent(
+    window.location.href.split(`${attrName}=`)[1].split("&")[0]
+  );
+}
+
+// Transfer the uuid and token query params to context, if present
+export const readQueryParams = assign(() => {
+  const uuid = getQueryAttr("uuid");
+  const token = getQueryAttr("token");
+  return {
+    query: {
+      uuid,
+      token,
+    },
+  };
 });
 
 // Set up the view for the selected factor
@@ -115,6 +143,7 @@ export const setPassword = assign(
       email: event.email,
       name: event.name,
       username: event.username,
+      emailOrUsername: event.emailOrUsername,
     },
     view: {
       ...context.view,
@@ -164,17 +193,22 @@ export const setUseBackupCode = assign(
   })
 );
 
+// For the TOTP code entry, if it's the first factor, we need to gather
+// the user's emailOrUsername. If it's the second factor, we already have it from the first factor.
 export const setShowEmailOrUsernameIfFirstFactor = (
   context: TotpCodeContext
 ) => {
   return assign({
     view: {
       ...context.view,
-      showEmailOrUsername: context.isSecondFactor,
+      showEmailOrUsername: !context.isSecondFactor,
     },
   });
 };
 
+// For TOTP code on signup, if it's the first factor, we don't proceed directly to the second factor
+// on success, because we need to show the user their backup codes first. In this case, store the
+// response so we can use it afterward.
 export const storeFactorResponse = assign(
   (context: TotpCodeContext, event: UserfrontApiFactorResponseEvent) => ({
     view: {
@@ -186,17 +220,17 @@ export const storeFactorResponse = assign(
 );
 
 // Store the allowed second factors, from the response to a successful first factor login.
-// allowedSecondFactors is not necessarily identical to config.flow.secondFactors, because
-// the user could have specific second factors set.
 export const setAllowedSecondFactors = assign(
-  (context: AuthContext<any>, event: UserfrontApiFactorResponseEvent) => ({
-    allowedSecondFactors: event.data.authentication.secondFactors,
-  })
+  (context: AuthContext<any>, event: UserfrontApiFactorResponseEvent) => {
+    return {
+      allowedSecondFactors: event.data.authentication.secondFactors,
+    };
+  }
 );
 
 // Same as above, but set from context.view instead of event.data
 // for views that don't proceed directly from the API request to
-// the second factor selection
+// the second factor selection (i.e. TOTP code as first factor)
 export const setAllowedSecondFactorsFromView = assign(
   (context: TotpCodeContext) => ({
     allowedSecondFactors: context.view.allowedSecondFactors,
@@ -209,168 +243,94 @@ export const markAsSecondFactor = assign({
 });
 
 // Redirect to the afterLoginPath etc. after signed in, just an alias for the Userfront API method
-export const redirectIfSignedIn = () => {
-  callUserfront({ method: "redirectIfSignedIn" });
-};
-
-// Set the tenantId based on what was returned from the Userfront API, or set isDevMode = true if
-// there is no tenantId set in the local Userfront SDK instance
-export const setTenantIdOrDevMode = (
-  context: AuthContext<any>,
-  event: UserfrontApiGetTenantIdEvent
-) => {
-  if (hasValue(event.data.tenantId)) {
-    return assign({
-      config: {
-        ...context.config,
-        tenantId: event.data.tenantId,
-      },
-    });
-  } else {
-    return assign({
-      config: {
-        ...context.config,
-        devMode: true,
-      },
-    });
+export const redirectIfLoggedIn = (context: AuthContext<any>) => {
+  if (context.config.redirect !== false) {
+    callUserfront({ method: "redirectIfLoggedIn", args: [] });
   }
 };
 
+// Set the tenantId based on what was returned from the Userfront API, or set shouldFetchFlow = false if
+// there is no tenantId set in the local Userfront SDK instance
+export const setTenantIdIfPresent = assign(
+  (context: AuthContext<any>, event: UserfrontApiGetTenantIdEvent) => {
+    if (hasValue(event.data)) {
+      return {
+        config: {
+          ...context.config,
+          tenantId: event.data,
+        },
+      };
+    } else {
+      return {
+        config: {
+          ...context.config,
+          shouldFetchFlow: false,
+        },
+      };
+    }
+  }
+);
+
 // Set the auth flow based on what was returned from the Userfront API
-export const setFlowFromUserfrontApi = (
-  context: AuthContext<any>,
-  event: UserfrontApiFetchFlowEvent
-) =>
-  assign({
-    config: {
-      ...context.config,
-      flow: event.data,
-    },
-  });
+export const setFlowFromUserfrontApi = assign(
+  (context: AuthContext<any>, event: UserfrontApiFetchFlowEvent) => {
+    if (!event.data) {
+      console.warn(
+        `Userfront toolkit: received no data from Userfront.setMode. This is likely a problem on Userfront's side.`
+      );
+      return {};
+    }
+    return {
+      config: {
+        ...context.config,
+        mode: event.data.mode,
+        flow: event.data.authentication,
+      },
+    };
+  }
+);
 
 // Once we've gotten the auth flow from the Userfront server,
 // if we're in preview mode we need to set the auth flow in the context
 // and then, if the user had already clicked a factor button, continue
 // the flow if that factor is still available.
-export const setFlowFromUserfrontApiAndResume = (
-  context: AuthContext<any>,
-  event: UserfrontApiFetchFlowEvent
-) => {
-  const actionList = [];
-  actionList.push(
-    assign({
-      config: {
-        ...context.config,
-        flow: event.data,
-      },
-    })
-  );
-  // TODO could be a factor not available in the server flow
-  if (context.activeFactor) {
-    const target = getTargetForFactor(context.activeFactor);
-    actionList.push(send(target));
-  }
-  return actionList;
-};
+export const resumeIfNeeded = choose([
+  {
+    cond: (context: AuthContext<any>) => !!context.activeFactor,
+    actions: [
+      send((context: AuthContext<any>) => ({
+        type: getTargetForFactor(<Factor>context.activeFactor),
+      })),
+    ],
+  },
+]);
 
 // Set the active factor, the factor that we're currently viewing.
 // This is really just for the specific case when we're in "preview mode"
 // (a local auth flow was provided, and we were told to fetch the flow from the server)
-// and the user clicks a factor.
+// and the user clicks a factor, so we can proceed to that factor when
+// the flow has been fetched.
+export const setActiveFactor = assign(
+  (context: AuthContext<any>, event: SelectFactorEvent) => ({
+    config: {
+      ...context.config,
+      activeFactor: event.factor,
+    },
+  })
+);
 
-// The factor that we're currently viewing is almost always dictated
-// by the state node we're in rather than context, this
-export const setActiveFactor = (
-  context: AuthContext<any>,
-  event: SelectFactorEvent
-) => ({
-  config: {
-    ...context.config,
-    activeFactor: event.factor,
+// Set a message to confirm that an email was resent.
+export const setResentMessage = assign((context: EmailLinkContext) => ({
+  view: {
+    ...context.view,
+    message: "Email resent.",
   },
-});
+}));
 
-/* UNIT TESTS */
-import { Factor } from "./types";
-import { createAuthContextForFactor } from "../../test/utils";
-
-if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
-  describe("models/actions.ts", () => {
-    describe("setupView", () => {
-      it("should set up the Password view context if no factor is given", () => {
-        const event = {
-          type: "selectFactor",
-          factor: {} as Factor,
-          isSecondFactor: false,
-        };
-        const expected = assign({
-          view: {
-            password: "",
-          },
-        });
-        const actual = setupView(
-          {} as AuthContext<any>,
-          event as SelectFactorEvent
-        );
-        expect(actual).toEqual(expected);
-      });
-      Object.entries(factorConfig).forEach(([key, factorData]) => {
-        it(`should set up the correct context for the ${key} factor`, () => {
-          const event = {
-            type: "selectFactor",
-            factor: {
-              channel: factorData.channel,
-              strategy: factorData.strategy,
-            },
-            isSecondFactor: false,
-          };
-          const expected = assign({
-            view: factorData.viewContext,
-          });
-          const actual = setupView(
-            {} as AuthContext<any>,
-            event as SelectFactorEvent
-          );
-          expect(actual).toEqual(expected);
-        });
-      });
-    });
-    describe("setTenantIdOrDevMode", () => {
-      it("should set the tenantId if one is available", () => {
-        const event = {
-          type: "done" as any,
-          data: {
-            tenantId: "demo1234",
-          },
-        };
-        const context = createAuthContextForFactor("password");
-        const expected = assign({
-          config: {
-            ...context.config,
-            tenantId: "demo1234",
-          },
-        });
-        const actual = setTenantIdOrDevMode(context, event);
-        expect(actual).toEqual(expected);
-      });
-      it("should set dev mode if no tenantId is available", () => {
-        const event = {
-          type: "done" as any,
-          data: {
-            tenantId: "",
-          },
-        };
-        const context = createAuthContextForFactor("password");
-        const expected = assign({
-          config: {
-            ...context.config,
-            devMode: true,
-          },
-        });
-        const actual = setTenantIdOrDevMode(context, event);
-        expect(actual).toEqual(expected);
-      });
-    });
-  });
-}
+// Clear any message confirming that an email was resent.
+export const clearResentMessage = assign((context: EmailLinkContext) => ({
+  view: {
+    ...context.view,
+    message: "",
+  },
+}));

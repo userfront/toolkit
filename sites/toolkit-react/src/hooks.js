@@ -1,14 +1,14 @@
 import { useEffect } from "react";
-import Userfront from "@userfront/core";
+import Userfront, {
+  _devTools,
+} from "../../../packages/toolkit-react/src/index.js";
+import mockUserfront from "./mockUserfront";
 
-export function useEnableGlobalUserfront() {
+export function useMockUserfront() {
   useEffect(() => {
-    window.Userfront = Userfront;
+    _devTools.overrideUserfrontSingleton(mockUserfront);
+    return () => {
+      _devTools.overrideUserfrontSingleton(Userfront);
+    };
   }, []);
-}
-
-export function useDisableGlobalUserfront() {
-  useEffect(() => {
-    window.Userfront = undefined;
-  });
 }

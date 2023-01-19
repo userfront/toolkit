@@ -1,8 +1,16 @@
 import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
-import AlternativeButton from "../components/AlternativeButton";
 import ErrorMessage from "../components/ErrorMessage";
 
+/**
+ * View for the user to set up their TOTP authenticator.
+ *
+ * @param {object} props
+ * @param {string} props.qrCode - QR code to display. Image URL or data-url.
+ * @param {boolean} props.allowBack - if true, show a Back button
+ * @param {object} error - a Userfront error to display
+ * @param {function} onEvent
+ */
 const EnterTotpCode = ({ qrCode, onEvent, allowBack, error }) => {
   const handleSubmit = (event) => {
     event.preventDefault();

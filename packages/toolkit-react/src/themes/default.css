@@ -110,6 +110,15 @@
   /* Border color for error messages */
   --uf-toolkit-error-border-color: #f7dcdc;
 
+  /* Color for informational update text */
+  --uf-toolkit-info-color: var(--uf-toolkit-secondary-color-text);
+
+  /* Background color for informational updates */
+  --uf-toolkit-info-background-color: #e6ffe5;
+
+  /* Border color for informational updates */
+  --uf-toolkit-info-border-color: #edf4ec;
+
   /* Rounding for edges of buttons and inputs */
   --uf-toolkit-border-radius: 4px;
 
@@ -250,6 +259,9 @@
 
   /* Background color for test mode banner */
   --uf-toolkit-test-mode-background-color: #ffda96;
+
+  /* Height of the placeholder, if no flow is available to be shown */
+  --uf-toolkit-placeholder-height: 300px;
 }
 
 /* Styles for a free-standing toolkit element */
@@ -410,6 +422,14 @@
   margin: 0 0.5em 0 0.5em;
   /* Ensure a minimum font size for labels, for accessibility */
   font-size: max(var(--uf-toolkit-label-font-size), 13px);
+}
+
+/* Secondary text - additional information for text inputs */
+.uf-toolkit .uf-toolkit-secondary-text {
+  font-size: max(var(--uf-toolkit-label-font-size), 13px);
+  color: var(--uf-toolkit-secondary-color-text);
+  display: inline-block;
+  margin-top: 0.5em;
 }
 
 /* Primary and secondary buttons */
@@ -646,6 +666,28 @@
   flex: 0 1 auto;
 }
 
+/* Info message */
+.uf-toolkit-info-message {
+  margin-bottom: var(--uf-toolkit-spacing);
+  border-radius: var(--uf-toolkit-border-radius);
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.uf-toolkit-info-message.uf-toolkit-has-info-message {
+  background-color: var(--uf-toolkit-info-background-color);
+  padding: calc(var(--uf-toolkit-spacing) / 2);
+  border: 1px solid var(--uf-toolkit-info-border-color);
+}
+
+.uf-toolkit-info-message .uf-toolkit-info-message-text {
+  color: var(--uf-toolkit-info-color);
+  display: block;
+  flex: 0 1 auto;
+}
+
 /* Test mode notice */
 .uf-toolkit-test-mode-notice {
   background-color: var(--uf-toolkit-test-mode-background-color);
@@ -656,4 +698,9 @@
   width: max-content;
   border-radius: var(--uf-toolkit-border-radius);
   font-size: 0.8em;
+}
+
+/* Placeholder for when we're loading form */
+.uf-toolkit .uf-toolkit-placeholder {
+  height: var(--uf-toolkit-placeholder-height);
 }

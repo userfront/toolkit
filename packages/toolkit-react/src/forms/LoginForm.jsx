@@ -29,6 +29,7 @@ const componentForStep = (state) => {
   } else {
     typeString = type;
   }
+  const canShowFlow = state.context.config.flow?.firstFactors;
   switch (typeString) {
     // While flow is being set up, show placeholder or preview as appropriate
     // TODO might need to tweak a little for placeholder vs preview? Not super important.
@@ -38,19 +39,26 @@ const componentForStep = (state) => {
     case "beginFlow":
     case "showPreviewAndFetchFlow":
     case "showPlaceholderAndFetchFlow":
-      return {
-        title: "Log in",
-        Component: SelectFactor,
-        props: {
-          isPlaceholder: !!state.context.config.flow,
-          isCompact: state.context.config.compact,
-          loadingFactor: state.context.activeFactor,
-          flow: state.context.config.flow,
-          isSecondFactor: false,
-          tenantId: state.context.tenantId,
-          isLogin: true,
-        },
-      };
+    case "handleLoginWithLink":
+      if (canShowFlow) {
+        return {
+          title: "Log in",
+          Component: SelectFactor,
+          props: {
+            isPlaceholder: !!state.context.config.flow,
+            isCompact: state.context.config.compact,
+            loadingFactor: state.context.activeFactor,
+            flow: state.context.config.flow,
+            isSecondFactor: false,
+            tenantId: state.context.tenantId,
+            isLogin: true,
+          },
+        };
+      } else {
+        return {
+          Component: Placeholder,
+        };
+      }
 
     // SelectFactor flow, with password possibly included inline
     case "selectFirstFactor.showForm":
@@ -144,7 +152,17 @@ const componentForStep = (state) => {
       return {
         title: "Check your email",
         Component: EmailLinkSent,
-        props: {},
+        props: {
+          message: state.context.view.message,
+        },
+      };
+    case "emailLink.resend":
+      return {
+        title: "Check your email",
+        Component: EmailLinkSent,
+        props: {
+          message: state.context.view.message,
+        },
       };
 
     // EmailCode flow
@@ -288,31 +306,33 @@ const componentForStep = (state) => {
       };
 
     // Shouldn't get here.
-    // TODO in prod this should be a GeneralErrorMessage
     default:
-      return () => {
-        return <div>NO COMPONENT</div>;
+      return {
+        title: "Oops, something went wrong",
+        Component: GeneralErrorMessage,
+        props: {},
       };
   }
 };
 
-// Some errors to use for testing instead of state.context.error
-// TODO remove before prod!
-const _error = {
-  message: "This is a short error message.",
-};
-
-const _errorLong = {
-  message:
-    "This is a longer error message. Think about a cloud. Just float around and be there. It looks so good, I might as well not stop. I thought today we would do a happy little picture. Everybody's different. Trees are different. Let them all be individuals. You can do anything here - the only pre-requisite is that it makes you happy.",
-};
-
+/**
+ * A login form that operates in conjunction with a login XState machine.
+ *
+ * @param {object} props
+ * @param {object} props.state - the machine's state
+ * @param {function} onEvent
+ * @returns
+ */
 const SignupForm = ({ state, onEvent }) => {
+  // Apply CSS classes based on the size of the form's container
   const [containerRef, setContainerRef] = useState();
   const sizeClass = useSizeClass(containerRef);
+
   const _onEvent = onEvent || ((evt) => log("event", evt));
+
   // Get the view component, title text, and props corresponding to this state
   const { Component, props, title } = componentForStep(state);
+
   // Construct the default props that are passed to all views
   const defaultProps = {
     allowBack: state.context.allowBack,
@@ -329,7 +349,7 @@ const SignupForm = ({ state, onEvent }) => {
       <h2>{title}</h2>
       <Component onEvent={_onEvent} {...defaultProps} {...props} />
       <div>
-        <SecuredByUserfront />
+        <SecuredByUserfront mode={state.context.config?.mode} />
       </div>
     </div>
   );

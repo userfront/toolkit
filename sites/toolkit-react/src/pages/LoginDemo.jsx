@@ -1,18 +1,26 @@
-import {
-  LoginForm as UnboundLoginForm,
-  createLoginFormModel,
-  defaultLoginFormContext,
-} from "../../../../packages/toolkit-react/src/index.js";
+import { _devTools } from "../../../../packages/toolkit-react/src/index.js";
 import { Link } from "react-router-dom";
 import { useMachine } from "@xstate/react";
 import Urlon from "urlon";
 import { useState, useEffect } from "react";
-import { useDisableGlobalUserfront } from "../hooks.js";
+import { useMockUserfront } from "../hooks.js";
 
-const LoginFormModel = createLoginFormModel(defaultLoginFormContext);
+const { UnboundLoginForm, createLoginFormModel, defaultLoginFormContext } =
+  _devTools;
+
+const config = {
+  ...defaultLoginFormContext.config,
+  shouldFetchFlow: false,
+};
+const context = {
+  ...defaultLoginFormContext,
+  config,
+};
+
+const LoginFormModel = createLoginFormModel(context);
 
 function App() {
-  useDisableGlobalUserfront();
+  useMockUserfront();
   const [hasSetInitialState, setHasSetInitialState] = useState(false);
   const [initialState, setInitialState] = useState({});
   if (!hasSetInitialState) {

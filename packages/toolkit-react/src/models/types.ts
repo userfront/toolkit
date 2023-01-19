@@ -10,8 +10,6 @@ export type Factor = {
 // An auth flow, per the Userfront API
 export type Flow = {
   firstFactors: Factor[];
-  secondFactors: Factor[];
-  isMfaRequired: boolean;
 };
 
 // An error object as returned by the Userfront API
@@ -23,15 +21,8 @@ export type FormError = {
   };
 };
 
-// Config for future optional fields on the form (name etc.)
-export type OptionalFieldConfig = "hide" | "allow" | "require";
-
 // Types of form in the toolkit
-export type FormType =
-  | "signup"
-  | "login"
-  | "requestPasswordResetEmail"
-  | "resetPassword";
+export type FormType = "signup" | "login";
 
 // Configuration data for the form - intended to be set either by the caller
 // or during initial setup steps of the form, then fixed afterward.
@@ -39,17 +30,15 @@ export interface FormConfig {
   type: FormType;
   tenantId?: string;
   flow?: Flow;
-  nameConfig: OptionalFieldConfig;
-  usernameConfig: OptionalFieldConfig;
-  phoneNumberConfig: OptionalFieldConfig;
+  mode?: string;
   // Is this in compact mode i.e. hide password behind a button
   compact: boolean;
   locale: string;
-  // Is this in dev mode i.e. don't call the API, use dummy data
-  devMode: boolean;
   // Should we fetch the tenant's default flow from the server,
   // even if a flow was provided inline?
   shouldFetchFlow: boolean;
+  // Destination to redirect to if user is logged in, or false to disable redirect.
+  redirect?: string | boolean;
 }
 
 // Data about the user
@@ -58,6 +47,7 @@ export interface UserData {
   name?: string;
   username?: string;
   phoneNumber?: string;
+  emailOrUsername?: string;
 }
 
 // TYPES FOR FACTORS
@@ -67,6 +57,7 @@ export interface CommonFormData {}
 
 export interface EmailLink extends CommonFormData {
   type: "emailLink";
+  message: string;
 }
 
 export interface EmailCode extends CommonFormData {
@@ -138,6 +129,11 @@ export type View =
   | Message
   | Loading;
 
+export type Query = {
+  token?: string;
+  uuid?: string;
+};
+
 // The full context for the signup form state machine,
 // with view data parameterized by the type of view we're
 // currently on.
@@ -156,6 +152,9 @@ export interface AuthContext<ViewType> {
   activeFactor?: Factor;
   allowedSecondFactors?: Factor[];
   allowBack: boolean;
+
+  // Query params present, to be filled at start
+  query: Query;
 
   // Current error (if any)
   error?: FormError;
@@ -217,7 +216,10 @@ export type UserfrontApiGetTenantIdEvent = {
 
 export type UserfrontApiFetchFlowEvent = {
   type: "done";
-  data: Flow;
+  data: {
+    authentication: Flow;
+    mode: "live" | "test";
+  };
 };
 
 export type UserfrontApiFactorResponseEvent = {
@@ -234,7 +236,6 @@ export type UserfrontApiFactorResponseEvent = {
 export type UserfrontApiErrorEvent = {
   type: "error";
   data: {
-    _isError: boolean;
     error: FormError;
   };
 };
@@ -260,6 +261,7 @@ export type PasswordSubmitEvent = {
   confirmPassword: string;
   name?: string;
   username?: string;
+  emailOrUsername?: string;
 };
 
 export type PhoneNumberSubmitEvent = {

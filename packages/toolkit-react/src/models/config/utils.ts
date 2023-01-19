@@ -1,7 +1,7 @@
 // CONSTANTS
 
 import { isSsoProvider } from "./guards";
-import { Factor } from "./types";
+import { Factor } from "../types";
 
 // List of all possible factors with:
 // channel, strategy
@@ -19,6 +19,7 @@ export const factorConfig = {
     testOnlySecond: "hasOnlyEmailLinkSecondFactor",
     viewContext: {
       type: "emailLink",
+      message: "",
     },
   },
   emailCode: {
@@ -104,7 +105,7 @@ export const createOnlyFactorCondition = (
   return (context: any) => {
     let onlyFactor;
     if (asSecondFactor) {
-      onlyFactor = context.flow.secondFactors[0];
+      onlyFactor = context.allowedSecondFactors?.[0];
     } else {
       onlyFactor = context.flow.firstFactors[0];
     }
@@ -121,7 +122,7 @@ export const isMissing = (str: any) => {
 };
 
 // Return true if a strong has any value.
-export const hasValue = (str: any) => {
+export const hasValue = (str: any): str is string => {
   return typeof str === "string" && str.length > 0;
 };
 
@@ -164,55 +165,3 @@ export const unhandledError = {
     type: "unhandled_error",
   },
 };
-
-/* UNIT TESTS */
-if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
-  describe("models/utils.ts", () => {
-    describe("getTargetForFactor", () => {
-      const ssoProviders = [
-        "apple",
-        "azure",
-        "facebook",
-        "github",
-        "google",
-        "linkedin",
-        "twitter",
-      ];
-      ssoProviders.forEach((provider) => {
-        it(`should return ssoProvider for ${provider}`, () => {
-          const factor = {
-            channel: "email",
-            strategy: provider,
-          };
-          const expected = "ssoProvider";
-          const actual = getTargetForFactor(factor);
-          expect(actual).toEqual(expected);
-        });
-      });
-      Object.entries(factorConfig).forEach(([key, factorData]) => {
-        if (key === "ssoProvider") {
-          return;
-        }
-        it(`should return ${key} for the matching factor`, () => {
-          const factor = {
-            channel: factorData.channel,
-            strategy: factorData.strategy,
-          };
-          const expected = key;
-          const actual = getTargetForFactor(factor);
-          expect(actual).toEqual(expected);
-        });
-      });
-      it("should return an empty string if there is no matching factor", () => {
-        const factor = {
-          channel: "test",
-          strategy: "factor",
-        };
-        const expected = "";
-        const actual = getTargetForFactor(factor);
-        expect(actual).toEqual(expected);
-      });
-    });
-  });
-}

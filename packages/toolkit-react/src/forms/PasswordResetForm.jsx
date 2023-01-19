@@ -1,12 +1,18 @@
-import callUserfront from "../services/userfront";
+import { callUserfront } from "../services/userfront";
 import SubmitButton from "../components/SubmitButton";
 import ErrorMessage from "../components/ErrorMessage";
 import SecuredByUserfront from "../components/SecuredByUserfront";
 import { useState } from "react";
 import { useSizeClass } from "../utils/hooks";
 
+/**
+ * Form to request a password reset email.
+ */
 const PasswordResetForm = () => {
+  // Apply a size-based CSS class based on the container's size
   const [containerRef, setContainerRef] = useState();
+  const sizeClass = useSizeClass(containerRef);
+
   const [error, setError] = useState();
   const [loading, setLoading] = useState();
   const [success, setSuccess] = useState();
@@ -15,8 +21,9 @@ const PasswordResetForm = () => {
     "We'll email you a link to reset your password"
   );
 
-  const sizeClass = useSizeClass(containerRef);
-
+  // Try to request a password reset email.
+  // Display a success message if successful.
+  // Otherwise, display the error received from the server.
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -25,7 +32,7 @@ const PasswordResetForm = () => {
       const email = event.target.elements.email.value;
       const response = await callUserfront({
         method: "sendResetLink",
-        args: email,
+        args: [email],
       });
       setSuccess(true);
       setLoading(false);

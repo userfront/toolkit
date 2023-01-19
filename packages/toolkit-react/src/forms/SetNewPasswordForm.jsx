@@ -1,4 +1,4 @@
-import callUserfront from "../services/userfront";
+import { callUserfront } from "../services/userfront";
 import SubmitButton from "../components/SubmitButton";
 import ContinueButton from "../components/ContinueButton";
 import ErrorMessage from "../components/ErrorMessage";
@@ -6,8 +6,18 @@ import SecuredByUserfront from "../components/SecuredByUserfront";
 import { useState } from "react";
 import { useSizeClass } from "../utils/hooks";
 
-const SetNewPasswordForm = () => {
+/**
+ * Form to reset a user's password. Should be at the destination of the password reset email link.
+ *
+ * @param {props} props
+ * @param {boolean} props.shouldConfirmPassword - if true, use a second password field to confirm the new password.
+ * @returns
+ */
+const SetNewPasswordForm = ({ shouldConfirmPassword = false }) => {
+  // Apply a CSS class based on the container's size
   const [containerRef, setContainerRef] = useState();
+  const sizeClass = useSizeClass(containerRef);
+
   const [error, setError] = useState();
   const [loading, setLoading] = useState();
   const [success, setSuccess] = useState();
@@ -15,14 +25,19 @@ const SetNewPasswordForm = () => {
   const [text, setText] = useState("");
   const [redirectUrl, setRedirectUrl] = useState("");
 
-  const sizeClass = useSizeClass(containerRef);
-
+  // Try to reset the user's password.
+  // If shouldConfirmPassword = true, check that both password fields match.
+  // On success, display a message and a Continue button with the redirect URL.
+  // On failure, show the error message from the server.
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
     setError(undefined);
     const password = event.target.elements.password.value;
-    const confirmPassword = event.target.elements.confirmPassword.value;
+    // Only compare if we're asking users to confirm their password
+    const confirmPassword = shouldConfirmPassword
+      ? event.target.elements.confirmPassword.value
+      : event.target.elements.password.value;
     if (password !== confirmPassword) {
       setError({
         message:
@@ -33,7 +48,7 @@ const SetNewPasswordForm = () => {
     try {
       const response = await callUserfront({
         method: "updatePassword",
-        args: { password },
+        args: [{ password }],
       });
       setSuccess(true);
       setLoading(false);
@@ -65,14 +80,16 @@ const SetNewPasswordForm = () => {
               name="password"
             ></input>
           </div>
-          <div className="uf-toolkit-form-row">
-            <label htmlFor="confirmPassword">Confirm your new password</label>
-            <input
-              className="uf-toolkit-input"
-              type="password"
-              name="confirmPassword"
-            ></input>
-          </div>
+          {shouldConfirmPassword && (
+            <div className="uf-toolkit-form-row">
+              <label htmlFor="confirmPassword">Confirm your new password</label>
+              <input
+                className="uf-toolkit-input"
+                type="password"
+                name="confirmPassword"
+              ></input>
+            </div>
+          )}
           <ErrorMessage error={error} />
           <div className="uf-toolkit-button-row">
             <SubmitButton />
