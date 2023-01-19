@@ -1,5 +1,15 @@
 import { callUserfront } from "../services/userfront";
 
+/**
+ * A functioning logout button.
+ *
+ * @param {props} props
+ * @param {boolean} props.disabled - is the button disabled?
+ * @param {string | boolean} props.redirect - URL to redirect to. If false, disables redirect.
+ *  If absent, redirect based on the tenant's after-logout path.
+ * @param {array} props.children - children to display in the button. Shows "Log out" if children are absent.
+ * @returns
+ */
 const LogoutButton = ({ redirect, disabled = false, children }) => {
   const _children = children || "Log out";
   const handleClick = async () => {

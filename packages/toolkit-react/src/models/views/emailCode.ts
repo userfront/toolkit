@@ -21,6 +21,7 @@ const emailCodeConfig: AuthMachineConfig = {
     },
     // Send the code email via the Userfront API
     send: {
+      // Clear any error that's being displayed
       entry: "clearError",
       invoke: {
         // Set method, email, and possibly name and username as arguments for the call
@@ -67,6 +68,7 @@ const emailCodeConfig: AuthMachineConfig = {
     },
     // Check the verification code via the Userfront API
     verifyCode: {
+      // Clear any error that's being displayed
       entry: "clearError",
       invoke: {
         // Set the arguments and call the Userfront API method to check the verification code

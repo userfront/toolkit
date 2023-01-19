@@ -124,11 +124,19 @@ export const factorToLogoAndText = (factor) => {
     default:
       return {
         logo: null,
-        text: "MISSING FACTOR",
+        text: factor.strategy,
       };
   }
 };
 
+/**
+ * A button with an icon for the given Userfront factor.
+ * Text is chosen based on the factor.
+ *
+ * @param {object} props
+ * @param {object} props.factor - a Userfront factor { strategy, channel }
+ * @returns
+ */
 const IconButton = ({ factor, children, ...props }) => {
   if (!factor) {
     return <BasicButton {...props}>{children}</BasicButton>;

@@ -2,6 +2,14 @@ import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
 import ErrorMessage from "../components/ErrorMessage";
 
+/**
+ * A view prompting the user for their username/email and password.
+ *
+ * @param {object} props
+ * @param {boolean} props.allowBack - if true, show a Back button
+ * @param {object} error - a Userfront error to display
+ * @param {function} onEvent
+ */
 const LogInWithPassword = ({ onEvent, allowBack, error }) => {
   const handleSubmit = (event) => {
     event.preventDefault();

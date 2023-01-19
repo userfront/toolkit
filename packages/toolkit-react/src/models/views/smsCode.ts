@@ -10,19 +10,25 @@ const smsCodeConfig: AuthMachineConfig = {
   initial: "showForm",
   entry: "setupView",
   states: {
+    // Show the form to enter a phone number
     showForm: {
       on: {
+        // When the user submits, store the phone number locally and proceed to send it with the Userfront API
         submit: {
           actions: "setPhoneNumber",
           target: "send",
         },
+        // When the user presses the back button, go back to the preceding factor selection screen
         back: "#backToFactors",
       },
     },
+    // Send the code SMS via the Userfront API
     send: {
+      // Clear any error that's being displayed
       entry: "clearError",
       invoke: {
         src: (context) => {
+          // Set method, phoneNumber, and possibly name and username as arguments for the call
           const arg: Record<string, string> = {
             channel: "sms",
             phoneNumber: (<SmsCodeContext>context).view.phoneNumber,
@@ -49,19 +55,26 @@ const smsCodeConfig: AuthMachineConfig = {
         },
       },
     },
+    // Show the form asking the user to enter the verification code
     showCodeForm: {
       on: {
+        // On submit, store and then verify the code
         submit: {
           actions: "setCode",
           target: "verifyCode",
         },
+        // The user can ask to resend the code to the same phone number
         resend: "send",
+        // The user can go back to the entry screen to use a different phone number
         back: "showForm",
       },
     },
+    // Check the verification code via the Userfront API
     verifyCode: {
+      // Clear any error that's being displayed
       entry: "clearError",
       invoke: {
+        // Set the arguments and call the Userfront API method to check the verification code
         src: (context) =>
           callUserfront({
             // Always call Userfront.login when verifying a code.
@@ -98,6 +111,7 @@ const smsCodeConfig: AuthMachineConfig = {
         ],
       },
     },
+    // Show a "verified" view, so we have something to show if there's nowhere to redirect to
     showCodeVerified: {
       type: "final",
     },

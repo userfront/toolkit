@@ -17,7 +17,6 @@ const setUpTotpConfig: AuthMachineConfig = {
     // so we can show it
     getQrCode: {
       invoke: {
-        // Method will exist on userfront-core when published
         // @ts-ignore
         src: () => callUserfront({ method: "store.user.getTotp" }),
         // If there's a problem getting the QR code, show an error message
@@ -45,7 +44,6 @@ const setUpTotpConfig: AuthMachineConfig = {
       },
     },
     // Confirm the TOTP setup is correct by using a TOTP code
-    // Doesn't seem to be technically required, but it's good practice
     confirmTotpCode: {
       entry: "clearError",
       invoke: {

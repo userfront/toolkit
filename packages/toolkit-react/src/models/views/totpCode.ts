@@ -5,15 +5,19 @@ import { AuthMachineConfig, TotpCodeContext } from "../types";
 const totpCodeConfig: AuthMachineConfig = {
   id: "totpCode",
   initial: "showForm",
+  // If this is the first factor, the user needs to provide an email or username.
+  // If it's the second factor, we already have that info.
   entry: ["setupView", "setShowEmailOrUsernameIfFirstFactor"],
   states: {
     // Show the TOTP code entry form
     showForm: {
       on: {
+        // Send the TOTP code on submit
         submit: {
           actions: "setTotpCode",
           target: "send",
         },
+        // Go to the backup code entry view
         useBackupCode: {
           actions: "setUseBackupCode",
         },

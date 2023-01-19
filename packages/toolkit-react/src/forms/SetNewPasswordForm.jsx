@@ -6,8 +6,18 @@ import SecuredByUserfront from "../components/SecuredByUserfront";
 import { useState } from "react";
 import { useSizeClass } from "../utils/hooks";
 
+/**
+ * Form to reset a user's password. Should be at the destination of the password reset email link.
+ *
+ * @param {props} props
+ * @param {boolean} props.shouldConfirmPassword - if true, use a second password field to confirm the new password.
+ * @returns
+ */
 const SetNewPasswordForm = ({ shouldConfirmPassword = false }) => {
+  // Apply a CSS class based on the container's size
   const [containerRef, setContainerRef] = useState();
+  const sizeClass = useSizeClass(containerRef);
+
   const [error, setError] = useState();
   const [loading, setLoading] = useState();
   const [success, setSuccess] = useState();
@@ -15,8 +25,10 @@ const SetNewPasswordForm = ({ shouldConfirmPassword = false }) => {
   const [text, setText] = useState("");
   const [redirectUrl, setRedirectUrl] = useState("");
 
-  const sizeClass = useSizeClass(containerRef);
-
+  // Try to reset the user's password.
+  // If shouldConfirmPassword = true, check that both password fields match.
+  // On success, display a message and a Continue button with the redirect URL.
+  // On failure, show the error message from the server.
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);

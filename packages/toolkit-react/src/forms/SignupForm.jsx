@@ -343,11 +343,22 @@ const componentForStep = (state) => {
   }
 };
 
+/**
+ * A signup form that operates in conjunction with a login XState machine.
+ *
+ * @param {object} props
+ * @param {object} props.state - the machine's state
+ * @param {function} onEvent
+ * @returns
+ */
 const SignupForm = ({ state, onEvent }) => {
+  // Apply CSS classes based on the size of the form's container
   const [containerRef, setContainerRef] = useState();
   const sizeClass = useSizeClass(containerRef);
+
   // Get the view component, title text, and props corresponding to this state
   const { Component, props, title } = componentForStep(state);
+
   // Construct the default props that are passed to all views
   const defaultProps = {
     allowBack: state.context.allowBack,

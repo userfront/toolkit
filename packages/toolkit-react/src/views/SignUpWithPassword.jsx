@@ -2,10 +2,22 @@ import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
 import ErrorMessage from "../components/ErrorMessage";
 
+/**
+ * View to allow a user to sign up with a username/email and password
+ *
+ * @param {object} props
+ * @param {boolean} props.collectUsername - if true, show a field for the user's username. Default false.
+ * @param {boolean} props.requirePasswordConfirmation - if true, show a second password input,
+ *  and require the passwords to match. Default false.
+ * @param {boolean} props.allowBack - if true, show a Back button
+ * @param {object} error - a Userfront error to display
+ * @param {function} onEvent
+ */
 const SignUpWithPassword = ({
   onEvent,
   allowBack,
-  requirePasswordConfirmation,
+  collectUsername = false,
+  requirePasswordConfirmation = false,
   error,
 }) => {
   const handleSubmit = (event) => {
@@ -16,21 +28,30 @@ const SignUpWithPassword = ({
       ? elements.confirmPassword.value
       : elements.password.value;
     if (onEvent) {
-      onEvent({
+      const event = {
         type: "submit",
-        username: elements.username.value,
         email: elements.email.value,
         password: elements.password.value,
         confirmPassword,
-      });
+      };
+      if (collectUsername) {
+        event.username = elements.username.value;
+      }
+      onEvent(event);
     }
   };
   return (
     <form onSubmit={handleSubmit} className="uf-toolkit-form">
-      <div className="uf-toolkit-form-row">
-        <label htmlFor="username">Username</label>
-        <input className="uf-toolkit-input" type="text" name="username"></input>
-      </div>
+      {collectUsername && (
+        <div className="uf-toolkit-form-row">
+          <label htmlFor="username">Username</label>
+          <input
+            className="uf-toolkit-input"
+            type="text"
+            name="username"
+          ></input>
+        </div>
+      )}
       <div className="uf-toolkit-form-row">
         <label htmlFor="email">Email address</label>
         <input className="uf-toolkit-input" type="email" name="email"></input>

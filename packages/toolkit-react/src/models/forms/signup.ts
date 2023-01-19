@@ -70,10 +70,14 @@ import {
 // a separate object, so we can override them as needed for testing.
 export const defaultSignupOptions = {
   guards: {
-    // Predicates for first factors
+    // Predicates for first factors:
+    // Does the flow have multiple first factors?
     hasMultipleFirstFactors: (context: AuthContext<any>, event: any) => {
       return (context.config.flow?.firstFactors?.length ?? 0) > 1;
     },
+    // Is the flow only one factor? One predicate per factor type.
+    // If there's only one allowed factor, allows us to skip the select screen
+    // and proceed directly to that factor.
     hasOnlyEmailLinkFirstFactor: createOnlyFactorCondition({
       channel: "email",
       strategy: "link",
@@ -103,9 +107,13 @@ export const defaultSignupOptions = {
     },
 
     // Predicates for second factors
+    // Identical to the first factor predicates
     hasMultipleSecondFactors: (context: AuthContext<any>, event: any) => {
       return (context.allowedSecondFactors?.length ?? 0) > 1;
     },
+    // Is the flow only one factor? One predicate per factor type.
+    // If there's only one allowed factor, allows us to skip the select screen
+    // and proceed directly to that factor.
     hasOnlyEmailLinkSecondFactor: createOnlyFactorCondition({
       channel: "email",
       strategy: "link",
@@ -195,8 +203,7 @@ export const defaultSignupOptions = {
   },
 };
 
-// A default context for the signup machine
-// TODO this isn't really needed
+// A default/starting context for the signup machine
 export const defaultAuthContext = {
   user: {
     email: "",
@@ -222,6 +229,7 @@ export const defaultAuthContext = {
 
 // Signup machine top-level configuration
 const signupMachineConfig: AuthMachineConfig = {
+  // Enables TypeScript typings
   schema: {
     context: {} as AuthContext<View>,
     events: {} as SignupMachineEvent,
@@ -244,6 +252,7 @@ const signupMachineConfig: AuthMachineConfig = {
         },
       ],
     },
+    // Initial state
     // Start the form's loading process
     init: {
       always: [
@@ -260,10 +269,8 @@ const signupMachineConfig: AuthMachineConfig = {
       ],
     },
     // Get the tenant ID from the global Userfront instance
-    // TODO need new method
     getGlobalTenantId: {
       invoke: {
-        // Method does not yet exist on userfront-core but will
         // @ts-ignore
         src: () => getUserfrontProperty("store.tenantId"),
         // Set the tenant ID if one was present, otherwise set shouldFetchFlow = false
@@ -284,6 +291,7 @@ const signupMachineConfig: AuthMachineConfig = {
     },
     // Start the flow, if possible, or report an error.
     initFlow: {
+      // If there are uuid and token query params, add them to the context
       entry: ["readQueryParams"],
       always: [
         // If shouldFetchFlow = false but we don't have a flow, we can't proceed.
@@ -305,7 +313,6 @@ const signupMachineConfig: AuthMachineConfig = {
         },
         // If we have a flow and shouldFetchFlow = true, proceed to a preview of the first step;
         // the preview shouldn't proceed to a specific factor.
-        // TODO probably better for this to be a placeholder in v1.
         {
           target: "showPreviewAndFetchFlow",
         },
@@ -326,7 +333,7 @@ const signupMachineConfig: AuthMachineConfig = {
     showPlaceholderAndFetchFlow: {
       invoke: {
         // Will retrieve mode & flow after userfront-core update
-        // @ts-ignore
+        // @ts-ignore - TS doesn't infer all of the valid methods correctly
         src: () => callUserfront({ method: "setMode" }),
         // On failure, report an error.
         onError: {
@@ -379,6 +386,8 @@ const signupMachineConfig: AuthMachineConfig = {
     },
     // Start the flow
     beginFlow: {
+      // At this point the Userfront singleton is fully initialized, so we should
+      // try to redirect if the user is logged in and config.redirect !== false.
       entry: ["redirectIfLoggedIn", "setupView"],
       always: [
         // If we're returning from a passwordless/email link or SSO first factor, attempt to use
@@ -409,32 +418,34 @@ const signupMachineConfig: AuthMachineConfig = {
         // that means that the only first factor in the flow is one we don't recognize.
 
         // Duplicates, should never be reached.
-        // Only here to help out the XCode visualizer.
-        {
-          actions: "disableBack",
-          target: "emailLink",
-          cond: "hasOnlyEmailLinkFirstFactor",
-        },
-        {
-          actions: "disableBack",
-          target: "emailCode",
-          cond: "hasOnlyEmailCodeFirstFactor",
-        },
-        {
-          actions: "disableBack",
-          target: "smsCode",
-          cond: "hasOnlySmsCodeFirstFactor",
-        },
-        {
-          actions: "disableBack",
-          target: "password",
-          cond: "hasOnlyPasswordFirstFactor",
-        },
-        {
-          actions: "disableBack",
-          target: "totpCode",
-          cond: "hasOnlyTotpFirstFactor",
-        },
+        // Only here to help out the XState visualizer.
+        // Uncomment if using the visualizer.
+
+        // {
+        //   actions: "disableBack",
+        //   target: "emailLink",
+        //   cond: "hasOnlyEmailLinkFirstFactor",
+        // },
+        // {
+        //   actions: "disableBack",
+        //   target: "emailCode",
+        //   cond: "hasOnlyEmailCodeFirstFactor",
+        // },
+        // {
+        //   actions: "disableBack",
+        //   target: "smsCode",
+        //   cond: "hasOnlySmsCodeFirstFactor",
+        // },
+        // {
+        //   actions: "disableBack",
+        //   target: "password",
+        //   cond: "hasOnlyPasswordFirstFactor",
+        // },
+        // {
+        //   actions: "disableBack",
+        //   target: "totpCode",
+        //   cond: "hasOnlyTotpFirstFactor",
+        // },
 
         // Error: if we get this far, it's an unhandled situation
         {
@@ -451,6 +462,7 @@ const signupMachineConfig: AuthMachineConfig = {
     smsCode: smsCodeConfig,
     password: passwordConfig,
     totpCode: totpCodeConfig,
+    // Start an SSO provider login flow
     ssoProvider: {
       id: "ssoProvider",
       invoke: {
@@ -471,6 +483,7 @@ const signupMachineConfig: AuthMachineConfig = {
         },
       },
     },
+    // Handle an incoming login link, using its query parameters to continue the login flow
     handleLoginWithLink: {
       id: "handleLoginWithLink",
       invoke: {
@@ -539,32 +552,34 @@ const signupMachineConfig: AuthMachineConfig = {
         })),
 
         // Duplicates, should never be reached.
-        // Only here to help out the XCode visualizer.
-        {
-          actions: ["disableBack", "markAsSecondFactor"],
-          target: "emailLink",
-          cond: "hasOnlyEmailLinkSecondFactor",
-        },
-        {
-          actions: ["disableBack", "markAsSecondFactor"],
-          target: "emailCode",
-          cond: "hasOnlyEmailCodeSecondFactor",
-        },
-        {
-          actions: ["disableBack", "markAsSecondFactor"],
-          target: "smsCode",
-          cond: "hasOnlySmsCodeSecondFactor",
-        },
-        {
-          actions: ["disableBack", "markAsSecondFactor"],
-          target: "password",
-          cond: "hasOnlyPasswordSecondFactor",
-        },
-        {
-          actions: ["disableBack", "markAsSecondFactor"],
-          target: "totpCode",
-          cond: "hasOnlyTotpSecondFactor",
-        },
+        // Only here to help out the XState visualizer.
+        // Uncomment if using the visualizer.
+
+        // {
+        //   actions: ["disableBack", "markAsSecondFactor"],
+        //   target: "emailLink",
+        //   cond: "hasOnlyEmailLinkSecondFactor",
+        // },
+        // {
+        //   actions: ["disableBack", "markAsSecondFactor"],
+        //   target: "emailCode",
+        //   cond: "hasOnlyEmailCodeSecondFactor",
+        // },
+        // {
+        //   actions: ["disableBack", "markAsSecondFactor"],
+        //   target: "smsCode",
+        //   cond: "hasOnlySmsCodeSecondFactor",
+        // },
+        // {
+        //   actions: ["disableBack", "markAsSecondFactor"],
+        //   target: "password",
+        //   cond: "hasOnlyPasswordSecondFactor",
+        // },
+        // {
+        //   actions: ["disableBack", "markAsSecondFactor"],
+        //   target: "totpCode",
+        //   cond: "hasOnlyTotpSecondFactor",
+        // },
 
         // If we get here, it's an unhandled error
         {
@@ -574,7 +589,7 @@ const signupMachineConfig: AuthMachineConfig = {
     },
     selectSecondFactor: selectFactorConfig,
     // Finish the flow.
-    // Redirect, or show a confirmation view.
+    // Redirect, or show a confirmation view if config.redirect === false.
     finish: {
       id: "finish",
       entry: "redirectIfLoggedIn",
