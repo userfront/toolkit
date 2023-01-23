@@ -15,12 +15,12 @@ const SecuredByUserfront = ({ mode }) => {
   return (
     <>
       <a
-        className="uf-toolkit-secured"
+        className="userfront-secured"
         href="https://www.userfront.com"
         target="_blank"
         rel="noopener"
       >
-        <img src={securedIcon} className="uf-toolkit-secured-icon" />
+        <img src={securedIcon} className="userfront-secured-icon" />
         Secured by Userfront
       </a>
       <TestModeNotice mode={mode} />

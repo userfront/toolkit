@@ -7,28 +7,28 @@ import FixedWidth from "../utils/FixedWidth";
 import ViewContainer from "../utils/ViewContainer";
 
 const cssVariables = [
-  "--uf-toolkit-text-color",
-  "--uf-toolkit-background-color",
-  "--uf-toolkit-container-border-color",
-  "--uf-toolkit-container-border",
-  "--uf-toolkit-border-radius",
-  "--uf-toolkit-container-box-shadow",
-  "--uf-toolkit-spacing",
-  "--uf-toolkit-container-margin",
-  "--uf-toolkit-container-width",
-  "--uf-toolkit-container-max-width",
-  "--uf-toolkit-container-height",
-  "--uf-toolkit-container-max-height",
-  "--uf-toolkit-font-family",
-  "--uf-toolkit-alignment",
-  "--uf-toolkit-em-size",
+  "--userfront-text-color",
+  "--userfront-background-color",
+  "--userfront-container-border-color",
+  "--userfront-container-border",
+  "--userfront-border-radius",
+  "--userfront-container-box-shadow",
+  "--userfront-spacing",
+  "--userfront-container-margin",
+  "--userfront-container-width",
+  "--userfront-container-max-width",
+  "--userfront-container-height",
+  "--userfront-container-max-height",
+  "--userfront-font-family",
+  "--userfront-alignment",
+  "--userfront-em-size",
 ];
 
 const sizeClasses = {
-  "uf-toolkit-tiny": "uf-toolkit-tiny",
-  "uf-toolkit-small": "uf-toolkit-small",
-  "uf-toolkit-medium": "uf-toolkit-medium",
-  "uf-toolkit-large": "uf-toolkit-large",
+  "userfront-tiny": "userfront-tiny",
+  "userfront-small": "userfront-small",
+  "userfront-medium": "userfront-medium",
+  "userfront-large": "userfront-large",
 };
 
 const factorForName = {
@@ -130,17 +130,17 @@ export default {
         "Width breakpoints for the view. Select one to view the form at that breakpoint.",
       control: "radio",
       options: [
-        "uf-toolkit-tiny",
-        "uf-toolkit-small",
-        "uf-toolkit-medium",
-        "uf-toolkit-large",
+        "userfront-tiny",
+        "userfront-small",
+        "userfront-medium",
+        "userfront-large",
       ],
       mapping: sizeClasses,
       labels: {
-        "uf-toolkit-tiny": "Tiny (<= 250px)",
-        "uf-toolkit-small": "Small (<= 350px)",
-        "uf-toolkit-medium": "Medium (<= 500px)",
-        "uf-toolkit-large": "Large (> 500px)",
+        "userfront-tiny": "Tiny (<= 250px)",
+        "userfront-small": "Small (<= 350px)",
+        "userfront-medium": "Medium (<= 500px)",
+        "userfront-large": "Large (> 500px)",
       },
       if: { arg: "width", truthy: false },
     },
@@ -165,15 +165,15 @@ const Template = (args, { style }) => {
   // To simplify, treat the factor list as a list of allowed second factors
   const allowedSecondFactors = args.factors.map((f) => factorForName[f]);
   if (args.width) {
-    let sizeClass = "uf-toolkit-large";
+    let sizeClass = "userfront-large";
     if (args.width <= 500) {
-      sizeClass = "uf-toolkit-medium";
+      sizeClass = "userfront-medium";
     }
     if (args.width <= 350) {
-      sizeClass = "uf-toolkit-small";
+      sizeClass = "userfront-small";
     }
     if (args.width <= 250) {
-      sizeClass = "uf-toolkit-tiny";
+      sizeClass = "userfront-tiny";
     }
     return (
       <FixedWidth width={args.width}>
@@ -192,16 +192,16 @@ const Template = (args, { style }) => {
   }
   let width;
   switch (args.size) {
-    case "uf-toolkit-large":
+    case "userfront-large":
       width = 650;
       break;
-    case "uf-toolkit-medium":
+    case "userfront-medium":
       width = 450;
       break;
-    case "uf-toolkit-small":
+    case "userfront-small":
       width = 300;
       break;
-    case "uf-toolkit-tiny":
+    case "userfront-tiny":
       width = 200;
       break;
   }
@@ -232,7 +232,7 @@ Login.args = {
     "Username and password",
   ],
   error: "",
-  size: "uf-toolkit-medium",
+  size: "userfront-medium",
   width: 0,
   ...argsForVariables(cssVariables),
 };
@@ -248,7 +248,7 @@ Signup.args = {
     "Username and password",
   ],
   error: "",
-  size: "uf-toolkit-medium",
+  size: "userfront-medium",
   width: 0,
   ...argsForVariables(cssVariables),
 };
@@ -265,7 +265,7 @@ WithError.args = {
   ],
   error:
     "That password wasn't correct. Please try again or choose a different way to log in.",
-  size: "uf-toolkit-medium",
+  size: "userfront-medium",
   width: 0,
   ...argsForVariables(cssVariables),
 };
@@ -281,7 +281,7 @@ Compact.args = {
     "Username and password",
   ],
   error: "",
-  size: "uf-toolkit-medium",
+  size: "userfront-medium",
   width: 0,
   ...argsForVariables(cssVariables),
 };
@@ -292,7 +292,7 @@ SecondFactors.args = {
   isLogin: true,
   factors: ["SMS verification code", "Authenticator app or device (TOTP)"],
   error: "",
-  size: "uf-toolkit-medium",
+  size: "userfront-medium",
   width: 0,
   ...argsForVariables(cssVariables),
 };

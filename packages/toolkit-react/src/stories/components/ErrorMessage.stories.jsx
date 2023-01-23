@@ -7,14 +7,14 @@ import {
 import FixedWidth from "../utils/FixedWidth";
 
 const cssVariables = [
-  "--uf-toolkit-spacing",
-  "--uf-toolkit-border-radius",
-  "--uf-toolkit-error-color",
-  "--uf-toolkit-error-background-color",
-  "--uf-toolkit-error-border-color",
-  "--uf-toolkit-font-family",
-  "--uf-toolkit-alignment",
-  "--uf-toolkit-em-size",
+  "--userfront-spacing",
+  "--userfront-border-radius",
+  "--userfront-error-color",
+  "--userfront-error-background-color",
+  "--userfront-error-border-color",
+  "--userfront-font-family",
+  "--userfront-alignment",
+  "--userfront-em-size",
 ];
 
 export default {

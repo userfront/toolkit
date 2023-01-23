@@ -9,7 +9,7 @@
 const RetryButton = ({ children, onClick, ...props }) => {
   const message = children || "Retry";
   return (
-    <button className="uf-toolkit-button uf-toolkit-button-subtle" {...props}>
+    <button className="userfront-button userfront-button-subtle" {...props}>
       {message}
     </button>
   );

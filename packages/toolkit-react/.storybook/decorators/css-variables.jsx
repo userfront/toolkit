@@ -33,7 +33,7 @@ export const withCssVariables = (Story, options) => {
   if (parameters.passStyle) {
     return (
       <div
-        className="uf-toolkit uf-toolkit-element uf-toolkit-test-background"
+        className="userfront-toolkit userfront-element userfront-test-background"
         style={cssVariables}
       >
         <Story style={cssVariables} />
@@ -43,7 +43,7 @@ export const withCssVariables = (Story, options) => {
 
   return (
     <div
-      className="uf-toolkit uf-toolkit-element uf-toolkit-test-background"
+      className="userfront-toolkit userfront-element userfront-test-background"
       style={cssVariables}
     >
       <Story />

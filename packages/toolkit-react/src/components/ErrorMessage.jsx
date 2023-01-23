@@ -9,16 +9,16 @@
  * @returns
  */
 const ErrorMessage = ({ error }) => {
-  const classes = ["uf-toolkit-error"];
+  const classes = ["userfront-error"];
   const hasError = !!error;
   if (hasError) {
-    classes.push("uf-toolkit-has-error");
+    classes.push("userfront-has-error");
   }
   const message =
     error?.message || "An unknown error has occurred. Please try again later.";
   return (
     <div className={classes.join(" ")} role="alert">
-      {hasError && <span className="uf-toolkit-error-text">{message}</span>}
+      {hasError && <span className="userfront-error-text">{message}</span>}
     </div>
   );
 };

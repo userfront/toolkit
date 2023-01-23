@@ -25,7 +25,7 @@ const BackButton = ({ onEvent, onClick, children, ...props }) => {
   const content = children || "Back";
   return (
     <button
-      className="uf-toolkit-button uf-toolkit-button-secondary"
+      className="userfront-button userfront-button-secondary"
       type="button"
       {...props}
       onClick={handleClick}

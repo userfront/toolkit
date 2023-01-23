@@ -2,7 +2,7 @@ const Container = ({ sizeClass, title, children, style }) => {
   return (
     <div
       style={style}
-      className={`uf-toolkit uf-toolkit-container ${sizeClass}`}
+      className={`userfront-toolkit userfront-container ${sizeClass}`}
     >
       {title && <h2>{title}</h2>}
       {children}

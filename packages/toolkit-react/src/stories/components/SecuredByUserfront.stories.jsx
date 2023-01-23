@@ -6,12 +6,12 @@ import {
 import FixedWidth from "../utils/FixedWidth";
 
 const cssVariables = [
-  "--uf-toolkit-secured-font-color",
-  "--uf-toolkit-secured-font-size",
-  "--uf-toolkit-spacing",
-  "--uf-toolkit-font-family",
-  "--uf-toolkit-alignment",
-  "--uf-toolkit-em-size",
+  "--userfront-secured-font-color",
+  "--userfront-secured-font-size",
+  "--userfront-spacing",
+  "--userfront-font-family",
+  "--userfront-alignment",
+  "--userfront-em-size",
 ];
 
 export default {

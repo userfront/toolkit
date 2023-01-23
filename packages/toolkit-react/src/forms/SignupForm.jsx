@@ -370,7 +370,7 @@ const SignupForm = ({ state, onEvent }) => {
   return (
     <div
       ref={setContainerRef}
-      className={`uf-toolkit uf-toolkit-container ${sizeClass}`}
+      className={`userfront-toolkit userfront-container ${sizeClass}`}
     >
       <h2>{title}</h2>
       <Component onEvent={onEvent} {...defaultProps} {...props} />

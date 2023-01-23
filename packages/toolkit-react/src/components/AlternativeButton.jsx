@@ -6,7 +6,7 @@
  */
 const AlternativeButton = (props) => {
   return (
-    <button className="uf-toolkit-button uf-toolkit-button-subtle" {...props} />
+    <button className="userfront-button userfront-button-subtle" {...props} />
   );
 };
 

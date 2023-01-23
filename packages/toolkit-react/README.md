@@ -94,7 +94,7 @@ The `src` directory contains the package's source:
 
 **CSS**
 
-The forms' CSS is in `themes/default.css`. This uses CSS variables to allow full customization of forms' appearance. Variables are all prefixed `--uf-toolkit` to separate them from variables in client code.
+The forms' CSS is in `themes/default.css`. This uses CSS variables to allow full customization of forms' appearance. Variables are all prefixed `--userfront` to separate them from variables in client code.
 
 **Storybook**
 

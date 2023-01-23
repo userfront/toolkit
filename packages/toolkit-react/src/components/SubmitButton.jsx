@@ -10,7 +10,7 @@ const SubmitButton = ({ children, ...props }) => {
   const _children = children || "Submit";
   return (
     <button
-      className="uf-toolkit-button uf-toolkit-button-primary"
+      className="userfront-button userfront-button-primary"
       type="submit"
       {...props}
     >
