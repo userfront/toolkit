@@ -72,7 +72,7 @@ describe("model-based: models/signup/emailCode", () => {
       emailCodeService.start();
       const mockUserfront = useMockUserfront();
       const email = "email@example.com";
-      const code = "123456";
+      const verificationCode = "123456";
       const sendError = {
         message: "Send error",
         error: {
@@ -134,7 +134,7 @@ describe("model-based: models/signup/emailCode", () => {
             const arg = mockUserfront.lastCall.args[0];
             expect(arg.channel).toEqual("email");
             expect(arg.method).toEqual("verificationCode");
-            expect(arg.verificationCode).toEqual(code);
+            expect(arg.verificationCode).toEqual(verificationCode);
             expect(arg.email).toEqual(email);
           },
           showingCodeFormWithError: () => {
@@ -181,7 +181,7 @@ describe("model-based: models/signup/emailCode", () => {
           },
           submitCode: () => {
             emailCodeService.send("submit", {
-              code,
+              verificationCode,
             });
           },
           failVerifyingCode: async () => {

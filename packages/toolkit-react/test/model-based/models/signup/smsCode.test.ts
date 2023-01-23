@@ -73,7 +73,7 @@ describe("model-based: models/signup/smsCode", () => {
       smsCodeService.start();
       const mockUserfront = useMockUserfront();
       const phoneNumber = "+15551234";
-      const code = "123456";
+      const verificationCode = "123456";
       const sendError = {
         message: "Send error",
         error: {
@@ -133,7 +133,7 @@ describe("model-based: models/signup/smsCode", () => {
             const arg = mockUserfront.lastCall.args[0];
             expect(arg.channel).toEqual("sms");
             expect(arg.method).toEqual("verificationCode");
-            expect(arg.verificationCode).toEqual(code);
+            expect(arg.verificationCode).toEqual(verificationCode);
             expect(arg.phoneNumber).toEqual(phoneNumber);
           },
           showingCodeFormWithError: () => {
@@ -181,7 +181,7 @@ describe("model-based: models/signup/smsCode", () => {
           },
           submitCode: () => {
             smsCodeService.send("submit", {
-              code,
+              verificationCode,
             });
           },
           failVerifyingCode: async () => {
