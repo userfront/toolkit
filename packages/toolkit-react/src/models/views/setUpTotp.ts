@@ -40,7 +40,10 @@ const setUpTotpConfig: AuthMachineConfig = {
           target: "confirmTotpCode",
         },
         // Go back to the factor selection view
-        back: "#backToFactors",
+        back: {
+          actions: "clearError",
+          target: "#backToFactors",
+        },
       },
     },
     // Confirm the TOTP setup is correct by using a TOTP code
@@ -97,7 +100,10 @@ const setUpTotpConfig: AuthMachineConfig = {
     showErrorMessage: {
       on: {
         retry: "getQrCode",
-        back: "#backToFactors",
+        back: {
+          actions: "clearError",
+          target: "#backToFactors",
+        },
       },
     },
     // Show a confirmation screen, in case we don't redirect.

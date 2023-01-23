@@ -16,7 +16,10 @@ const emailCodeConfig: AuthMachineConfig = {
           target: "send",
         },
         // When the user presses the back button, go back to the preceding factor selection screen
-        back: "#backToFactors",
+        back: {
+          actions: "clearError",
+          target: "#backToFactors",
+        },
       },
     },
     // Send the code email via the Userfront API
@@ -82,7 +85,8 @@ const emailCodeConfig: AuthMachineConfig = {
                 method: "verificationCode",
                 channel: "email",
                 email: context.user.email,
-                verificationCode: (<EmailCodeContext>context).view.code,
+                verificationCode: (<EmailCodeContext>context).view
+                  .verificationCode,
                 redirect: context.config.redirect,
               },
             ],

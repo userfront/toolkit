@@ -19,7 +19,10 @@ const smsCodeConfig: AuthMachineConfig = {
           target: "send",
         },
         // When the user presses the back button, go back to the preceding factor selection screen
-        back: "#backToFactors",
+        back: {
+          actions: "clearError",
+          target: "#backToFactors",
+        },
       },
     },
     // Send the code SMS via the Userfront API
@@ -85,7 +88,8 @@ const smsCodeConfig: AuthMachineConfig = {
                 method: "verificationCode",
                 channel: "sms",
                 phoneNumber: (<SmsCodeContext>context).view.phoneNumber,
-                verificationCode: (<SmsCodeContext>context).view.code,
+                verificationCode: (<SmsCodeContext>context).view
+                  .verificationCode,
                 redirect: context.config.redirect,
               },
             ],

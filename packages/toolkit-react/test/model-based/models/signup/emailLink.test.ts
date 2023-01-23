@@ -137,6 +137,7 @@ describe("model-based: models/signup/emailLink", () => {
           returnedToFactors: () => {
             const state = emailLinkService.getSnapshot();
             expect(state.value).toEqual("backToFactors");
+            expect(state.context.error).toBeFalsy();
           },
         },
         events: {

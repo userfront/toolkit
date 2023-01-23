@@ -131,7 +131,7 @@ export const setCode = assign(
   ) => ({
     view: {
       ...context.view,
-      code: event.code,
+      verificationCode: event.verificationCode,
     },
   })
 );

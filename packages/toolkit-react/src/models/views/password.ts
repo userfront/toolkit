@@ -27,7 +27,10 @@ const passwordConfig: AuthMachineConfig = {
           },
         ],
         // Go back to the factor selection view
-        back: "#backToFactors",
+        back: {
+          actions: "clearError",
+          target: "#backToFactors",
+        },
       },
     },
     // Send the signup request with the Userfront API

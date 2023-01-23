@@ -151,6 +151,7 @@ describe("model-based: models/signup/emailCode", () => {
           returnedToFactors: () => {
             const state = emailCodeService.getSnapshot();
             expect(state.value).toEqual("backToFactors");
+            expect(state.context.error).toBeFalsy();
           },
           usingSecondFactor: () => {
             const state = emailCodeService.getSnapshot();

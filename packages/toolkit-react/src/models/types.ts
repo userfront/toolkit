@@ -62,13 +62,13 @@ export interface EmailLink extends CommonFormData {
 
 export interface EmailCode extends CommonFormData {
   type: "emailCode";
-  code: string;
+  verificationCode: string;
 }
 
 export interface SmsCode extends CommonFormData {
   type: "smsCode";
   phoneNumber: string;
-  code: string;
+  verificationCode: string;
 }
 
 export interface Password extends CommonFormData {
@@ -251,7 +251,7 @@ export type EmailSubmitEvent = {
 
 export type CodeSubmitEvent = {
   type: "submit";
-  code: string;
+  verificationCode: string;
 };
 
 export type PasswordSubmitEvent = {
