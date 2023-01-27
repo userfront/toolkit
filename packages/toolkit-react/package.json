@@ -1,7 +1,7 @@
 {
-  "name": "@userfront/react",
-  "version": "1.0.0-alpha.1",
-  "description": "React bindings and components for authentication with Userfront",
+  "name": "toolkit-react",
+  "version": "1.0.0",
+  "description": "",
   "type": "module",
   "directories": {
     "test": "test"
@@ -17,26 +17,55 @@
     "build-storybook": "build-storybook",
     "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\""
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/userfront/toolkit.git"
-  },
-  "keywords": [
-    "userfront"
-  ],
-  "author": "Userfront",
-  "license": "MIT",
-  "main": "./dist/userfront-react.umd.cjs",
-  "module": "./dist/userfront-react.js",
+  "author": "",
+  "license": "ISC",
+  "main": "./dist/toolkit-react.umd.cjs",
+  "module": "./dist/toolkit-react.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/userfront-react.js",
-      "require": "./dist/userfront-react.umd.cjs"
+      "import": "./dist/toolkit-react.js",
+      "require": "./dist/toolkit-react.umd.cjs"
     },
-    "./themes/": "./dist/"
+    "./style.css": "./dist/style.css"
   },
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "@react-hook/resize-observer": "^1.2.6",
+    "@userfront/core": "0.5.0-alpha.1",
+    "@xstate/react": "^3.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.4.0",
+    "react-phone-input-2": "^2.15.1",
+    "urlon": "^3.1.0",
+    "xstate": "^4.33.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.19.3",
+    "@storybook/addon-actions": "^6.5.12",
+    "@storybook/addon-essentials": "^6.5.15",
+    "@storybook/addon-interactions": "^6.5.12",
+    "@storybook/addon-links": "^6.5.12",
+    "@storybook/builder-vite": "^0.2.3",
+    "@storybook/react": "^6.5.15",
+    "@storybook/testing-library": "^0.0.13",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
+    "@vitejs/plugin-react": "^2.1.0",
+    "@vitest/coverage-c8": "^0.25.2",
+    "@xstate/test": "^1.0.0-alpha.0",
+    "babel-loader": "^8.2.5",
+    "esbuild": "^0.16.17",
+    "fast-check": "^3.3.0",
+    "jsdom": "^20.0.3",
+    "json": "^11.0.0",
+    "storybook-addon-pseudo-states": "^1.15.1",
+    "typescript": "^4.8.4",
+    "vite": "^3.1.4",
+    "vite-plugin-dts": "^1.6.4",
+    "vitest": "^0.24.3"
+  }
 }

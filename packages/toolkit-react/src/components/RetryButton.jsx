@@ -6,7 +6,7 @@
  * @param {object} props
  * @returns
  */
-const RetryButton = ({ children, ...props }) => {
+const RetryButton = ({ children, onClick, ...props }) => {
   const message = children || "Retry";
   return (
     <button className="userfront-button userfront-button-subtle" {...props}>
