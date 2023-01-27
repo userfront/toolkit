@@ -66,7 +66,10 @@ const emailCodeConfig: AuthMachineConfig = {
         // The user can ask to resend the code to the same email address
         resend: "send",
         // The user can go back to the email entry screen to use a different email address
-        back: "showForm",
+        back: {
+          actions: "clearError",
+          target: "showForm",
+        },
       },
     },
     // Check the verification code via the Userfront API

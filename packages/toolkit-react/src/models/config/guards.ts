@@ -33,7 +33,7 @@ export const secondFactorRequired = (
   context: AuthContext<any>,
   event: UserfrontApiFactorResponseEvent
 ) => {
-  return event.data.isMfaRequired;
+  return !!event.data?.isMfaRequired;
 };
 
 // Same as above, but check against the view context,
