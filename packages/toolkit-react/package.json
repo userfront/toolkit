@@ -1,7 +1,7 @@
 {
-  "name": "@userfront/react",
-  "version": "1.0.0-alpha.1",
-  "description": "React bindings and components for authentication with Userfront",
+  "name": "toolkit-react",
+  "version": "1.0.0",
+  "description": "",
   "type": "module",
   "directories": {
     "test": "test"
@@ -16,24 +16,17 @@
     "build-storybook": "build-storybook",
     "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\""
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/userfront/toolkit.git"
-  },
-  "keywords": [
-    "userfront"
-  ],
-  "author": "Userfront",
-  "license": "MIT",
-  "main": "./dist/userfront-react.umd.cjs",
-  "module": "./dist/userfront-react.js",
+  "author": "",
+  "license": "ISC",
+  "main": "./dist/toolkit-react.umd.cjs",
+  "module": "./dist/toolkit-react.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/userfront-react.js",
-      "require": "./dist/userfront-react.umd.cjs"
+      "import": "./dist/toolkit-react.js",
+      "require": "./dist/toolkit-react.umd.cjs"
     },
-    "./themes/": "./dist/"
+    "./style.css": "./dist/style.css"
   },
   "files": [
     "dist"

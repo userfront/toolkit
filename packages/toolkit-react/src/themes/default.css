@@ -172,9 +172,6 @@
   /* Title font size */
   --userfront-title-font-size: 1.5em;
 
-  /* Title font color */
-  --userfront-title-text-color: var(--userfront-text-color);
-
   /* Form-level error message color */
   --userfront-error-text-color: var(--userfront-error-color);
 
@@ -310,17 +307,14 @@
   box-shadow: var(--userfront-container-active-box-shadow);
 }
 
-/* Lists */
+/* Necessary global resets */
 .userfront-toolkit ul {
   padding-left: 0;
-  width: fit-content;
-  margin: 0 auto;
 }
 
 /* Title text */
 .userfront-toolkit h2 {
   font-size: var(--userfront-title-font-size);
-  color: var(--userfront-title-text-color);
   margin-top: 0;
 }
 
@@ -674,7 +668,6 @@
 
 /* Info message */
 .userfront-info-message {
-  margin-top: var(--userfront-spacing);
   margin-bottom: var(--userfront-spacing);
   border-radius: var(--userfront-border-radius);
   display: flex;

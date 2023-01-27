@@ -109,7 +109,7 @@ export const createOnlyFactorCondition = ({
     if (secondFactor) {
       onlyFactor = context.allowedSecondFactors?.[0];
     } else {
-      onlyFactor = context.config.flow?.firstFactors[0];
+      onlyFactor = context.flow.firstFactors[0];
     }
     return (
       onlyFactor.channel === factor.channel &&
