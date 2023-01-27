@@ -23,33 +23,33 @@ const LogInWithPassword = ({ onEvent, allowBack, error }) => {
     }
   };
   return (
-    <form onSubmit={handleSubmit} className="uf-toolkit-form">
-      <div className="uf-toolkit-form-row">
+    <form onSubmit={handleSubmit} className="userfront-form">
+      <div className="userfront-form-row">
         <label htmlFor="email">Username or email address</label>
         <input
-          className="uf-toolkit-input"
+          className="userfront-input"
           type="text"
           name="emailOrUsername"
         ></input>
       </div>
-      <div className="uf-toolkit-form-row">
+      <div className="userfront-form-row">
         <label htmlFor="password">Password</label>
         <input
-          className="uf-toolkit-input"
+          className="userfront-input"
           type="password"
           name="password"
-          aria-describedby="uf-toolkit-password-rules"
+          aria-describedby="userfront-password-rules"
         ></input>
         <span
-          className="uf-toolkit-secondary-text"
-          id="uf-toolkit-password-rules"
+          className="userfront-secondary-text"
+          id="userfront-password-rules"
         >
           At least 16 characters OR at least 8 characters including a number and
           a letter.
         </span>
       </div>
       <ErrorMessage error={error} />
-      <div className="uf-toolkit-button-row">
+      <div className="userfront-button-row">
         {allowBack && <BackButton onEvent={onEvent} />}
         <SubmitButton />
       </div>

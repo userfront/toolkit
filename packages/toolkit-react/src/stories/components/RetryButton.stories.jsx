@@ -8,12 +8,12 @@ import FixedWidth from "../utils/FixedWidth";
 import makePseudoStory from "../utils/pseudo";
 
 const cssVariables = [
-  "--uf-toolkit-spacing",
-  "--uf-toolkit-button-padding",
-  "--uf-toolkit-subtle-button-font-size",
-  "--uf-toolkit-link-color",
-  "--uf-toolkit-font-family",
-  "--uf-toolkit-em-size",
+  "--userfront-spacing",
+  "--userfront-button-padding",
+  "--userfront-subtle-button-font-size",
+  "--userfront-link-color",
+  "--userfront-font-family",
+  "--userfront-em-size",
 ];
 
 export default {

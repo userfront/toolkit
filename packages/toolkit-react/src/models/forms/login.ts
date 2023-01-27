@@ -116,22 +116,27 @@ export const defaultSignupOptions = {
     hasOnlyEmailLinkSecondFactor: createOnlyFactorCondition({
       channel: "email",
       strategy: "link",
+      secondFactor: true,
     }),
     hasOnlyEmailCodeSecondFactor: createOnlyFactorCondition({
       channel: "email",
       strategy: "verificationCode",
+      secondFactor: true,
     }),
     hasOnlySmsCodeSecondFactor: createOnlyFactorCondition({
       channel: "sms",
       strategy: "verificationCode",
+      secondFactor: true,
     }),
     hasOnlyPasswordSecondFactor: createOnlyFactorCondition({
       channel: "email",
       strategy: "password",
+      secondFactor: true,
     }),
     hasOnlyTotpSecondFactor: createOnlyFactorCondition({
       channel: "authenticator",
       strategy: "totp",
+      secondFactor: true,
     }),
     hasOnlySsoSecondFactor: (context: AuthContext<any>) => {
       const factor = context.allowedSecondFactors?.[0];

@@ -7,7 +7,7 @@
 const ContinueButton = (props) => {
   return (
     <button
-      className="uf-toolkit-button uf-toolkit-button-primary"
+      className="userfront-button userfront-button-primary"
       type="submit"
       {...props}
     >

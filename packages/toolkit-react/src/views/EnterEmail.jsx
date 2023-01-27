@@ -21,13 +21,13 @@ const EnterEmail = ({ onEvent, allowBack, error }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="uf-toolkit-form">
-      <div className="uf-toolkit-form-row">
+    <form onSubmit={handleSubmit} className="userfront-form">
+      <div className="userfront-form-row">
         <label htmlFor="email">Email address</label>
-        <input className="uf-toolkit-input" type="email" name="email" />
+        <input className="userfront-input" type="email" name="email" />
       </div>
       <ErrorMessage error={error} />
-      <div className="uf-toolkit-button-row">
+      <div className="userfront-button-row">
         {allowBack && <BackButton onEvent={onEvent} />}
         <SubmitButton />
       </div>

@@ -21,13 +21,13 @@ const EnterPhone = ({ onEvent, allowBack, error }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="uf-toolkit-form">
-      <div className="uf-toolkit-form-row">
+    <form onSubmit={handleSubmit} className="userfront-form">
+      <div className="userfront-form-row">
         <label htmlFor="phoneNumber">Mobile phone number</label>
         <PhoneNumberInput name="phoneNumber" />
       </div>
       <ErrorMessage error={error} />
-      <div className="uf-toolkit-button-row">
+      <div className="userfront-button-row">
         {allowBack && <BackButton onEvent={onEvent} />}
         <SubmitButton />
       </div>

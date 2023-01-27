@@ -49,18 +49,18 @@ const PasswordResetForm = () => {
   return (
     <div
       ref={setContainerRef}
-      className={`uf-toolkit uf-toolkit-container ${sizeClass}`}
+      className={`userfront-toolkit userfront-container ${sizeClass}`}
     >
       <h2>{title}</h2>
       <p>{text}</p>
       {!success && (
-        <form onSubmit={handleSubmit} className="uf-toolkit-form">
-          <div className="uf-toolkit-form-row">
+        <form onSubmit={handleSubmit} className="userfront-form">
+          <div className="userfront-form-row">
             <label htmlFor="email">Email address</label>
-            <input className="uf-toolkit-input" type="email" name="email" />
+            <input className="userfront-input" type="email" name="email" />
           </div>
           <ErrorMessage error={error} />
-          <div className="uf-toolkit-button-row">
+          <div className="userfront-button-row">
             <SubmitButton disabled={loading}>Get reset link</SubmitButton>
           </div>
         </form>

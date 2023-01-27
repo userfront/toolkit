@@ -16,7 +16,10 @@ const emailLinkConfig: AuthMachineConfig = {
           target: "send",
         },
         // When the user presses the back button, go back to the prior (first, second) factor selection view
-        back: "#backToFactors",
+        back: {
+          actions: "clearError",
+          target: "#backToFactors",
+        },
       },
     },
     // Request to send the email link to the given email,

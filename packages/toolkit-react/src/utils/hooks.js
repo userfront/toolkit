@@ -13,13 +13,13 @@ export const useSizeClass = (target) => {
   });
 
   if (size <= 250) {
-    return "uf-toolkit-tiny";
+    return "userfront-tiny";
   }
   if (size <= 350) {
-    return "uf-toolkit-small";
+    return "userfront-small";
   }
   if (size <= 500) {
-    return "uf-toolkit-medium";
+    return "userfront-medium";
   }
-  return "uf-toolkit-large";
+  return "userfront-large";
 };

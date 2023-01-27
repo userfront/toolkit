@@ -41,49 +41,49 @@ const SignUpWithPassword = ({
     }
   };
   return (
-    <form onSubmit={handleSubmit} className="uf-toolkit-form">
+    <form onSubmit={handleSubmit} className="userfront-form">
       {collectUsername && (
-        <div className="uf-toolkit-form-row">
+        <div className="userfront-form-row">
           <label htmlFor="username">Username</label>
           <input
-            className="uf-toolkit-input"
+            className="userfront-input"
             type="text"
             name="username"
           ></input>
         </div>
       )}
-      <div className="uf-toolkit-form-row">
+      <div className="userfront-form-row">
         <label htmlFor="email">Email address</label>
-        <input className="uf-toolkit-input" type="email" name="email"></input>
+        <input className="userfront-input" type="email" name="email"></input>
       </div>
-      <div className="uf-toolkit-form-row">
+      <div className="userfront-form-row">
         <label htmlFor="password">Choose a password</label>
         <input
-          className="uf-toolkit-input"
+          className="userfront-input"
           type="password"
           name="password"
-          aria-describedby="uf-toolkit-password-rules"
+          aria-describedby="userfront-password-rules"
         ></input>
         <span
-          className="uf-toolkit-secondary-text"
-          id="uf-toolkit-password-rules"
+          className="userfront-secondary-text"
+          id="userfront-password-rules"
         >
           At least 16 characters OR at least 8 characters including a number and
           a letter.
         </span>
       </div>
       {requirePasswordConfirmation && (
-        <div className="uf-toolkit-form-row">
+        <div className="userfront-form-row">
           <label htmlFor="confirmPassword">Confirm your password</label>
           <input
-            className="uf-toolkit-input"
+            className="userfront-input"
             type="password"
             name="confirmPassword"
           ></input>
         </div>
       )}
       <ErrorMessage error={error} />
-      <div className="uf-toolkit-button-row">
+      <div className="userfront-button-row">
         {allowBack && <BackButton onEvent={onEvent} />}
         <SubmitButton />
       </div>

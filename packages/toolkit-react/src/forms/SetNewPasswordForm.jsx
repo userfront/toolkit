@@ -66,32 +66,32 @@ const SetNewPasswordForm = ({ shouldConfirmPassword = false }) => {
   return (
     <div
       ref={setContainerRef}
-      className={`uf-toolkit uf-toolkit-container ${sizeClass}`}
+      className={`userfront-toolkit userfront-container ${sizeClass}`}
     >
       <h2>{title}</h2>
       <p>{text}</p>
       {!success && (
-        <form onSubmit={handleSubmit} className="uf-toolkit-form">
-          <div className="uf-toolkit-form-row">
+        <form onSubmit={handleSubmit} className="userfront-form">
+          <div className="userfront-form-row">
             <label htmlFor="password">Choose a new password</label>
             <input
-              className="uf-toolkit-input"
+              className="userfront-input"
               type="password"
               name="password"
             ></input>
           </div>
           {shouldConfirmPassword && (
-            <div className="uf-toolkit-form-row">
+            <div className="userfront-form-row">
               <label htmlFor="confirmPassword">Confirm your new password</label>
               <input
-                className="uf-toolkit-input"
+                className="userfront-input"
                 type="password"
                 name="confirmPassword"
               ></input>
             </div>
           )}
           <ErrorMessage error={error} />
-          <div className="uf-toolkit-button-row">
+          <div className="userfront-button-row">
             <SubmitButton />
           </div>
         </form>

@@ -7,10 +7,10 @@ import {
 import FixedWidth from "../utils/FixedWidth";
 
 const cssVariables = [
-  "--uf-toolkit-divider-color",
-  "--uf-toolkit-spacing",
-  "--uf-toolkit-text-color",
-  "--uf-toolkit-em-size",
+  "--userfront-divider-color",
+  "--userfront-spacing",
+  "--userfront-text-color",
+  "--userfront-em-size",
 ];
 
 export default {

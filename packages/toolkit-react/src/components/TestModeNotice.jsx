@@ -25,8 +25,8 @@ const TestModeNotice = ({ mode }) => {
   }
 
   return (
-    <div className="uf-toolkit-test-mode-notice">
-      <span className="uf-toolkit-test-mode-text">
+    <div className="userfront-test-mode-notice">
+      <span className="userfront-test-mode-text">
         Test Mode: {testModeReason}
       </span>
     </div>

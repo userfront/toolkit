@@ -98,13 +98,15 @@ export const factorConfig = {
 
 // Create a guard/predicate that checks if the given factor
 // is the only possible factor. Checks first or second factor.
-export const createOnlyFactorCondition = (
-  factor: any,
-  asSecondFactor: Boolean = false
-) => {
+export const createOnlyFactorCondition = ({
+  channel,
+  strategy,
+  secondFactor,
+}: any) => {
+  const factor = { channel, strategy };
   return (context: any) => {
     let onlyFactor;
-    if (asSecondFactor) {
+    if (secondFactor) {
       onlyFactor = context.allowedSecondFactors?.[0];
     } else {
       onlyFactor = context.flow.firstFactors[0];

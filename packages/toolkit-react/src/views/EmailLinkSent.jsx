@@ -21,7 +21,7 @@ const EmailLinkSent = ({ onEvent, user, message }) => {
     <div>
       <p>A link has been sent to {user.email}.</p>
       <InfoMessage message={message} />
-      <div className="uf-toolkit-button-row">
+      <div className="userfront-button-row">
         <BackButton onEvent={onEvent} />
         <RetryButton onClick={onResend}>Resend</RetryButton>
       </div>

@@ -22,7 +22,10 @@ const totpCodeConfig: AuthMachineConfig = {
           actions: "setUseBackupCode",
         },
         // Go back to the factor selection view
-        back: "#backToFactors",
+        back: {
+          actions: "clearError",
+          target: "#backToFactors",
+        },
       },
     },
     // Send the login request with the Userfront API

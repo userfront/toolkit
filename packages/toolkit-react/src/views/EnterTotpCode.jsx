@@ -63,28 +63,28 @@ const EnterTotpCode = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="uf-toolkit-form">
+    <form onSubmit={handleSubmit} className="userfront-form">
       {showEmailOrUsername && (
-        <div className="uf-toolkit-form-row">
+        <div className="userfront-form-row">
           <label htmlFor="emailOrUsername">Username or email address</label>
           <input
-            className="uf-toolkit-input"
+            className="userfront-input"
             type="text"
             name="emailOrUsername"
           />
         </div>
       )}
       {useBackupCode ? (
-        <div className="uf-toolkit-form-row">
+        <div className="userfront-form-row">
           <label htmlFor="backupCode">Backup code</label>
-          <input className="uf-toolkit-input" type="tel" name="backupCode" />
+          <input className="userfront-input" type="tel" name="backupCode" />
         </div>
       ) : (
-        <div className="uf-toolkit-form-row">
+        <div className="userfront-form-row">
           <label htmlFor="totpCode">
             Six-digit code from your authenticator app or device
           </label>
-          <input className="uf-toolkit-input" type="tel" name="totpCode" />
+          <input className="userfront-input" type="tel" name="totpCode" />
         </div>
       )}
       {useBackupCode ? (
@@ -97,7 +97,7 @@ const EnterTotpCode = ({
         </AlternativeButton>
       )}
       <ErrorMessage error={error} />
-      <div className="uf-toolkit-button-row">
+      <div className="userfront-button-row">
         {allowBack && <BackButton onEvent={onEvent} />}
         <SubmitButton />
       </div>

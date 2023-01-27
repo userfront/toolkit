@@ -8,21 +8,21 @@ import FixedWidth from "../utils/FixedWidth";
 import makePseudoStory from "../utils/pseudo";
 
 const cssVariables = [
-  "--uf-toolkit-input-text-color",
-  "--uf-toolkit-input-background-color",
-  "--uf-toolkit-input-border",
-  "--uf-toolkit-input-font-size",
-  "--uf-toolkit-input-background-color-active",
-  "--uf-toolkit-input-border-active",
-  "--uf-toolkit-input-border-focus",
-  "--uf-toolkit-input-border-error",
-  "--uf-toolkit-placeholder-color",
-  "--uf-toolkit-placeholder-color-active",
-  "--uf-toolkit-label-alignment",
-  "--uf-toolkit-border-radius",
-  "--uf-toolkit-spacing",
-  "--uf-toolkit-font-family",
-  "--uf-toolkit-em-size",
+  "--userfront-input-text-color",
+  "--userfront-input-background-color",
+  "--userfront-input-border",
+  "--userfront-input-font-size",
+  "--userfront-input-background-color-active",
+  "--userfront-input-border-active",
+  "--userfront-input-border-focus",
+  "--userfront-input-border-error",
+  "--userfront-placeholder-color",
+  "--userfront-placeholder-color-active",
+  "--userfront-label-alignment",
+  "--userfront-border-radius",
+  "--userfront-spacing",
+  "--userfront-font-family",
+  "--userfront-em-size",
 ];
 
 export default {
@@ -73,8 +73,8 @@ const Template = (args) => {
   if (args.labelText) {
     return (
       <FixedWidth width={args.width}>
-        <div className="uf-toolkit-form">
-          <div className="uf-toolkit-form-row">
+        <div className="userfront-form">
+          <div className="userfront-form-row">
             <label>{args.labelText}</label>
             <Input {...stripVariablesFromArgs(newArgs)} />
           </div>

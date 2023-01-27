@@ -6,7 +6,7 @@
  * @returns
  */
 const Input = ({ ...props }) => {
-  return <input className="uf-toolkit-input" {...props} />;
+  return <input className="userfront-input" {...props} />;
 };
 
 export default Input;
