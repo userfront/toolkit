@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "pre:build": "cd ../../node_modules/@userfront/core && npm install && npm run build",
-    "build": "npm run pre:build && tsc && vite build",
+    "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
