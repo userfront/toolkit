@@ -22,6 +22,7 @@ import {
   enableBack,
   setupView,
   readQueryParams,
+  markQueryParamsInvalid,
   setResentMessage,
   clearResentMessage,
 } from "../config/actions";
@@ -203,6 +204,7 @@ export const defaultSignupOptions = {
     enableBack,
     setupView,
     readQueryParams,
+    markQueryParamsInvalid,
     setResentMessage,
     clearResentMessage,
   },
@@ -518,9 +520,9 @@ const signupMachineConfig: AuthMachineConfig = {
         ],
         onError: [
           // If there was a problem logging in with the link token and uuid,
-          // go back to first factor selection and show the error.
+          // Mark the query params invalid, so we don't infinitely retry them.
           {
-            actions: "setErrorFromApiError",
+            actions: ["setErrorFromApiError", "markQueryParamsInvalid"],
             target: "beginFlow",
           },
         ],

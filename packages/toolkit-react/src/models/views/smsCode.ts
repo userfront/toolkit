@@ -69,7 +69,10 @@ const smsCodeConfig: AuthMachineConfig = {
         // The user can ask to resend the code to the same phone number
         resend: "send",
         // The user can go back to the entry screen to use a different phone number
-        back: "showForm",
+        back: {
+          actions: "clearError",
+          target: "showForm",
+        },
       },
     },
     // Check the verification code via the Userfront API

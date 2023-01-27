@@ -259,26 +259,36 @@ const componentForStep = (state) => {
       };
 
     // TOTP flow
-    case "totpCode.showForm":
+    case "totpCode.showForm": {
+      const useBackupCode = state.context.view.useBackupCode;
+      const title = useBackupCode
+        ? "Enter a backup code"
+        : "Enter your six-digit code";
       return {
-        title: "Enter your six-digit code",
+        title,
         Component: EnterTotpCode,
         props: {
           errorMessage: state.context.errorMessage,
-          useBackupCode: state.context.view.useBackupCode,
+          useBackupCode,
           showEmailOrUsername: state.context.view.showEmailOrUsername,
         },
       };
-    case "totpCode.send":
+    }
+    case "totpCode.send": {
+      const useBackupCode = state.context.view.useBackupCode;
+      const title = useBackupCode
+        ? "Enter a backup code"
+        : "Enter your six-digit code";
       return {
-        title: "Enter your six-digit code",
+        title,
         Component: EnterTotpCode,
         props: {
           isLoading: true,
-          useBackupCode: state.context.view.useBackupCode,
+          useBackupCode,
           showEmailOrUsername: state.context.view.showEmailOrUsername,
         },
       };
+    }
     case "totpCode.showTotpSuccess":
       return {
         title: "Verified",

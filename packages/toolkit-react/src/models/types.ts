@@ -132,6 +132,7 @@ export type View =
 export type Query = {
   token?: string;
   uuid?: string;
+  isValid?: boolean;
 };
 
 // The full context for the signup form state machine,

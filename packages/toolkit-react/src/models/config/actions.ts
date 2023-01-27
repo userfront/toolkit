@@ -72,13 +72,27 @@ function getQueryAttr(attrName: string): string {
 }
 
 // Transfer the uuid and token query params to context, if present
-export const readQueryParams = assign(() => {
+export const readQueryParams = assign((context: AuthContext<View>) => {
+  // If query has been marked invalid, don't reset it to valid
+  if (context.query?.isValid === false) {
+    return {};
+  }
   const uuid = getQueryAttr("uuid");
   const token = getQueryAttr("token");
   return {
     query: {
       uuid,
       token,
+      isValid: true,
+    },
+  };
+});
+
+// Clear out query params, for example if they turn out to be invalid
+export const markQueryParamsInvalid = assign(() => {
+  return {
+    query: {
+      isValid: false,
     },
   };
 });
@@ -213,8 +227,8 @@ export const storeFactorResponse = assign(
   (context: TotpCodeContext, event: UserfrontApiFactorResponseEvent) => ({
     view: {
       ...context.view,
-      isMfaRequired: event.data.isMfaRequired,
-      allowedSecondFactors: event.data.authentication?.secondFactors || [],
+      isMfaRequired: event.data?.isMfaRequired,
+      allowedSecondFactors: event.data?.authentication?.secondFactors || [],
     },
   })
 );
