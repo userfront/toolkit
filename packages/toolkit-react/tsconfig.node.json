@@ -5,7 +5,8 @@
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
     "types": [
-      "vitest/importMeta"
+      "vitest/importMeta",
+      "vitest/globals"
     ],
     "baseUrl": ".",
     "paths": {
