@@ -44,6 +44,9 @@ const passwordConfig: AuthMachineConfig = {
             email: context.user.email,
             password: (<PasswordContext>context).view.password,
             redirect: context.config.redirect,
+            options: {
+              noResetEmail: true,
+            },
           };
           if (hasValue(context.user.name)) {
             arg.name = context.user.name;

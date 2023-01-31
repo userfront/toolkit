@@ -1,15 +1,14 @@
 {
-  "name": "toolkit-react",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@userfront/react",
+  "version": "1.0.0-alpha.1",
+  "description": "React bindings and components for authentication with Userfront",
   "type": "module",
   "directories": {
     "test": "test"
   },
   "scripts": {
     "dev": "vite build --watch",
-    "pre:build": "cd ../../node_modules/@userfront/core && npm install && npm run build",
-    "build": "npm run pre:build && tsc && vite build",
+    "build": "tsc && vite build",
     "test": "vitest run",
     "watch": "vitest",
     "coverage": "vitest run --coverage",
@@ -17,17 +16,24 @@
     "build-storybook": "build-storybook",
     "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\""
   },
-  "author": "",
-  "license": "ISC",
-  "main": "./dist/toolkit-react.umd.cjs",
-  "module": "./dist/toolkit-react.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/userfront/toolkit.git"
+  },
+  "keywords": [
+    "userfront"
+  ],
+  "author": "Userfront",
+  "license": "MIT",
+  "main": "./dist/userfront-react.umd.cjs",
+  "module": "./dist/userfront-react.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/toolkit-react.js",
-      "require": "./dist/toolkit-react.umd.cjs"
+      "import": "./dist/userfront-react.js",
+      "require": "./dist/userfront-react.umd.cjs"
     },
-    "./style.css": "./dist/style.css"
+    "./themes/": "./dist/"
   },
   "files": [
     "dist"
@@ -62,7 +68,7 @@
     "fast-check": "^3.3.0",
     "jsdom": "^20.0.3",
     "json": "^11.0.0",
-    "storybook-addon-pseudo-states": "^1.15.1",
+    "storybook-addon-pseudo-states": "1.15.1",
     "typescript": "^4.8.4",
     "vite": "^3.1.4",
     "vite-plugin-dts": "^1.6.4",
