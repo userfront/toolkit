@@ -23,7 +23,7 @@
   --userfront-container-width: auto;
 
   /* Max width of outer container */
-  --userfront-container-max-width: 340px;
+  --userfront-container-max-width: 450px;
 
   /* Height of outer container */
   --userfront-container-height: auto;
@@ -338,51 +338,19 @@
 
 /* Form row: label + input group */
 .userfront-form .userfront-form-row {
+  display: flex;
+  flex-flow: column nowrap;
   margin-bottom: var(--userfront-spacing);
 }
 
 .userfront-form .userfront-form-row label {
   display: block;
+  flex: 1 0 auto;
   margin-left: 1px;
 }
 
 .userfront-form .userfront-form-row input {
   display: block;
-  width: 100%;
-}
-
-/* Inline form row variant, with label on same line as input. */
-/* Not used by default, but can remain available as an option. */
-.userfront-form .userfront-form-row .userfront-form-row-inline {
-  flex: 1 0 auto;
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-}
-
-.userfront-form .userfront-form-row .userfront-form-row-inline label {
-  flex: 0 1 40%;
-}
-
-.userfront-form .userfront-form-row .userfront-form-row-inline input {
-  flex: 1 1 100%;
-  align-self: flex-end;
-}
-
-/* Adjustments for small forms */
-.userfront-small .userfront-form .userfront-form-row,
-.userfront-tiny .userfront-form .userfront-form-row {
-  flex-flow: column nowrap;
-  align-items: stretch;
-}
-
-.userfront-small .userfront-form .userfront-form-row label,
-.userfront-tiny .userfront-form .userfront-form-row label {
-  flex: 1 0 auto;
-}
-
-.userfront-small .userfront-form .userfront-form-row input,
-.userfront-tiny .userfront-form .userfront-form-row input {
   flex: 0 0 auto;
   align-self: stretch;
 }
@@ -399,7 +367,6 @@
   line-height: calc(var(--userfront-input-font-size) * 2);
 
   padding: 0.25em 1em;
-  max-width: calc(100% - 2em - 2px);
 }
 
 .userfront-toolkit input.userfront-input:hover,
