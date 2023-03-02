@@ -662,7 +662,6 @@
 /* Error message */
 
 .userfront-error {
-  margin-bottom: var(--userfront-spacing);
   border-radius: var(--userfront-border-radius);
   display: flex;
   flex-flow: column nowrap;
@@ -674,6 +673,7 @@
   background-color: var(--userfront-error-background-color);
   padding: calc(var(--userfront-spacing) / 2);
   border: 1px solid var(--userfront-error-border-color);
+  margin-bottom: var(--userfront-spacing);
 }
 
 .userfront-error .userfront-error-text {
