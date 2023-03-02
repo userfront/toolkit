@@ -23,7 +23,7 @@
   --userfront-container-width: auto;
 
   /* Max width of outer container */
-  --userfront-container-max-width: 450px;
+  --userfront-container-max-width: 340px;
 
   /* Height of outer container */
   --userfront-container-height: auto;
@@ -33,6 +33,9 @@
 
   /* Margin of outer container */
   --userfront-container-margin: 0 auto;
+
+  /* Padding of outer container */
+  --userfront-container-padding: 2em 1.5em;
 
   /* Toolkit form globals */
   /* Default font size; scales entire form, since sizes are set with em units */
@@ -45,13 +48,13 @@
   --userfront-font-family: Avenir, Helvetica, Arial, sans-serif;
 
   /* Background color of the form */
-  --userfront-background-color: #f8f9fa;
+  --userfront-background-color: #ffffff;
 
   /* Default text and divider color of the form */
   --userfront-text-color: #303133;
 
   /* Muted text color, used for dividers */
-  --userfront-divider-color: #999;
+  --userfront-divider-color: #ccc;
 
   /* Primary color of the form, for primary button background and highlights */
   --userfront-primary-color: #5e72e4;
@@ -69,7 +72,7 @@
   --userfront-primary-color-text: #ffffff;
 
   /* Secondary color, for secondary button background */
-  --userfront-secondary-color: #f8f9fa;
+  --userfront-secondary-color: #ffffff;
 
   /* Hovered and active version of the secondary color */
   --userfront-secondary-color-active: #f2f5fa;
@@ -123,7 +126,7 @@
   --userfront-border-radius: 4px;
 
   /* Background color for text inputs */
-  --userfront-input-background-color: #f8f9fa;
+  --userfront-input-background-color: #ffffff;
 
   /* Active and hovered background color for text inputs */
   --userfront-input-background-color-active: #f8f9fa;
@@ -194,7 +197,7 @@
   --userfront-button-padding: 0.5em;
 
   /* Transform to apply on non-disabled button hover */
-  --userfront-button-hover-transform: scale(1.005);
+  --userfront-button-hover-transform: none;
 
   /* Button icon size - icons are always square */
   --userfront-button-icon-size: 2em;
@@ -290,7 +293,7 @@
   border-radius: var(--userfront-border-radius);
   box-shadow: var(--userfront-container-box-shadow);
 
-  padding: var(--userfront-spacing);
+  padding: var(--userfront-container-padding);
   margin: var(--userfront-container-margin);
 
   width: var(--userfront-container-width);
@@ -394,6 +397,9 @@
 
   font-size: var(--userfront-input-font-size);
   line-height: calc(var(--userfront-input-font-size) * 2);
+
+  padding: 0.25em 1em;
+  max-width: calc(100% - 2em - 2px);
 }
 
 .userfront-toolkit input.userfront-input:hover,
@@ -584,6 +590,10 @@
   justify-content: stretch;
 }
 
+.userfront-toolkit .userfront-button-row:last-child {
+  margin-bottom: 0;
+}
+
 .userfront-toolkit .userfront-button-row > .userfront-button {
   flex: 1 1;
 }
@@ -633,7 +643,7 @@
   flex-flow: row nowrap;
   justify-content: stretch;
   margin-bottom: var(--userfront-spacing);
-  color: var(--userfront-text-color);
+  color: var(--userfront-secondary-color-text);
 }
 
 .userfront-divider-split .userfront-divider {
