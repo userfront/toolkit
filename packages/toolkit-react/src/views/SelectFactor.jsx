@@ -70,7 +70,7 @@ const SelectFactor = ({
       showingPassword = true;
       // Put dividers before and after, as appropriate
       if (i !== 0) {
-        displayItems.push(<Divider text="or" key="before_password" />);
+        displayItems.push(<Divider text="OR" key="before_password" />);
       }
       displayItems.push(
         <PasswordForm
@@ -81,7 +81,7 @@ const SelectFactor = ({
         />
       );
       if (i < factors.length - 1) {
-        displayItems.push(<Divider text="or" key="after_password" />);
+        displayItems.push(<Divider text="OR" key="after_password" />);
       }
     }
   }

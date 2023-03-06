@@ -11,6 +11,7 @@
 const ErrorMessage = ({ error }) => {
   const classes = ["userfront-error"];
   const hasError = !!error;
+
   if (hasError) {
     classes.push("userfront-has-error");
   }
