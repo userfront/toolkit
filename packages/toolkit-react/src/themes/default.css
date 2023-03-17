@@ -393,6 +393,15 @@
   color: var(--userfront-placeholder-color-active);
 }
 
+.userfront-toolkit input.userfront-input-error {
+  border-color: var(--userfront-error-color);
+}
+
+.userfront-toolkit .userfront-input-error-message {
+  color: var(--userfront-error-color);
+  padding: 0.25em 0;
+}
+
 /* Labels for text inputs */
 .userfront-toolkit label {
   width: auto;
