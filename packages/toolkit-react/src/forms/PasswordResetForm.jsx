@@ -2,6 +2,7 @@ import { callUserfront } from "../services/userfront";
 import SubmitButton from "../components/SubmitButton";
 import ErrorMessage from "../components/ErrorMessage";
 import SecuredByUserfront from "../components/SecuredByUserfront";
+import Input from "../components/Input";
 import { useState } from "react";
 import { useSizeClass } from "../utils/hooks";
 
@@ -9,6 +10,8 @@ import { useSizeClass } from "../utils/hooks";
  * Form to request a password reset email.
  */
 const PasswordResetForm = () => {
+  const [emailRequired, setEmailRequired] = useState(false);
+
   // Apply a size-based CSS class based on the container's size
   const [containerRef, setContainerRef] = useState();
   const sizeClass = useSizeClass(containerRef);
@@ -26,10 +29,16 @@ const PasswordResetForm = () => {
   // Otherwise, display the error received from the server.
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);
-    setError(undefined);
     try {
       const email = event.target.elements.email.value;
+
+      // Do not submit if email is missing
+      setEmailRequired(!email);
+      if (!email) return;
+
+      // Submit the form
+      setLoading(true);
+      setError(undefined);
       const response = await callUserfront({
         method: "sendResetLink",
         args: [email],
@@ -56,8 +65,7 @@ const PasswordResetForm = () => {
       {!success && (
         <form onSubmit={handleSubmit} className="userfront-form">
           <div className="userfront-form-row">
-            <label htmlFor="email">Email address</label>
-            <input className="userfront-input" type="email" name="email" />
+            <Input.Email showError={emailRequired} />
           </div>
           <ErrorMessage error={error} />
           <div className="userfront-button-row">

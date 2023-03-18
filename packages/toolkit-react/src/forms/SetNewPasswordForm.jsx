@@ -2,6 +2,7 @@ import { callUserfront } from "../services/userfront";
 import SubmitButton from "../components/SubmitButton";
 import ContinueButton from "../components/ContinueButton";
 import ErrorMessage from "../components/ErrorMessage";
+import Input from "../components/Input";
 import SecuredByUserfront from "../components/SecuredByUserfront";
 import { useState } from "react";
 import { useSizeClass } from "../utils/hooks";
@@ -14,6 +15,8 @@ import { useSizeClass } from "../utils/hooks";
  * @returns
  */
 const SetNewPasswordForm = ({ shouldConfirmPassword = false }) => {
+  const [passwordRequired, setPasswordRequired] = useState(false);
+
   // Apply a CSS class based on the container's size
   const [containerRef, setContainerRef] = useState();
   const sizeClass = useSizeClass(containerRef);
@@ -31,9 +34,9 @@ const SetNewPasswordForm = ({ shouldConfirmPassword = false }) => {
   // On failure, show the error message from the server.
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);
     setError(undefined);
     const password = event.target.elements.password.value;
+
     // Only compare if we're asking users to confirm their password
     const confirmPassword = shouldConfirmPassword
       ? event.target.elements.confirmPassword.value
@@ -45,7 +48,13 @@ const SetNewPasswordForm = ({ shouldConfirmPassword = false }) => {
       });
       return;
     }
+
+    // Do not submit if password is missing
+    setPasswordRequired(!password);
+    if (!password) return;
+
     try {
+      setLoading(true);
       const response = await callUserfront({
         method: "updatePassword",
         args: [{ password }],
@@ -73,21 +82,15 @@ const SetNewPasswordForm = ({ shouldConfirmPassword = false }) => {
       {!success && (
         <form onSubmit={handleSubmit} className="userfront-form">
           <div className="userfront-form-row">
-            <label htmlFor="password">Choose a new password</label>
-            <input
-              className="userfront-input"
-              type="password"
-              name="password"
-            ></input>
+            <Input.Password
+              label="Choose a new password"
+              showError={passwordRequired}
+            />
           </div>
           {shouldConfirmPassword && (
             <div className="userfront-form-row">
               <label htmlFor="confirmPassword">Confirm your new password</label>
-              <input
-                className="userfront-input"
-                type="password"
-                name="confirmPassword"
-              ></input>
+              <Input type="password" name="confirmPassword" />
             </div>
           )}
           <ErrorMessage error={error} />
