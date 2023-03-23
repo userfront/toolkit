@@ -414,6 +414,7 @@
   right: 2px;
   cursor: pointer;
   color: var(--userfront-secondary-color-text);
+  font-size: max(var(--userfront-label-font-size), 13px);
 }
 
 /* Labels for text inputs */
