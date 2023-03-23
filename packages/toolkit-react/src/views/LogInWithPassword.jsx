@@ -1,6 +1,7 @@
 import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
 import ErrorMessage from "../components/ErrorMessage";
+import PasswordInput from "../components/PasswordInput.jsx";
 
 /**
  * A view prompting the user for their username/email and password.
@@ -34,12 +35,7 @@ const LogInWithPassword = ({ onEvent, allowBack, error }) => {
       </div>
       <div className="userfront-form-row">
         <label htmlFor="password">Password</label>
-        <input
-          className="userfront-input"
-          type="password"
-          name="password"
-          aria-describedby="userfront-password-rules"
-        ></input>
+        <PasswordInput />
         <span
           className="userfront-secondary-text"
           id="userfront-password-rules"

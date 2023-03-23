@@ -393,6 +393,17 @@
   color: var(--userfront-placeholder-color-active);
 }
 
+/* Password input */
+.userfront-toolkit .userfront-password-input-container {
+  position: relative;
+  width: 100%;
+  display: block;
+}
+
+.userfront-toolkit .userfront-password-input-container .userfront-input {
+  width: 100%;
+}
+
 /* Labels for text inputs */
 .userfront-toolkit label {
   width: auto;
