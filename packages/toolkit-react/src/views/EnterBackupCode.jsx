@@ -20,7 +20,7 @@ const EnterBackupCode = ({ onEvent, allowBack, error }) => {
     const backupCode = event.target.elements.backupCode.value;
     // Enforce presence of backupCode
     setBackupCodeError(!backupCode);
-    if (backupCodeError) return;
+    if (!backupCode) return;
 
     // TODO @Ryan there is no submit information in this one
   };

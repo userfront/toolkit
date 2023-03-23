@@ -21,7 +21,7 @@ const EnterVerificationCode = ({ onEvent, error }) => {
 
     // Enforce presence of verificationCode
     setVerificationCodeError(!verificationCode);
-    if (verificationCodeError) return;
+    if (!verificationCode) return;
 
     onEvent({
       type: "submit",

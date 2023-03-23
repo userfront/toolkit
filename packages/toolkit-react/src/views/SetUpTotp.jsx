@@ -22,7 +22,7 @@ const EnterTotpCode = ({ qrCode, onEvent, allowBack, error }) => {
     const totpCode = event.target.elements.totpCode.value;
     // Enforce presence of totpCode
     setTotpCodeError(!totpCode);
-    if (totpCodeError) return;
+    if (!totpCode) return;
 
     onEvent({
       type: "submit",

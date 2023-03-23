@@ -22,6 +22,7 @@ const EnterEmail = ({ onEvent, allowBack, error }) => {
     // Enforce presence of email
     const email = event.target.elements.email.value;
     setEmailError(!email);
+    if (!email) return;
 
     if (onEvent && !emailError) {
       onEvent({

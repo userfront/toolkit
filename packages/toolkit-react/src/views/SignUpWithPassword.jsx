@@ -22,15 +22,17 @@ const SignUpWithPassword = ({
   requirePasswordConfirmation = false,
   error,
 }) => {
-  const [emailRequired, setEmailRequired] = useState(false);
-  const [passwordRequired, setPasswordRequired] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const elements = event.target.elements;
 
-    setEmailRequired(!elements.email.value);
-    setPasswordRequired(!elements.password.value);
+    // Enforce presence of email & password
+    setEmailError(!elements.email.value);
+    setPasswordError(!elements.password.value);
+    if (!elements.email.value || !elements.password.value) return;
 
     // If password confirmation is not required, put the password in that field so validation passes
     const confirmPassword = requirePasswordConfirmation
@@ -62,13 +64,10 @@ const SignUpWithPassword = ({
         </div>
       )}
       <div className="userfront-form-row">
-        <Input.Email label="Email address" showError={emailRequired} />
+        <Input.Email label="Email address" showError={emailError} />
       </div>
       <div className="userfront-form-row">
-        <Input.Password
-          label="Choose a password"
-          showError={passwordRequired}
-        />
+        <Input.Password label="Choose a password" showError={passwordError} />
         <span
           className="userfront-secondary-text"
           id="userfront-password-rules"

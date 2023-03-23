@@ -37,14 +37,14 @@ const EnterTotpCode = ({
     // Enforce presence of emailOrUsername if visible
     if (showEmailOrUsername) {
       setEmailOrUsernameError(!elements.emailOrUsername.value);
-      if (emailOrUsernameError) return;
+      if (!elements.emailOrUsername.value) return;
     }
 
     // backupCode
     if (useBackupCode) {
       // Check that the backup code is present
       setBackupCodeError(!elements.backupCode.value);
-      if (backupCodeError) return;
+      if (!elements.backupCode.value) return;
 
       // Submit the backup code
       const eventData = {
@@ -59,7 +59,7 @@ const EnterTotpCode = ({
       // totpCode
       // Check that the totpCode is present
       setTotpCodeError(!elements.totpCode.value);
-      if (totpCodeError) return;
+      if (!elements.totpCode.value) return;
 
       // Submit the totpCode
       const eventData = {

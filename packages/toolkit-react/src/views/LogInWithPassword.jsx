@@ -20,10 +20,12 @@ const LogInWithPassword = ({ onEvent, allowBack, error }) => {
     event.preventDefault();
     const elements = event.target.elements;
 
+    // Enforce presence of emailOrUsername & password
     setEmailOrUsernameError(!elements.emailOrUsername.value);
     setPasswordError(!elements.password.value);
+    if (!elements.emailOrUsername.value || !elements.password.value) return;
 
-    if (onEvent && !emailOrUsernameError && !passwordError) {
+    if (onEvent) {
       onEvent({
         type: "submit",
         emailOrUsername: elements.emailOrUsername.value,
