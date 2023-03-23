@@ -292,12 +292,12 @@ const componentForStep = (state) => {
           qrCode: state.context.view.qrCode || "",
         },
       };
-    case "totpCode.showTotpBackupCodes":
+    case "totpCode.showBackupCodes":
       return {
         title: "Save your backup codes",
         Component: SetUpTotpSuccess,
         props: {
-          totpBackupCodes: state.context.view.totpBackupCodes || [],
+          backupCodes: state.context.view.backupCodes || [],
         },
       };
     case "totpCode.showTotpSetupComplete":

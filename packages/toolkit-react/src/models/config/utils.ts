@@ -72,12 +72,12 @@ export const factorConfig = {
       showEmailOrUsername: false,
 
       // Properties for TOTP login
-      useTotpBackupCode: false,
-      totpBackupCode: "",
+      useBackupCode: false,
+      backupCode: "",
 
       // Properties for TOTP setup
       qrCode: "",
-      totpBackupCodes: [],
+      backupCodes: [],
       isMfaRequired: false,
       allowedSecondFactors: [],
     },

@@ -182,7 +182,7 @@ export const setQrCode = assign(
     view: {
       ...context.view,
       qrCode: event.data.qrCode,
-      totpBackupCodes: event.data.totpBackupCodes,
+      backupCodes: event.data.backupCodes,
     },
   })
 );
@@ -202,7 +202,7 @@ export const setUseBackupCode = assign(
   (context: TotpCodeContext, event: UseBackupCodeEvent) => ({
     view: {
       ...context.view,
-      useTotpBackupCode: event.useTotpBackupCode,
+      useBackupCode: event.useBackupCode,
     },
   })
 );

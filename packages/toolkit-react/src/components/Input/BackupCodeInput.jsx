@@ -1,6 +1,6 @@
 import BaseInput from "./BaseInput";
 
-export default function TotpBackupCodeInput({
+export default function BackupCodeInput({
   label = "Backup code",
   placeholder,
   showError,
@@ -10,7 +10,7 @@ export default function TotpBackupCodeInput({
     <BaseInput
       label={label}
       type="tel"
-      name="totpBackupCode"
+      name="backupCode"
       placeholder={placeholder}
       showError={showError}
       errorMessage={errorMessage}

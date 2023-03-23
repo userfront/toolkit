@@ -18,7 +18,7 @@ const totpCodeConfig: AuthMachineConfig = {
           target: "send",
         },
         // Go to the backup code entry view
-        useTotpBackupCode: {
+        useBackupCode: {
           actions: "setUseBackupCode",
         },
         // Go back to the factor selection view
@@ -32,15 +32,15 @@ const totpCodeConfig: AuthMachineConfig = {
     send: {
       entry: "clearError",
       invoke: {
-        // Set totpCode or totpBackupCode and possibly emailOrUsername as arguments and call the method
+        // Set totpCode or backupCode and possibly emailOrUsername as arguments and call the method
         src: (_context) => {
           const context = <TotpCodeContext>_context;
           const arg: Record<string, any> = {
             method: "totp",
             redirect: context.config.redirect,
           };
-          if (context.view.useTotpBackupCode) {
-            arg.totpBackupCode = <string>context.view.totpBackupCode;
+          if (context.view.useBackupCode) {
+            arg.backupCode = <string>context.view.backupCode;
           } else {
             arg.totpCode = context.view.totpCode;
           }
@@ -83,12 +83,12 @@ const totpCodeConfig: AuthMachineConfig = {
     sendBackupCode: {
       entry: "clearError",
       invoke: {
-        // Set totpBackupCode and possibly emailOrUsername as arguments and call the method
+        // Set backupCode and possibly emailOrUsername as arguments and call the method
         src: (_context) => {
           const context = <TotpCodeContext>_context;
           const arg: Record<string, any> = {
             method: "totp",
-            totpBackupCode: <string>context.view.totpBackupCode,
+            backupCode: <string>context.view.backupCode,
             redirect: context.config.redirect,
           };
           if (context.view.emailOrUsername) {

@@ -12,15 +12,15 @@ import Input from "../components/Input";
  * @param {function} onEvent
  */
 const EnterBackupCode = ({ onEvent, allowBack, error }) => {
-  const [totpBackupCodeError, setTotpBackupCodeError] = useState(false);
+  const [backupCodeError, setBackupCodeError] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const totpBackupCode = event.target.elements.totpBackupCode.value;
-    // Enforce presence of totpBackupCode
-    setTotpBackupCodeError(!totpBackupCode);
-    if (totpBackupCodeError) return;
+    const backupCode = event.target.elements.backupCode.value;
+    // Enforce presence of backupCode
+    setBackupCodeError(!backupCode);
+    if (backupCodeError) return;
 
     // TODO @Ryan there is no submit information in this one
   };
@@ -28,7 +28,7 @@ const EnterBackupCode = ({ onEvent, allowBack, error }) => {
   return (
     <form onSubmit={handleSubmit} className="userfront-form">
       <div className="userfront-form-row">
-        <Input.TotpBackupCode showError={totpBackupCodeError} />
+        <Input.BackupCode showError={backupCodeError} />
       </div>
       <ErrorMessage error={error} />
       <div className="userfront-button-row">

@@ -4,7 +4,7 @@ import EmailInput from "./EmailInput";
 import EmailOrUsernameInput from "./EmailOrUsernameInput";
 import PasswordInput from "./PasswordInput";
 import TotpCodeInput from "./TotpCodeInput";
-import TotpBackupCodeInput from "./TotpBackupCodeInput";
+import BackupCodeInput from "./BackupCodeInput";
 import VerificationCodeInput from "./VerificationCodeInput";
 
 /**
@@ -16,7 +16,7 @@ export default class Input extends Component {
   static EmailOrUsername = EmailOrUsernameInput;
   static Password = PasswordInput;
   static TotpCode = TotpCodeInput;
-  static TotpBackupCode = TotpBackupCodeInput;
+  static BackupCode = BackupCodeInput;
   static VerificationCode = VerificationCodeInput;
 
   render() {

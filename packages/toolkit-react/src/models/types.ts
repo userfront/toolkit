@@ -83,12 +83,12 @@ export interface TotpCode extends CommonFormData {
   totpCode: string;
 
   // Data for login
-  totpBackupCode?: string;
-  useTotpBackupCode?: boolean;
+  backupCode?: string;
+  useBackupCode?: boolean;
 
   // Data for signup
   qrCode?: string;
-  totpBackupCodes?: string[];
+  backupCodes?: string[];
   allowedSecondFactors?: Factor[];
   isMfaRequired?: boolean;
 }
@@ -204,7 +204,7 @@ export type UserfrontApiFetchQrCodeEvent = {
   type: "done";
   data: {
     qrCode: string;
-    totpBackupCodes: string[];
+    backupCodes: string[];
   };
 };
 
@@ -273,13 +273,13 @@ export type PhoneNumberSubmitEvent = {
 export type TotpCodeSubmitEvent = {
   type: "submit";
   totpCode?: string;
-  totpBackupCode?: string;
+  backupCode?: string;
   emailOrUsername?: string;
 };
 
 export type UseBackupCodeEvent = {
-  type: "useTotpBackupCode";
-  useTotpBackupCode: boolean;
+  type: "useBackupCode";
+  useBackupCode: boolean;
 };
 
 export type SelectFactorEvent = {

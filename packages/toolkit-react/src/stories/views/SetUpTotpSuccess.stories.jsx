@@ -72,7 +72,7 @@ export default {
 };
 
 export const Default = (args, { style }) => {
-  const totpBackupCodes = [
+  const backupCodes = [
     "482391",
     "820340",
     "387412",
@@ -98,10 +98,7 @@ export const Default = (args, { style }) => {
     return (
       <FixedWidth width={args.width}>
         <ViewContainer style={style} sizeClass={sizeClass} title={args.title}>
-          <SetUpTotpSuccess
-            totpBackupCodes={totpBackupCodes}
-            onEvent={() => {}}
-          />
+          <SetUpTotpSuccess backupCodes={backupCodes} onEvent={() => {}} />
         </ViewContainer>
       </FixedWidth>
     );
@@ -124,10 +121,7 @@ export const Default = (args, { style }) => {
   return (
     <FixedWidth width={width}>
       <ViewContainer style={style} sizeClass={args.size} title={args.title}>
-        <SetUpTotpSuccess
-          totpBackupCodes={totpBackupCodes}
-          onEvent={() => {}}
-        />
+        <SetUpTotpSuccess backupCodes={backupCodes} onEvent={() => {}} />
       </ViewContainer>
     </FixedWidth>
   );
