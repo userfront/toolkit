@@ -1,7 +1,9 @@
+import { useState } from "react";
 import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
 import AlternativeButton from "../components/AlternativeButton";
 import ErrorMessage from "../components/ErrorMessage";
+import Input from "../components/Input";
 
 /**
  * A view prompting the user to enter their TOTP authenticator code,
@@ -10,7 +12,7 @@ import ErrorMessage from "../components/ErrorMessage";
  * @param {object} props
  * @param {boolean} props.showEmailOrUsername - if true, show an input for the user's email or username.
  *   Necessary if this is the first factor. Unnecessary for a second factor.
- * @param {boolean} props.useBackupCode - if true, show the UI for entering a backup code instead of
+ * @param {boolean} props.useTotpBackupCode - if true, show the UI for entering a backup code instead of
  *   for entering a code from the authenticator app.
  * @param {boolean} props.allowBack - if true, show a Back button
  * @param {object} error - a Userfront error to display
@@ -18,29 +20,54 @@ import ErrorMessage from "../components/ErrorMessage";
  */
 const EnterTotpCode = ({
   showEmailOrUsername = false,
-  useBackupCode = false,
+  useTotpBackupCode = false,
   onEvent,
   allowBack,
   error,
 }) => {
+  const [emailOrUsernameError, setEmailOrUsernameError] = useState(false);
+  const [totpCodeError, setTotpCodeError] = useState(false);
+  const [totpBackupCodeError, setTotpBackupCodeError] = useState(false);
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (useBackupCode) {
+
+    const elements = event.target.elements;
+
+    // Enforce presence of emailOrUsername if visible
+    if (showEmailOrUsername) {
+      setEmailOrUsernameError(!elements.emailOrUsername.value);
+      if (emailOrUsernameError) return;
+    }
+
+    // totpBackupCode
+    if (useTotpBackupCode) {
+      // Check that the backup code is present
+      setTotpBackupCodeError(!elements.totpBackupCode.value);
+      if (totpBackupCodeError) return;
+
+      // Submit the backup code
       const eventData = {
         type: "submit",
-        backupCode: event.target.elements.backupCode.value,
+        totpBackupCode: elements.totpBackupCode.value,
       };
-      if (event.target.elements.emailOrUsername?.value) {
-        eventData.emailOrUsername = event.target.elements.emailOrUsername.value;
+      if (elements.emailOrUsername?.value) {
+        eventData.emailOrUsername = elements.emailOrUsername.value;
       }
       onEvent(eventData);
     } else {
+      // totpCode
+      // Check that the totpCode is present
+      setTotpCodeError(!elements.totpCode.value);
+      if (totpCodeError) return;
+
+      // Submit the totpCode
       const eventData = {
         type: "submit",
-        totpCode: event.target.elements.totpCode.value,
+        totpCode: elements.totpCode.value,
       };
       if (event.target.elements.emailOrUsername?.value) {
-        eventData.emailOrUsername = event.target.elements.emailOrUsername.value;
+        eventData.emailOrUsername = emailOrUsername.value;
       }
       onEvent(eventData);
     }
@@ -49,16 +76,16 @@ const EnterTotpCode = ({
   const handleUseTotpCode = (event) => {
     event.preventDefault();
     onEvent({
-      type: "useBackupCode",
-      useBackupCode: false,
+      type: "useTotpBackupCode",
+      useTotpBackupCode: false,
     });
   };
 
   const handleUseBackupCode = (event) => {
     event.preventDefault();
     onEvent({
-      type: "useBackupCode",
-      useBackupCode: true,
+      type: "useTotpBackupCode",
+      useTotpBackupCode: true,
     });
   };
 
@@ -66,28 +93,25 @@ const EnterTotpCode = ({
     <form onSubmit={handleSubmit} className="userfront-form">
       {showEmailOrUsername && (
         <div className="userfront-form-row">
-          <label htmlFor="emailOrUsername">Username or email address</label>
-          <input
-            className="userfront-input"
-            type="text"
-            name="emailOrUsername"
-          />
+          <Input.EmailOrUsername showError={emailOrUsernameError} />
         </div>
       )}
-      {useBackupCode ? (
+      {useTotpBackupCode ? (
         <div className="userfront-form-row">
-          <label htmlFor="backupCode">Backup code</label>
-          <input className="userfront-input" type="tel" name="backupCode" />
+          <Input.TotpBackupCode showError={totpBackupCodeError} />
         </div>
       ) : (
         <div className="userfront-form-row">
-          <label htmlFor="totpCode">
-            Six-digit code from your authenticator app or device
-          </label>
-          <input className="userfront-input" type="tel" name="totpCode" />
+          <Input.TotpCode showError={totpCodeError} />
         </div>
       )}
-      {useBackupCode ? (
+      <ErrorMessage error={error} />
+      <div className="userfront-button-row">
+        {allowBack && <BackButton onEvent={onEvent} />}
+        <SubmitButton />
+      </div>
+
+      {useTotpBackupCode ? (
         <AlternativeButton onClick={handleUseTotpCode}>
           Use a code from your authenticator app or device
         </AlternativeButton>
@@ -96,11 +120,6 @@ const EnterTotpCode = ({
           Use a backup code
         </AlternativeButton>
       )}
-      <ErrorMessage error={error} />
-      <div className="userfront-button-row">
-        {allowBack && <BackButton onEvent={onEvent} />}
-        <SubmitButton />
-      </div>
     </form>
   );
 };

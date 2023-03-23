@@ -73,12 +73,12 @@ const setUpTotpConfig: AuthMachineConfig = {
         // When verified, show the backup codes so the user can record them
         onDone: {
           actions: "storeFactorResponse",
-          target: "showBackupCodes",
+          target: "showTotpBackupCodes",
         },
       },
     },
     // Show the user's backup codes once TOTP setup succeeds
-    showBackupCodes: {
+    showTotpBackupCodes: {
       on: {
         // Proceed to the second factor if required,
         // otherwise show a message and redirect

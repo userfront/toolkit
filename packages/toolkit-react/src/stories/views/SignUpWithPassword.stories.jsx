@@ -40,6 +40,11 @@ export default {
       description: "Should the view offer a Back button to the user?",
       control: "boolean",
     },
+    collectUsername: {
+      name: "Collect username",
+      description: "Allow the user to choose their own username upon signup.",
+      control: "boolean",
+    },
     error: {
       name: "Error message",
       description: "If there is an error message, the view will show it.",
@@ -126,6 +131,7 @@ const Template = (args, { style }) => {
       <ViewContainer style={style} sizeClass={args.size} title={args.title}>
         <SignUpWithPassword
           allowBack={args.allowBack}
+          collectUsername={args.collectUsername}
           error={error}
           onEvent={() => {}}
         />
@@ -137,6 +143,7 @@ const Template = (args, { style }) => {
 export const Default = Template.bind({});
 Default.args = {
   allowBack: true,
+  collectUsername: false,
   error: "",
   size: "userfront-medium",
   width: 0,
@@ -146,6 +153,7 @@ Default.args = {
 export const WithError = Template.bind({});
 WithError.args = {
   allowBack: true,
+  collectUsername: false,
   error:
     "The passwords didn't match. Please ensure the passwords match and try again.",
   size: "userfront-medium",
@@ -157,6 +165,7 @@ WithError.storyName = "With error message";
 export const NoBack = Template.bind({});
 NoBack.args = {
   allowBack: false,
+  collectUsername: false,
   error: "",
   size: "userfront-medium",
   width: 0,

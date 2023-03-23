@@ -260,8 +260,8 @@ const componentForStep = (state) => {
 
     // TOTP flow
     case "totpCode.showForm": {
-      const useBackupCode = state.context.view.useBackupCode;
-      const title = useBackupCode
+      const useTotpBackupCode = state.context.view.useTotpBackupCode;
+      const title = useTotpBackupCode
         ? "Enter a backup code"
         : "Enter your six-digit code";
       return {
@@ -269,14 +269,14 @@ const componentForStep = (state) => {
         Component: EnterTotpCode,
         props: {
           errorMessage: state.context.errorMessage,
-          useBackupCode,
+          useTotpBackupCode,
           showEmailOrUsername: state.context.view.showEmailOrUsername,
         },
       };
     }
     case "totpCode.send": {
-      const useBackupCode = state.context.view.useBackupCode;
-      const title = useBackupCode
+      const useTotpBackupCode = state.context.view.useTotpBackupCode;
+      const title = useTotpBackupCode
         ? "Enter a backup code"
         : "Enter your six-digit code";
       return {
@@ -284,7 +284,7 @@ const componentForStep = (state) => {
         Component: EnterTotpCode,
         props: {
           isLoading: true,
-          useBackupCode,
+          useTotpBackupCode,
           showEmailOrUsername: state.context.view.showEmailOrUsername,
         },
       };

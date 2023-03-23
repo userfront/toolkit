@@ -1,6 +1,8 @@
+import { useState } from "react";
 import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
 import ErrorMessage from "../components/ErrorMessage";
+import Input from "../components/Input";
 
 /**
  * A view prompting the user to enter an email address,
@@ -12,19 +14,27 @@ import ErrorMessage from "../components/ErrorMessage";
  * @param {function} onEvent
  */
 const EnterEmail = ({ onEvent, allowBack, error }) => {
+  const [emailError, setEmailError] = useState(false);
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    onEvent({
-      type: "submit",
-      email: event.target.elements.email.value,
-    });
+
+    // Enforce presence of email
+    const email = event.target.elements.email.value;
+    setEmailError(!email);
+
+    if (onEvent && !emailError) {
+      onEvent({
+        type: "submit",
+        email,
+      });
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="userfront-form">
       <div className="userfront-form-row">
-        <label htmlFor="email">Email address</label>
-        <input className="userfront-input" type="email" name="email" />
+        <Input.Email showError={emailError} />
       </div>
       <ErrorMessage error={error} />
       <div className="userfront-button-row">

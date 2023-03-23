@@ -1,6 +1,8 @@
+import { useState } from "react";
 import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
 import ErrorMessage from "../components/ErrorMessage";
+import Input from "../components/Input";
 
 /**
  * A view prompting the user to enter the verification code they received by email or SMS.
@@ -10,19 +12,27 @@ import ErrorMessage from "../components/ErrorMessage";
  * @param {function} onEvent
  */
 const EnterVerificationCode = ({ onEvent, error }) => {
+  const [verificationCodeError, setVerificationCodeError] = useState(false);
+
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    const verificationCode = event.target.elements.verificationCode.value;
+
+    // Enforce presence of verificationCode
+    setVerificationCodeError(!verificationCode);
+    if (verificationCodeError) return;
+
     onEvent({
       type: "submit",
-      verificationCode: event.target.elements.verificationCode.value,
+      verificationCode,
     });
   };
 
   return (
     <form onSubmit={handleSubmit} className="userfront-form">
       <div className="userfront-form-row">
-        <label htmlFor="verificationCode">Enter your code</label>
-        <input className="userfront-input" type="tel" name="verificationCode" />
+        <Input.VerificationCode showError={verificationCodeError} />
       </div>
       <ErrorMessage error={error} />
       <div className="userfront-button-row">

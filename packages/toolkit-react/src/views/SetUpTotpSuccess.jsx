@@ -5,10 +5,10 @@ import ContinueButton from "../components/ContinueButton";
  * and to display backup codes so the user can record them.
  *
  * @param {object} props
- * @param {array} props.backupCodes - array of strings
+ * @param {array} props.totpBackupCodes - array of strings
  * @param {function} onEvent
  */
-const SetUpTotpSuccess = ({ backupCodes, onEvent }) => {
+const SetUpTotpSuccess = ({ totpBackupCodes, onEvent }) => {
   const handleContinue = (event) => {
     event.preventDefault();
     onEvent({
@@ -24,7 +24,7 @@ const SetUpTotpSuccess = ({ backupCodes, onEvent }) => {
         these codes down and store them in a safe place.
       </p>
       <ul>
-        {backupCodes.map((code) => (
+        {totpBackupCodes.map((code) => (
           <li key={code}>{code}</li>
         ))}
       </ul>

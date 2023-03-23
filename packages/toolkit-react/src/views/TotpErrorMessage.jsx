@@ -20,8 +20,8 @@ const TotpErrorMessage = ({ onEvent, allowBack, error }) => {
   return (
     <div>
       <p>
-        Uh oh, we couldn't retrieve your authenticator setup information. Please
-        choose a different method, or try again later.
+        We could not retrieve your authenticator information. Please choose a
+        different method or try again.
       </p>
       <ErrorMessage error={error} />
       {allowBack && <BackButton onEvent={onEvent} />}
