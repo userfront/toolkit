@@ -34,7 +34,6 @@ const LogInWithPassword = ({ onEvent, allowBack, error }) => {
         ></input>
       </div>
       <div className="userfront-form-row">
-        <label htmlFor="password">Password</label>
         <PasswordInput />
         <span
           className="userfront-secondary-text"

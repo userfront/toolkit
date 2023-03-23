@@ -397,11 +397,23 @@
 .userfront-toolkit .userfront-password-input-container {
   position: relative;
   width: 100%;
-  display: block;
+  display: flex;
+  flex-flow: column nowrap;
 }
 
 .userfront-toolkit .userfront-password-input-container .userfront-input {
-  width: 100%;
+  padding-right: 3.5em;
+}
+
+.userfront-toolkit
+  .userfront-password-input-container
+  .userfront-password-toggle {
+  position: absolute;
+  padding: 0.5em 0.75em;
+  top: 2px;
+  right: 2px;
+  cursor: pointer;
+  color: var(--userfront-secondary-color-text);
 }
 
 /* Labels for text inputs */
