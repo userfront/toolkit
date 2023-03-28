@@ -393,6 +393,37 @@
   color: var(--userfront-placeholder-color-active);
 }
 
+/* Password input */
+.userfront-toolkit .userfront-password-input-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.userfront-toolkit .userfront-password-input-container .userfront-input {
+  padding-right: calc(max(var(--userfront-label-font-size), 16px) + 1.5rem);
+}
+
+.userfront-toolkit
+  .userfront-password-input-container
+  .userfront-password-toggle {
+  position: absolute;
+  /* shift padding toward the top to align icon with text center line */
+  /* horizontal padding is in rem as it does not need to vary with input font size */
+  padding: 0.6em 0.75rem 0.4em;
+  right: 3px;
+  height: calc(100% - 1em); /* 100% - 1em total vertical padding */
+  /* flex/center/center to center the icon within its container */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--userfront-placeholder-color);
+  font-size: max(var(--userfront-label-font-size), 13px);
+  width: max(var(--userfront-label-font-size), 16px);
+}
+
 .userfront-toolkit input.userfront-input-error {
   border-color: var(--userfront-error-color);
 }
