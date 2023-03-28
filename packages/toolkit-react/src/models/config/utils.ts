@@ -77,7 +77,7 @@ export const factorConfig = {
 
       // Properties for TOTP setup
       qrCode: "",
-      totpBackupCodes: [],
+      backupCodes: [],
       isMfaRequired: false,
       allowedSecondFactors: [],
     },

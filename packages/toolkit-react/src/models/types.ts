@@ -88,7 +88,7 @@ export interface TotpCode extends CommonFormData {
 
   // Data for signup
   qrCode?: string;
-  totpBackupCodes?: string[];
+  backupCodes?: string[];
   allowedSecondFactors?: Factor[];
   isMfaRequired?: boolean;
 }
