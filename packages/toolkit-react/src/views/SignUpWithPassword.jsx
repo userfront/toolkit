@@ -1,6 +1,8 @@
+import { useState } from "react";
 import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
 import ErrorMessage from "../components/ErrorMessage";
+import Input from "../components/Input";
 
 /**
  * View to allow a user to sign up with a username/email and password
@@ -20,9 +22,18 @@ const SignUpWithPassword = ({
   requirePasswordConfirmation = false,
   error,
 }) => {
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const elements = event.target.elements;
+
+    // Enforce presence of email & password
+    setEmailError(!elements.email.value);
+    setPasswordError(!elements.password.value);
+    if (!elements.email.value || !elements.password.value) return;
+
     // If password confirmation is not required, put the password in that field so validation passes
     const confirmPassword = requirePasswordConfirmation
       ? elements.confirmPassword.value
@@ -53,17 +64,10 @@ const SignUpWithPassword = ({
         </div>
       )}
       <div className="userfront-form-row">
-        <label htmlFor="email">Email address</label>
-        <input className="userfront-input" type="email" name="email"></input>
+        <Input.Email label="Email address" showError={emailError} />
       </div>
       <div className="userfront-form-row">
-        <label htmlFor="password">Choose a password</label>
-        <input
-          className="userfront-input"
-          type="password"
-          name="password"
-          aria-describedby="userfront-password-rules"
-        ></input>
+        <Input.Password label="Choose a password" showError={passwordError} />
         <span
           className="userfront-secondary-text"
           id="userfront-password-rules"

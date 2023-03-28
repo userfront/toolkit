@@ -82,15 +82,16 @@ The logout button, password reset request form, and password reset form are simp
 
 The `src` directory contains the package's source:
 
-- `assets` - static assets
-- `themes` - CSS files
-- `components` - basic components for the forms: buttons, inputs, etc.
-- `views` - views for the signup and login forms
-- `models` - each view, and the login and signup form, has an XState model in this folder
-- `forms` - the "plain" forms, without models. The login and signup forms here are more for test usage.
-- `packaged-forms` - the "packaged" login and signup forms, connected to appropriate models, for client usage.
-- `services`, `utils` - internal tools
-- `stories` - Storybook stories.
+- `src/assets` - static assets
+- `src/themes` - CSS files
+- `src/components` - basic components for the forms: buttons, inputs, etc.
+- `src/views` - views for the signup and login forms
+- `src/models` - each view, and the login and signup form, has an XState model in this folder
+- `src/forms` - the "plain" forms, without models. The login and signup forms here are more for test usage.
+- `src/packaged-forms` - the "packaged" login and signup forms, connected to appropriate models, for client usage.
+- `src/services` - internal tools
+- `src/utils` - internal tools
+- `src/stories` - Storybook stories.
 
 **CSS**
 

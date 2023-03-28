@@ -1,7 +1,8 @@
+import { useState } from "react";
 import SubmitButton from "../components/SubmitButton";
 import BackButton from "../components/BackButton";
 import ErrorMessage from "../components/ErrorMessage";
-import PasswordInput from "../components/PasswordInput.jsx";
+import Input from "../components/Input";
 
 /**
  * A view prompting the user for their username/email and password.
@@ -12,9 +13,18 @@ import PasswordInput from "../components/PasswordInput.jsx";
  * @param {function} onEvent
  */
 const LogInWithPassword = ({ onEvent, allowBack, error }) => {
+  const [emailOrUsernameError, setEmailOrUsernameError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const elements = event.target.elements;
+
+    // Enforce presence of emailOrUsername & password
+    setEmailOrUsernameError(!elements.emailOrUsername.value);
+    setPasswordError(!elements.password.value);
+    if (!elements.emailOrUsername.value || !elements.password.value) return;
+
     if (onEvent) {
       onEvent({
         type: "submit",
@@ -26,15 +36,10 @@ const LogInWithPassword = ({ onEvent, allowBack, error }) => {
   return (
     <form onSubmit={handleSubmit} className="userfront-form">
       <div className="userfront-form-row">
-        <label htmlFor="email">Username or email address</label>
-        <input
-          className="userfront-input"
-          type="text"
-          name="emailOrUsername"
-        ></input>
+        <Input.EmailOrUsername showError={emailOrUsernameError} />
       </div>
       <div className="userfront-form-row">
-        <PasswordInput />
+        <Input.Password showError={passwordError} />
         <span
           className="userfront-secondary-text"
           id="userfront-password-rules"

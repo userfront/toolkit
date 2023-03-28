@@ -40,6 +40,11 @@ export default {
       description: "Should the view offer a Back button to the user?",
       control: "boolean",
     },
+    showEmailOrUsername: {
+      name: "Show emailOrUsername",
+      description: "Should the emailOrUsername input be displayed?",
+      control: "boolean",
+    },
     error: {
       name: "Error message",
       description: "If there is an error message, the view will show it.",
@@ -126,6 +131,7 @@ const Template = (args, { style }) => {
       <ViewContainer style={style} sizeClass={args.size} title={args.title}>
         <EnterTotpCode
           allowBack={args.allowBack}
+          showEmailOrUsername={args.showEmailOrUsername}
           error={error}
           onEvent={() => {}}
         />
@@ -137,6 +143,7 @@ const Template = (args, { style }) => {
 export const Default = Template.bind({});
 Default.args = {
   allowBack: true,
+  showEmailOrUsername: false,
   error: "",
   size: "userfront-medium",
   width: 0,
@@ -146,6 +153,7 @@ Default.args = {
 export const WithError = Template.bind({});
 WithError.args = {
   allowBack: true,
+  showEmailOrUsername: false,
   error: "That code was not correct. Please try again.",
   size: "userfront-medium",
   width: 0,
@@ -156,6 +164,7 @@ WithError.storyName = "With error message";
 export const NoBack = Template.bind({});
 NoBack.args = {
   allowBack: false,
+  showEmailOrUsername: false,
   error: "",
   size: "userfront-medium",
   width: 0,
