@@ -1,6 +1,6 @@
 {
   "name": "@userfront/react",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.7",
   "description": "React bindings and components for authentication with Userfront",
   "type": "module",
   "directories": {
@@ -13,8 +13,7 @@
     "watch": "vitest",
     "coverage": "vitest run --coverage",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\""
+    "build-storybook": "build-storybook"
   },
   "repository": {
     "type": "git",

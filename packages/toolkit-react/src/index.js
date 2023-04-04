@@ -1,31 +1,36 @@
 /*
+ * The Userfront CoreJS library is the default export
+ * For ESM/UMD interop, we attach everything else to the default export
+ */
+import UserfrontCore from "@userfront/core";
+
+/*
  * Fully functional Userfront forms
  * If you're using this library, these are probably what you're looking for!
  */
-export { default as SignupForm } from "./packaged-forms/SignupForm";
-export { default as LoginForm } from "./packaged-forms/LoginForm";
-export { default as PasswordResetForm } from "./forms/PasswordResetForm";
-export { default as SetNewPasswordForm } from "./forms/SetNewPasswordForm";
-export { default as LogoutButton } from "./components/LogoutButton";
+import SignupForm from "./packaged-forms/SignupForm";
+import LoginForm from "./packaged-forms/LoginForm";
+import PasswordResetForm from "./forms/PasswordResetForm";
+import SetNewPasswordForm from "./forms/SetNewPasswordForm";
+import LogoutButton from "./components/LogoutButton";
+
+UserfrontCore.SignupForm = SignupForm;
+UserfrontCore.LoginForm = LoginForm;
+UserfrontCore.PasswordResetForm = PasswordResetForm;
+UserfrontCore.SetNewPasswordForm = SetNewPasswordForm;
+UserfrontCore.LogoutButton = LogoutButton;
 
 /*
  * CSS styles for the forms
  */
 import "./themes/default.css";
 
-/*
- * The Userfront CoreJS library is the default export
- */
-import Userfront from "@userfront/core";
-
 // TODO #9: add link to upgrade guide
-Userfront.build = (toolId) => {
+UserfrontCore.build = (toolId) => {
   console.error(`Userfront.build(${toolId}) has been removed. Instead, import the component directly:
     import { SignupForm, LoginForm, PasswordResetForm, SetNewPasswordForm, LogoutButton } from "@userfront/react"
   See TODO DOCS LINK for more information about upgrading to the new toolkit.`);
 };
-
-export default Userfront;
 
 /*
  * Dev tools.
@@ -48,7 +53,7 @@ import {
 
 // Function that allows overriding the Userfront singleton used by the forms with a custom object of your choice
 import { overrideUserfrontSingleton } from "./services/userfront";
-export const _devTools = {
+const _devTools = {
   UnboundSignupForm,
   UnboundLoginForm,
   createSignupFormModel,
@@ -57,3 +62,7 @@ export const _devTools = {
   defaultLoginFormContext,
   overrideUserfrontSingleton,
 };
+
+UserfrontCore._devTools = _devTools;
+
+export default UserfrontCore;

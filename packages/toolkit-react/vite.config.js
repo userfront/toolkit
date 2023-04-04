@@ -23,9 +23,9 @@ export default defineConfig({
     },
     lib: {
       entry: resolve(__dirname, "src/index.js"),
-      name: "ToolkitReact",
+      name: "Userfront",
       formats: ["es", "umd"],
-      filename: (format) => `toolkit-react.${format}.js`,
+      fileName: "userfront-react",
     },
     rollupOptions: {
       external: ["react", "react-dom"],
