@@ -32,7 +32,6 @@
       "import": "./dist/userfront-react.js",
       "require": "./dist/userfront-react.umd.cjs"
     },
-    "./themes/*": "./dist/",
     "./themes/default.css": "./dist/style.css"
   },
   "files": [
