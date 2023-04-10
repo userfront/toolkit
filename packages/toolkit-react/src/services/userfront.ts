@@ -3,7 +3,7 @@
 // need a state machine to describe their behavior.
 
 import Userfront from "@userfront/core";
-import get from "lodash.get";
+import { get } from "lodash";
 
 interface Store {
   tenantId?: string;
