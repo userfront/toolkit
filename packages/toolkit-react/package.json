@@ -39,7 +39,7 @@
   ],
   "dependencies": {
     "@react-hook/resize-observer": "^1.2.6",
-    "@userfront/core": "0.5.0-alpha.1",
+    "@userfront/core": "^0.5.8",
     "@xstate/react": "3.0.1",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
