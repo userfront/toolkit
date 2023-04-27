@@ -2,14 +2,14 @@
 // for uniformity for Logout and PasswordReset forms that don't
 // need a state machine to describe their behavior.
 
-import Userfront from "@userfront/core";
+import Userfront from "@rjfelix/userfront-core";
 import { get } from "lodash";
 
 interface Store {
   tenantId?: string;
 }
 
-declare module "@userfront/core" {
+declare module "@rjfelix/userfront-core" {
   const store: Store;
 }
 

@@ -2,7 +2,7 @@
  * The Userfront CoreJS library is the default export
  * For ESM/UMD interop, we attach everything else to the default export
  */
-import Userfront from "@userfront/core";
+import Userfront from "@rjfelix/userfront-core";
 
 /*
  * Fully functional Userfront forms

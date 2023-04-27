@@ -1,6 +1,6 @@
 import { AuthContext, FormError, FormType } from "../../src/models/types";
 import { overrideUserfrontSingleton } from "../../src/services/userfront";
-import Userfront from "@userfront/core";
+import Userfront from "@rjfelix/userfront-core";
 import { expect } from "vitest";
 
 import { factorConfig } from "../../src/models/config/utils";

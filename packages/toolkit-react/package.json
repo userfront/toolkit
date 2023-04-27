@@ -1,6 +1,6 @@
 {
-  "name": "@userfront/react",
-  "version": "1.0.0-alpha.11",
+  "name": "@rjfelix/userfront-react",
+  "version": "1.0.0-alpha.12",
   "description": "React bindings and components for authentication with Userfront",
   "type": "module",
   "directories": {
@@ -39,7 +39,7 @@
   ],
   "dependencies": {
     "@react-hook/resize-observer": "^1.2.6",
-    "@userfront/core": "^0.5.8",
+    "@rjfelix/userfront-core": "^0.6.0-alpha.1",
     "@xstate/react": "3.0.1",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
