@@ -146,7 +146,6 @@ describe("model-based: models/signup/smsCode", () => {
           codeVerified: () => {
             const state = smsCodeService.getSnapshot();
             expect(state.value).toEqual("showCodeVerified");
-            expect(mockUserfront.lastCall.method).toEqual("redirectIfLoggedIn");
           },
           returnedToFactors: () => {
             const state = smsCodeService.getSnapshot();

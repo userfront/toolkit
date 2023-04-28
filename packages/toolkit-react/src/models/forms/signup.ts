@@ -596,10 +596,9 @@ const signupMachineConfig: AuthMachineConfig = {
     },
     selectSecondFactor: selectFactorConfig,
     // Finish the flow.
-    // Redirect, or show a confirmation view if config.redirect === false.
+    // Show a confirmation view in case we don't redirect.
     finish: {
       id: "finish",
-      entry: "redirectIfLoggedIn",
       type: "final",
     },
   },
