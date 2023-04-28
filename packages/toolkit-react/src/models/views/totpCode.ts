@@ -72,9 +72,10 @@ const totpCodeConfig: AuthMachineConfig = {
             target: "#beginSecondFactor",
             cond: "secondFactorRequired",
           },
-          // Otherwise we're logged in; redirect, and show a confirmation view
+          // Otherwise, we're signed in.
+          // Core JS redirects as appropriate here.
+          // Show the "verified" view in case we don't redirect.
           {
-            actions: "redirectIfLoggedIn",
             target: "showTotpSuccess",
           },
         ],
@@ -118,9 +119,10 @@ const totpCodeConfig: AuthMachineConfig = {
             target: "#beginSecondFactor",
             cond: "secondFactorRequired",
           },
-          // Otherwise we're logged in; redirect, and show a confirmation view
+          // Otherwise, we're signed in.
+          // Core JS redirects as appropriate here.
+          // Show the "verified" view in case we don't redirect.
           {
-            actions: "redirectIfLoggedIn",
             target: "showTotpSuccess",
           },
         ],

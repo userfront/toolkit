@@ -81,15 +81,17 @@ const setUpTotpConfig: AuthMachineConfig = {
     showBackupCodes: {
       on: {
         // Proceed to the second factor if required,
-        // otherwise show a message and redirect
+        // otherwise show a message
         finish: [
           {
             actions: "setAllowedSecondFactorsFromView",
             target: "#beginSecondFactor",
             cond: "secondFactorRequiredFromView",
           },
+          // We're signed in.
+          // Core JS redirects as appropriate here.
+          // Show the "verified" view in case we don't redirect.
           {
-            actions: "redirectIfLoggedIn",
             target: "showTotpSetupComplete",
           },
         ],

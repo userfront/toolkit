@@ -109,10 +109,10 @@ const smsCodeConfig: AuthMachineConfig = {
             target: "#beginSecondFactor",
             cond: "secondFactorRequired",
           },
-          // Otherwise, we're signed in, redirect.
-          // Show the "verified" view in case redirect fails.
+          // Otherwise, we're signed in.
+          // Core JS redirects as appropriate here.
+          // Show the "verified" view in case we don't redirect.
           {
-            actions: "redirectIfLoggedIn",
             target: "showCodeVerified",
           },
         ],
