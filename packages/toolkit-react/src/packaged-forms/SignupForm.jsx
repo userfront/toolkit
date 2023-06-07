@@ -1,3 +1,5 @@
+"use client";
+
 import SignupForm from "../forms/SignupForm";
 import createSignupFormMachine, {
   defaultAuthContext,
