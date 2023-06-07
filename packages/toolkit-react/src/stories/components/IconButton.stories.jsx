@@ -103,6 +103,7 @@ export default {
         "Google",
         "LinkedIn",
         "Twitter",
+        "Okta",
         "Username and password",
         "Email link (passwordless)",
         "Authenticator app or device (TOTP)",

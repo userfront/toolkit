@@ -291,6 +291,7 @@ const mockUserfront = {
           { channel: "email", strategy: "google" },
           { channel: "email", strategy: "apple" },
           { channel: "email", strategy: "github" },
+          { channel: "email", strategy: "okta" },
         ],
       },
     };

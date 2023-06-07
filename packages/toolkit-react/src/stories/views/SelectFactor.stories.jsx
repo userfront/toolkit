@@ -120,6 +120,7 @@ export default {
         "Google",
         "LinkedIn",
         "Twitter",
+        "Okta",
         "Email link (passwordless)",
         "Authenticator app or device (TOTP)",
         "SMS verification code",
