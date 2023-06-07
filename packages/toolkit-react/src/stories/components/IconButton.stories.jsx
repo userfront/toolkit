@@ -59,6 +59,10 @@ const factorForName = {
     channel: "email",
     strategy: "twitter",
   },
+  Okta: {
+    channel: "email",
+    strategy: "okta",
+  },
   "Username and password": {
     channel: "email",
     strategy: "password",

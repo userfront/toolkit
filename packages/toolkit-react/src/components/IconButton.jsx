@@ -5,6 +5,7 @@ import githubLogo from "../assets/logos/github.svg";
 import googleLogo from "../assets/logos/google.svg";
 import linkedInLogo from "../assets/logos/linkedin.svg";
 import twitterLogo from "../assets/logos/twitter.svg";
+import oktaLogo from "../assets/logos/okta.svg";
 import { MdPassword, MdOutlineMarkEmailRead } from "react-icons/md";
 import { TbLink, TbDeviceMobileMessage } from "react-icons/tb";
 import { TiSortNumerically } from "react-icons/ti";
@@ -96,6 +97,11 @@ export const factorToLogoAndText = (factor) => {
       return {
         logo: <Icon logo={twitterLogo} />,
         text: "Twitter",
+      };
+    case "okta":
+      return {
+        logo: <Icon logo={oktaLogo} />,
+        text: "Okta",
       };
     case "verificationCode": {
       switch (factor.channel) {
