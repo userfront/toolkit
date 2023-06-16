@@ -1,3 +1,5 @@
+"use client";
+
 import { callUserfront } from "../services/userfront";
 import SubmitButton from "../components/SubmitButton";
 import ErrorMessage from "../components/ErrorMessage";

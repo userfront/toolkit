@@ -24,7 +24,8 @@ export const isSsoProvider = (factor: Factor) => {
       factor.strategy === "github" ||
       factor.strategy === "twitter" ||
       factor.strategy === "facebook" ||
-      factor.strategy === "linkedin")
+      factor.strategy === "linkedin" ||
+      factor.strategy === "okta")
   );
 };
 

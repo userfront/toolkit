@@ -59,6 +59,10 @@ const factorForName = {
     channel: "email",
     strategy: "twitter",
   },
+  Okta: {
+    channel: "email",
+    strategy: "okta",
+  },
   "Username and password": {
     channel: "email",
     strategy: "password",
@@ -99,6 +103,7 @@ export default {
         "Google",
         "LinkedIn",
         "Twitter",
+        "Okta",
         "Username and password",
         "Email link (passwordless)",
         "Authenticator app or device (TOTP)",

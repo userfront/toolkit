@@ -1,0 +1,32 @@
+name: "Open PR for tagged release branch"
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+          registry-url: "https://registry.npmjs.org"
+      - name: Configure git identity
+        run: |
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "Userfront Robot"
+      - run: cd packages/toolkit-react
+      - name: Update package.json version
+        id: version
+        run: |
+          npm version ${{ github.event.release.tag_name }} --git-tag-version=false | xargs -0 -L1 -I '%' echo 'VERSION=%' >> "$GITHUB_OUTPUT"
+      - uses: peter-evans/create-pull-request@v5
+        with:
+          branch: 'release/${{ steps.version.outputs.VERSION }}'
+          title: 'Publish ${{ steps.version.outputs.VERSION }} to npm'
+          commit-message: 'version ${{ steps.version.outputs.VERSION }}'
+          body: 'Automated pull request to publish library version ${{ steps.version.outputs.VERSION }} to npm. If everything looks good, approve this PR to publish and auto-merge.'
+          base: main

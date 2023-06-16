@@ -1,3 +1,5 @@
+"use client";
+
 import LoginForm from "../forms/LoginForm";
 import createLoginFormMachine, {
   defaultAuthContext,

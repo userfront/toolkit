@@ -11,6 +11,7 @@ describe("models/utils.ts", () => {
       "google",
       "linkedin",
       "twitter",
+      "okta",
     ];
     ssoProviders.forEach((provider) => {
       it(`should return ssoProvider for ${provider}`, () => {

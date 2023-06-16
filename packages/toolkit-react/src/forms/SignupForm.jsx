@@ -1,3 +1,5 @@
+"use client";
+
 import EnterEmail from "../views/EnterEmail";
 import EnterPhone from "../views/EnterPhone";
 import EnterVerificationCode from "../views/EnterVerificationCode";
