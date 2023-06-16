@@ -1,6 +1,6 @@
 {
   "name": "toolkit",
-  "version": "1.0.1-alpha.0",
+  "version": "1.0.1-alpha.1",
   "description": "This repo establishes the Userfront toolkit, with the following features",
   "lint-staged": {
     "*.{js,jsx,css,md,ts,tsx}": "prettier --write"
