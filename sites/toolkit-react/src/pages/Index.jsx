@@ -46,9 +46,23 @@ const Index = () => {
       <ul>
         <li>
           <Link to="/live/signup">Signup form (live)</Link>
+          <ul>
+            <li>
+              <Link to="/live/signup?redirectOnLoad=true">
+                (with redirect on load)
+              </Link>
+            </li>
+          </ul>
         </li>
         <li>
           <Link to="/live/login">Login form (live)</Link>
+          <ul>
+            <li>
+              <Link to="/live/login?redirectOnLoad=true">
+                (with redirect on load)
+              </Link>
+            </li>
+          </ul>
         </li>
         <li>
           <Link to="/live/reset">Password reset form (live)</Link>

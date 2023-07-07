@@ -263,6 +263,13 @@ export const redirectIfLoggedIn = (context: AuthContext<any>) => {
   }
 };
 
+// Redirect to the afterLoginPath if the user is already logged in when the form loads, if redirectOnLoad = true
+export const redirectOnLoad = (context: AuthContext<any>) => {
+  if (context.config.redirectOnLoad) {
+    callUserfront({ method: "redirectIfLoggedIn", args: [] });
+  }
+};
+
 // Set the tenantId based on what was returned from the Userfront API, or set shouldFetchFlow = false if
 // there is no tenantId set in the local Userfront SDK instance
 export const setTenantIdIfPresent = assign(
