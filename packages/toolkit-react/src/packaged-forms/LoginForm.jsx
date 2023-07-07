@@ -17,6 +17,11 @@ import { useMachine } from "@xstate/react";
  * @param {string | boolean} props.redirect - URL to redirect to after successful login.
  *   If false, do not redirect.
  *   If absent, use the after-login path from the server.
+ * @param {boolean} props.redirectOnLoadIfLoggedIn - if true, will redirect to the after-signup path on page load
+ *     if the user is already logged in
+ *   If false, will not redirect on page load.
+ *   Defaults to false.
+ *   Does not control whether user is redirected after signing up. @see props.redirect
  * @param {boolean} props.shouldFetchFlow - if true (default), fetch the first factors from the server.
  *   If false, do not fetch the first factors from the server.
  *   Should be left at true in most production use cases.
@@ -30,6 +35,7 @@ function PackagedLoginForm({
   flow,
   compact,
   redirect,
+  redirectOnLoadIfLoggedIn = false,
   shouldFetchFlow = true,
   xstateDevTools = false,
 }) {
@@ -47,6 +53,7 @@ function PackagedLoginForm({
       config.compact = !!compact;
       config.shouldFetchFlow = !!shouldFetchFlow;
       config.redirect = redirect;
+      config.redirectOnLoad = !!redirectOnLoadIfLoggedIn;
       const context = {
         ...defaultAuthContext,
         config,

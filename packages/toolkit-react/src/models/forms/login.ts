@@ -11,6 +11,7 @@ import {
   setUseBackupCode,
   setShowEmailOrUsernameIfFirstFactor,
   redirectIfLoggedIn,
+  redirectOnLoad,
   setCode,
   setErrorFromApiError,
   clearError,
@@ -191,6 +192,7 @@ export const defaultSignupOptions = {
     setUseBackupCode,
     setShowEmailOrUsernameIfFirstFactor,
     redirectIfLoggedIn,
+    redirectOnLoad,
     setCode,
     setErrorFromApiError,
     clearError,
@@ -388,8 +390,8 @@ const signupMachineConfig: AuthMachineConfig = {
     // Start the flow
     beginFlow: {
       // At this point the Userfront singleton is fully initialized, so we should
-      // try to redirect if the user is logged in and config.redirect !== false.
-      entry: ["redirectIfLoggedIn", "setupView"],
+      // try to redirect if the user is logged in and config.redirectOnLoad !== false.
+      entry: ["redirectOnLoad", "setupView"],
       always: [
         // If we're returning from a passwordless/email link or SSO first factor, attempt to use
         // the query params to proceed.

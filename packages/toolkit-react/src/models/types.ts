@@ -39,6 +39,8 @@ export interface FormConfig {
   shouldFetchFlow: boolean;
   // Destination to redirect to if user is logged in, or false to disable redirect.
   redirect?: string | boolean;
+  // If true, redirect to the after-login path if the user is already logged in on page load.
+  redirectOnLoad?: boolean;
 }
 
 // Data about the user
