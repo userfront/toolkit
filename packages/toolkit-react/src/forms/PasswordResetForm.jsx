@@ -1,5 +1,6 @@
 "use client";
 
+import { getUserfrontPropertySync } from "../services/userfront";
 import RequestPasswordResetForm from "./RequestPasswordResetForm";
 import SetNewPasswordForm from "./SetNewPasswordForm";
 
@@ -22,10 +23,14 @@ const PasswordResetForm = ({ shouldConfirmPassword = false }) => {
   const hasCredentials =
     url.searchParams.has("token") && url.searchParams.has("uuid");
 
+  // Check to see if the user is logged in
+  const user = getUserfrontPropertySync("user");
+  const hasUser = !!user;
+
   // Display the SetNewPasswordForm if credentials are present, otherwise display RequestPasswordResetForm
   // Note: Userfront.updatePassword() grabs the credentials from query params itself, so we don't need to
   // pass them along.
-  if (hasCredentials) {
+  if (hasCredentials || hasUser) {
     return <SetNewPasswordForm shouldConfirmPassword={shouldConfirmPassword} />;
   }
   return <RequestPasswordResetForm />;

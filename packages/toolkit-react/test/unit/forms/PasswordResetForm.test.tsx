@@ -1,12 +1,20 @@
 import React from "react";
-import { expect, describe, it, beforeEach } from "vitest";
+import { vi, expect, describe, it, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import PasswordResetForm from "../../../src/forms/PasswordResetForm";
+import { getUserfrontPropertySync } from "../../../src/services/userfront";
+
+vi.mock("../../../src/services/userfront", () => {
+  return {
+    getUserfrontPropertySync: vi.fn(),
+  };
+});
 
 describe("forms/PasswordResetForm.jsx", () => {
   const originalLocation = window.location;
   beforeEach(() => {
     window.location = originalLocation;
+    vi.mocked(getUserfrontPropertySync).mockReturnValue(null);
   });
   it("should show the 'request password reset' form if no query params are present", async () => {
     render(<PasswordResetForm />);
@@ -55,5 +63,16 @@ describe("forms/PasswordResetForm.jsx", () => {
 
     const confirm = await screen.findByText("Confirm your new password");
     expect(confirm).toBeDefined();
+  });
+
+  it("should show the 'set new password' form if a user is logged in", async () => {
+    vi.mocked(getUserfrontPropertySync).mockReturnValue({
+      name: "John Doe",
+    });
+
+    render(<PasswordResetForm />);
+
+    const result = await screen.findByText("Choose a new password");
+    expect(result).toBeDefined();
   });
 });
