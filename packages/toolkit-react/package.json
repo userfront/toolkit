@@ -67,7 +67,6 @@
     "@xstate/graph": "2.0.0-alpha.0",
     "@xstate/test": "1.0.0-alpha.0",
     "babel-loader": "^8.2.5",
-    "enzyme": "^3.11.0",
     "esbuild": "^0.16.17",
     "fast-check": "^3.3.0",
     "jsdom": "^20.0.3",
