@@ -1,6 +1,6 @@
 /*
  * The Userfront CoreJS library is the default export
- * For ESM/UMD interop, we attach everything else to the default export
+ * For ESM, we export everything else as named exports
  */
 import Userfront from "@userfront/core";
 
@@ -12,14 +12,8 @@ export { default as SignupForm } from "./packaged-forms/SignupForm";
 export { default as LoginForm } from "./packaged-forms/LoginForm";
 export { default as PasswordResetForm } from "./forms/PasswordResetForm";
 export { default as SetNewPasswordForm } from "./forms/SetNewPasswordForm";
+export { default as RequestPasswordResetForm } from "./forms/RequestPasswordResetForm";
 export { default as LogoutButton } from "./components/LogoutButton";
-
-// UserfrontCore.SignupForm = SignupForm;
-// UserfrontCore.LoginForm = LoginForm;
-// UserfrontCore.PasswordResetForm = PasswordResetForm;
-// UserfrontCore.SetNewPasswordForm = SetNewPasswordForm;
-// UserfrontCore.LogoutButton = LogoutButton;
-
 /*
  * CSS styles for the forms
  */

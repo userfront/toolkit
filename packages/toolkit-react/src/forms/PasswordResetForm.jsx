@@ -1,85 +1,32 @@
-"use client";
-
-import { callUserfront } from "../services/userfront";
-import SubmitButton from "../components/SubmitButton";
-import ErrorMessage from "../components/ErrorMessage";
-import SecuredByUserfront from "../components/SecuredByUserfront";
-import Input from "../components/Input";
-import { useState } from "react";
-import { useSizeClass } from "../utils/hooks";
+import RequestPasswordResetForm from "./RequestPasswordResetForm";
+import SetNewPasswordForm from "./SetNewPasswordForm";
 
 /**
- * Form to request a password reset email.
+ * Combined password reset form: shows the "set new password" form if link credentials (uuid and token)
+ * are present in the query parameters. Otherwise, shows the "request password reset" form.
+ *
+ * Use this if users both request a password reset and perform the reset at your password reset path.
+ * If they are done at two different paths, use RequestPasswordResetForm and SetNewPasswordForm instead.
+ *
+ * @param {props} props
+ * @param {boolean} props.shouldConfirmPassword - if true, in the SetNewPasswordForm, use a second password field
+ *   to confirm the new password.
+ *
  */
-const PasswordResetForm = () => {
-  const [emailRequired, setEmailRequired] = useState(false);
 
-  // Apply a size-based CSS class based on the container's size
-  const [containerRef, setContainerRef] = useState();
-  const sizeClass = useSizeClass(containerRef);
+const PasswordResetForm = ({ shouldConfirmPassword = false }) => {
+  // Check to see if the link credentials are present in the query string
+  const url = new URL(window.location.href);
+  const hasCredentials =
+    url.searchParams.has("token") && url.searchParams.has("uuid");
 
-  const [error, setError] = useState();
-  const [loading, setLoading] = useState();
-  const [success, setSuccess] = useState();
-  const [title, setTitle] = useState("Password reset");
-  const [text, setText] = useState(
-    "We'll email you a link to reset your password"
-  );
-
-  // Try to request a password reset email.
-  // Display a success message if successful.
-  // Otherwise, display the error received from the server.
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const email = event.target.elements.email.value;
-
-      // Do not submit if email is missing
-      setEmailRequired(!email);
-      if (!email) return;
-
-      // Submit the form
-      setLoading(true);
-      setError(undefined);
-      const response = await callUserfront({
-        method: "sendResetLink",
-        args: [email],
-      });
-      setSuccess(true);
-      setLoading(false);
-      setTitle("Check your email");
-      setText(
-        `We sent an email to ${response.result.email} with a link to reset your password.`
-      );
-    } catch (err) {
-      setLoading(false);
-      setError(err);
-    }
-  };
-
-  return (
-    <div
-      ref={setContainerRef}
-      className={`userfront-toolkit userfront-container ${sizeClass}`}
-    >
-      <h2>{title}</h2>
-      <p>{text}</p>
-      {!success && (
-        <form onSubmit={handleSubmit} className="userfront-form">
-          <div className="userfront-form-row">
-            <Input.Email showError={emailRequired} />
-          </div>
-          <ErrorMessage error={error} />
-          <div className="userfront-button-row">
-            <SubmitButton disabled={loading}>Get reset link</SubmitButton>
-          </div>
-        </form>
-      )}
-      <div>
-        <SecuredByUserfront />
-      </div>
-    </div>
-  );
+  // Display the SetNewPasswordForm if credentials are present, otherwise display RequestPasswordResetForm
+  // Note: Userfront.updatePassword() grabs the credentials from query params itself, so we don't need to
+  // pass them along.
+  if (hasCredentials) {
+    return <SetNewPasswordForm shouldConfirmPassword={shouldConfirmPassword} />;
+  }
+  return <RequestPasswordResetForm />;
 };
 
 export default PasswordResetForm;
