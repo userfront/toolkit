@@ -28,7 +28,7 @@ const Index = () => {
           <Link to="/login">Login form demo</Link>
         </li>
         <li>
-          <Link to="/reset">Password reset form demo</Link>
+          <Link to="/reset">Request password reset form demo</Link>
         </li>
         <li>
           <Link to="/set-password">Set new password form demo</Link>
@@ -39,7 +39,7 @@ const Index = () => {
       </ul>
       <h2>Live demos</h2>
       <p>
-        Connected to live tenant "Toolkit Test Tenant" <code>6bg66q7n</code>{" "}
+        Connected to live tenant "Toolkit Test Tenant" <code>wbm95g4b</code>{" "}
         with the domain <code>https://toolkit-dev-app-react.vercel.app/</code>{" "}
         set as a live domain.
       </p>
@@ -66,6 +66,14 @@ const Index = () => {
         </li>
         <li>
           <Link to="/live/reset">Password reset form (live)</Link>
+          <ul>
+            <li>
+              Should display the "request password reset" form when accessed
+              directly, and the "set new password" form when provided{" "}
+              <code>uuid</code> and
+              <code>token</code> in the query parameters.
+            </li>
+          </ul>
         </li>
         <li>
           <Link to="/redirects/password-reset">
