@@ -1,3 +1,5 @@
+"use client";
+
 import RequestPasswordResetForm from "./RequestPasswordResetForm";
 import SetNewPasswordForm from "./SetNewPasswordForm";
 
