@@ -1,6 +1,6 @@
 {
   "name": "@userfront/react",
-  "version": "1.0.0-alpha.14",
+  "version": "1.0.0-alpha.15",
   "description": "React bindings and components for authentication with Userfront",
   "type": "module",
   "directories": {
