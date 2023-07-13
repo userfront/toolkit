@@ -19,7 +19,7 @@ import SetNewPasswordForm from "./SetNewPasswordForm";
  *   Otherwise, redirect to the after-login path after the user resets their password.
  */
 
-const PasswordResetForm = ({ shouldConfirmPassword = false, redirect }) => {
+const PasswordResetForm = ({ shouldConfirmPassword = true, redirect }) => {
   // Check to see if the link credentials are present in the query string
   const url = new URL(window.location.href);
   const hasCredentials =

@@ -60,7 +60,7 @@ describe("forms/PasswordResetForm.jsx", () => {
       "https://www.example.com/reset?uuid=some-uuid&token=some-token"
     );
 
-    render(<PasswordResetForm shouldConfirmPassword />);
+    render(<PasswordResetForm />);
 
     const choose = await screen.findByText("Choose a new password");
     expect(choose).toBeDefined();
