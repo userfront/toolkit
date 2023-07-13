@@ -14,7 +14,11 @@ describe("forms/PasswordResetForm.jsx", () => {
   const originalLocation = window.location;
   beforeEach(() => {
     window.location = originalLocation;
-    vi.mocked(getUserfrontPropertySync).mockReturnValue(null);
+    vi.mocked(getUserfrontPropertySync).mockReturnValue({
+      hasRole: vi.fn(),
+      update: vi.fn(),
+      updatePassword: vi.fn(),
+    });
   });
   it("should show the 'request password reset' form if no query params are present", async () => {
     render(<PasswordResetForm />);
@@ -67,7 +71,15 @@ describe("forms/PasswordResetForm.jsx", () => {
 
   it("should show the 'set new password' form if a user is logged in", async () => {
     vi.mocked(getUserfrontPropertySync).mockReturnValue({
-      name: "John Doe",
+      hasRole: vi.fn(),
+      update: vi.fn(),
+      updatePassword: vi.fn(),
+      mode: "live",
+      tenantId: "abcd1234",
+      userId: 1,
+      userUuid: "d6f0f045-f6ea-4262-8724-dfc0b77e7dc9",
+      email: "test@example.com",
+      name: "Test User",
     });
 
     render(<PasswordResetForm />);

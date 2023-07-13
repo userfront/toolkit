@@ -14,10 +14,12 @@ import SetNewPasswordForm from "./SetNewPasswordForm";
  * @param {props} props
  * @param {boolean} props.shouldConfirmPassword - if true, in the SetNewPasswordForm, use a second password field
  *   to confirm the new password.
- *
+ * @param {boolean | string} props.redirect - if false, do not redirect after the user resets their password.
+ *   If a string is provided, redirect to that path after the user resets their password.
+ *   Otherwise, redirect to the after-login path after the user resets their password.
  */
 
-const PasswordResetForm = ({ shouldConfirmPassword = false }) => {
+const PasswordResetForm = ({ shouldConfirmPassword = false, redirect }) => {
   // Check to see if the link credentials are present in the query string
   const url = new URL(window.location.href);
   const hasCredentials =
@@ -25,13 +27,18 @@ const PasswordResetForm = ({ shouldConfirmPassword = false }) => {
 
   // Check to see if the user is logged in
   const user = getUserfrontPropertySync("user");
-  const hasUser = !!user;
+  const hasUser = !!(user && user.userId);
 
   // Display the SetNewPasswordForm if credentials are present, otherwise display RequestPasswordResetForm
   // Note: Userfront.updatePassword() grabs the credentials from query params itself, so we don't need to
   // pass them along.
   if (hasCredentials || hasUser) {
-    return <SetNewPasswordForm shouldConfirmPassword={shouldConfirmPassword} />;
+    return (
+      <SetNewPasswordForm
+        shouldConfirmPassword={shouldConfirmPassword}
+        redirect={redirect}
+      />
+    );
   }
   return <RequestPasswordResetForm />;
 };
