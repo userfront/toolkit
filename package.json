@@ -6,12 +6,6 @@
     "*.{js,jsx,css,md,ts,tsx}": "prettier --write"
   },
   "main": "index.js",
-  "workspaces": {
-    "packages": [
-      "packages/*",
-      "sites/*"
-    ]
-  },
   "directories": {
     "doc": "docs",
     "test": "test"

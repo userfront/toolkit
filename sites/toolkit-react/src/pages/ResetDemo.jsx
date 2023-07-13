@@ -1,4 +1,4 @@
-import { PasswordResetForm } from "../../../../packages/toolkit-react/src/index.js";
+import { RequestPasswordResetForm } from "../../../../packages/toolkit-react/src/index.js";
 import { Link } from "react-router-dom";
 import { useMockUserfront } from "../hooks.js";
 
@@ -9,7 +9,7 @@ const ResetDemo = () => {
       <div>
         <Link to="/">Home</Link>
       </div>
-      <PasswordResetForm />
+      <RequestPasswordResetForm />
       <hr />
       <div>
         <p>Password reset form has only internal state.</p>

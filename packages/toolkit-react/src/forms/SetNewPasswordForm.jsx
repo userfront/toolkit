@@ -1,6 +1,6 @@
 "use client";
 
-import { callUserfront } from "../services/userfront";
+import { callUserfront, getUserfrontPropertySync } from "../services/userfront";
 import SubmitButton from "../components/SubmitButton";
 import ContinueButton from "../components/ContinueButton";
 import ErrorMessage from "../components/ErrorMessage";
@@ -16,7 +16,7 @@ import { useSizeClass } from "../utils/hooks";
  * @param {boolean} props.shouldConfirmPassword - if true, use a second password field to confirm the new password.
  * @returns
  */
-const SetNewPasswordForm = ({ shouldConfirmPassword = false }) => {
+const SetNewPasswordForm = ({ shouldConfirmPassword = false, redirect }) => {
   const [passwordRequired, setPasswordRequired] = useState(false);
 
   // Apply a CSS class based on the container's size
@@ -26,9 +26,15 @@ const SetNewPasswordForm = ({ shouldConfirmPassword = false }) => {
   const [error, setError] = useState();
   const [loading, setLoading] = useState();
   const [success, setSuccess] = useState();
+  const [showContinueButton, setShowContinueButton] = useState();
   const [title, setTitle] = useState("Set your new password");
   const [text, setText] = useState("");
-  const [redirectUrl, setRedirectUrl] = useState("");
+  const [redirectUrl, setRedirectUrl] = useState(redirect || "");
+
+  // Check to see if the user is logged in
+  // If so, we need to collect the existing password
+  const user = getUserfrontPropertySync("user");
+  const hasUser = !!(user && user.userId);
 
   // Try to reset the user's password.
   // If shouldConfirmPassword = true, check that both password fields match.
@@ -37,13 +43,13 @@ const SetNewPasswordForm = ({ shouldConfirmPassword = false }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError(undefined);
-    const password = event.target.elements.password.value;
+    const newPassword = event.target.elements.newPassword.value;
 
     // Only compare if we're asking users to confirm their password
-    const confirmPassword = shouldConfirmPassword
-      ? event.target.elements.confirmPassword.value
-      : event.target.elements.password.value;
-    if (password !== confirmPassword) {
+    const confirmNewPassword = shouldConfirmPassword
+      ? event.target.elements.confirmNewPassword.value
+      : event.target.elements.newPassword.value;
+    if (newPassword !== confirmNewPassword) {
       setError({
         message:
           "The passwords don't match. Please re-enter your new password.",
@@ -52,22 +58,37 @@ const SetNewPasswordForm = ({ shouldConfirmPassword = false }) => {
     }
 
     // Do not submit if password is missing
-    setPasswordRequired(!password);
-    if (!password) return;
+    setPasswordRequired(!newPassword);
+    if (!newPassword) return;
 
     try {
       setLoading(true);
+      const args = { password: newPassword, redirect };
+      if (hasUser) {
+        args.existingPassword = event.target.elements.password.value;
+      }
       const response = await callUserfront({
         method: "updatePassword",
-        args: [{ password }],
+        args: [args],
       });
       setSuccess(true);
       setLoading(false);
+      // If there is a redirect sent from the server, CoreJS will do it here
       setTitle("New password set");
-      setText(
-        `Success! Your password has been changed. Click the button below to continue to the site.`
-      );
-      setRedirectUrl(response.redirectTo);
+      if (redirect === false || (!redirect && !response.redirectTo)) {
+        // No redirect is expected
+        setText(`Success! Your password has been changed.`);
+      } else {
+        // Redirect is expected, but didn't happen for some reason
+        setText(
+          `Success! Your password has been changed. Click the button below to continue to the site.`
+        );
+        setShowContinueButton(true);
+        // Set redirect URL from the response if one wasn't provided as a prop
+        if (!redirect) {
+          setRedirectUrl(response.redirectTo);
+        }
+      }
     } catch (err) {
       setLoading(false);
       setError(err);
@@ -83,16 +104,24 @@ const SetNewPasswordForm = ({ shouldConfirmPassword = false }) => {
       <p>{text}</p>
       {!success && (
         <form onSubmit={handleSubmit} className="userfront-form">
+          {hasUser && (
+            <div className="userfront-form-row">
+              <Input.Password label="Enter your current password" />
+            </div>
+          )}
           <div className="userfront-form-row">
             <Input.Password
+              name="newPassword"
               label="Choose a new password"
               showError={passwordRequired}
             />
           </div>
           {shouldConfirmPassword && (
             <div className="userfront-form-row">
-              <label htmlFor="confirmPassword">Confirm your new password</label>
-              <Input type="password" name="confirmPassword" />
+              <label htmlFor="confirmNewPassword">
+                Confirm your new password
+              </label>
+              <Input type="password" name="confirmNewPassword" />
             </div>
           )}
           <ErrorMessage error={error} />
@@ -101,7 +130,7 @@ const SetNewPasswordForm = ({ shouldConfirmPassword = false }) => {
           </div>
         </form>
       )}
-      {success && (
+      {showContinueButton && (
         <a href={redirectUrl}>
           <ContinueButton />
         </a>

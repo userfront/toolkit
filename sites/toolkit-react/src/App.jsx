@@ -19,7 +19,7 @@ import LiveSetNewPasswordDemo from "./pages/LiveSetNewPasswordDemo";
 import Userfront from "../../../packages/toolkit-react/src/index.js";
 import { useEffect } from "react";
 
-Userfront.init("6bg66q7n");
+Userfront.init("wbm95g4b");
 
 const router = createBrowserRouter([
   {
@@ -64,15 +64,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/redirects/after-login",
-    element: () => <Redirect type="after login" />,
+    element: <Redirect type="after login" />,
   },
   {
     path: "/redirects/after-logout",
-    element: () => <Redirect type="after logout" />,
+    element: <Redirect type="after logout" />,
   },
   {
     path: "/redirects/after-signup",
-    element: () => <Redirect type="after signup" />,
+    element: <Redirect type="after signup" />,
   },
   {
     path: "/redirects/password-reset",

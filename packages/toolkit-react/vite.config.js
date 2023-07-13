@@ -16,10 +16,4 @@ export default defineConfig({
       "@test": resolve(__dirname, "test"),
     },
   },
-  test: {
-    includeSource: ["src/**/*.{js,jsx,ts,tsx}"],
-    coverage: {
-      reporter: ["text", "json-summary", "json"],
-    },
-  },
 });

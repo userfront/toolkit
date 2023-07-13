@@ -25,11 +25,7 @@ jobs:
         id: version
         working-directory: ./packages/toolkit-react
         run: |
-          npm version prerelease --preid alpha | xargs -0 -L1 -I '%' echo 'VERSION=%' >> "$GITHUB_OUTPUT"
-      - name: log version
-        working-directory: ./packages/toolkit-react
-        run: |
-          cat package.json
+          npm version prerelease --preid alpha | xargs -0 -L1 -I '%' echo "VERSION=%" >> "$GITHUB_OUTPUT"
       - name: push changes
         working-directory: ./packages/toolkit-react
         run: |
