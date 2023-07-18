@@ -1,6 +1,6 @@
 // State machine for the "username and password" view
 
-import { AuthMachineConfig, PasswordContext } from "../types";
+import { AuthMachineConfig, PasswordContext, SignOnFormType } from "../types";
 import { callUserfront } from "../../services/userfront";
 import { hasValue } from "../config/utils";
 
@@ -8,7 +8,7 @@ import { hasValue } from "../config/utils";
 const passwordConfig: AuthMachineConfig = {
   id: "password",
   initial: "showForm",
-  entry: "setupView",
+  entry: ["clearError", "setupView"],
   states: {
     // Show the username, password, confirm password form
     showForm: {
@@ -58,7 +58,7 @@ const passwordConfig: AuthMachineConfig = {
             arg.emailOrUsername = context.user.emailOrUsername;
           }
           return callUserfront({
-            method: context.config.type,
+            method: <SignOnFormType>context.config.type,
             args: [arg],
           });
         },

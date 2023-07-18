@@ -22,6 +22,9 @@ import {
   UseBackupCodeEvent,
   Factor,
   EmailLinkContext,
+  FactorAction,
+  SetNewPasswordContext,
+  SetNewPasswordSubmitEvent,
 } from "../types";
 import { getTargetForFactor, factorConfig, hasValue } from "./utils";
 // @ts-ignore
@@ -162,6 +165,17 @@ export const setPassword = assign(
     view: {
       ...context.view,
       password: event.password,
+    },
+  })
+);
+
+export const setPasswordForReset = assign(
+  (context: SetNewPasswordContext, event: SetNewPasswordSubmitEvent) => ({
+    view: {
+      ...context.view,
+      password: event.password,
+      confirmPassword: event.confirmPassword,
+      existingPassword: event.existingPassword,
     },
   })
 );
@@ -355,3 +369,22 @@ export const clearResentMessage = assign((context: EmailLinkContext) => ({
     message: "",
   },
 }));
+
+export const setFirstFactorAction = assign((context: AuthContext<View>) => ({
+  action: <FactorAction>(context.config.type === "login" ? "use" : "setup"),
+}));
+
+export const setSecondFactorAction = assign((context: AuthContext<View>) => {
+  const hasExistingSecondFactors = context.allowedSecondFactors?.some(
+    (factor) => factor.isConfiguredByUser
+  );
+  if (hasExistingSecondFactors) {
+    return {
+      action: <FactorAction>"use",
+    };
+  } else {
+    return {
+      action: <FactorAction>"setup",
+    };
+  }
+});

@@ -8,7 +8,7 @@ import { hasValue } from "../config/utils";
 const smsCodeConfig: AuthMachineConfig = {
   id: "smsCode",
   initial: "showForm",
-  entry: "setupView",
+  entry: ["clearError", "setupView"],
   states: {
     // Show the form to enter a phone number
     showForm: {

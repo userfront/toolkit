@@ -53,7 +53,12 @@ export const isSecondFactor = (context: AuthContext<View>) => {
 export const passwordsMatch = (
   context: AuthContext<Password>,
   event: PasswordSubmitEvent
-) => event.password === event.confirmPassword;
+) => {
+  if (context.action === "use") {
+    return true;
+  }
+  return event.password === event.confirmPassword;
+};
 
 // Guard that always succeeds, for guards that aren't relevant in a certain context
 export const alwaysSucceed = () => true;
@@ -106,4 +111,12 @@ export const isLoggedIn = () => {
   // TypeScript doesn't recognize that this is Userfront.tokens which is an object
   // @ts-ignore
   return !!getUserfrontPropertySync("tokens")?.accessToken;
+};
+
+export const isLoggedInOrHasLinkCredentials = (context: AuthContext<any>) => {
+  return isLoggedIn() || hasLinkQueryParams(context);
+};
+
+export const isPasswordReset = (context: AuthContext<any>) => {
+  return context.config.type === "reset";
 };

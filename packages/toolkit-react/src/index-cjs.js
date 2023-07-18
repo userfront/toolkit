@@ -10,7 +10,7 @@ import UserfrontCore from "@userfront/core";
  */
 import SignupForm from "./packaged-forms/SignupForm";
 import LoginForm from "./packaged-forms/LoginForm";
-import PasswordResetForm from "./forms/PasswordResetForm";
+import PasswordResetForm from "./packaged-forms/PasswordResetForm";
 import SetNewPasswordForm from "./forms/SetNewPasswordForm";
 import RequestPasswordResetForm from "./forms/RequestPasswordResetForm";
 import LogoutButton from "./components/LogoutButton";

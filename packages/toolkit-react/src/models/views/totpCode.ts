@@ -7,7 +7,7 @@ const totpCodeConfig: AuthMachineConfig = {
   initial: "showForm",
   // If this is the first factor, the user needs to provide an email or username.
   // If it's the second factor, we already have that info.
-  entry: ["setupView", "setShowEmailOrUsernameIfFirstFactor"],
+  entry: ["clearError", "setupView", "setShowEmailOrUsernameIfFirstFactor"],
   states: {
     // Show the TOTP code entry form
     showForm: {

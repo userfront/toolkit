@@ -4,49 +4,138 @@ import EnterEmail from "../views/EnterEmail";
 import EnterPhone from "../views/EnterPhone";
 import EnterVerificationCode from "../views/EnterVerificationCode";
 import SelectFactor from "../views/SelectFactor";
-import SetUpTotp from "../views/SetUpTotp";
-import SetUpTotpSuccess from "../views/SetUpTotpSuccess";
-import SignUpWithPassword from "../views/SignUpWithPassword";
+import EnterTotpCode from "../views/EnterTotpCode";
+import LogInWithPassword from "../views/LogInWithPassword";
 import SecuredByUserfront from "../components/SecuredByUserfront";
 import Message from "../views/Message";
 import GeneralErrorMessage from "../views/GeneralErrorMessage";
-import TotpErrorMessage from "../views/TotpErrorMessage";
 import Success from "../views/Success";
 import EmailLinkSent from "../views/EmailLinkSent";
 import Placeholder from "../views/Placeholder";
+import AlreadyLoggedIn from "../views/AlreadyLoggedIn";
+import SetNewPassword from "../views/SetNewPassword";
+import SetNewPasswordSuccess from "../views/SetNewPasswordSuccess";
 import { log } from "../services/logging";
 import { useState } from "react";
 import { useSizeClass } from "../utils/hooks";
+import SignUpWithPassword from "../views/SignUpWithPassword";
+import { isLoggedIn } from "../models/config/guards";
+
+const strings = {
+  login: {
+    title: "Log in",
+    done: "Logged in",
+
+    // strategies
+    email: {
+      link: {
+        title: "Email me a link",
+        checkEmail: "Check your email",
+      },
+      code: {
+        title: "Email me a code",
+        checkEmail: "Check your email",
+      },
+    },
+    sms: {
+      code: {
+        title: "Text me a code",
+        enterCode: "Enter your verification code",
+      },
+    },
+  },
+  signup: {
+    title: "Sign up",
+    done: "Signed up",
+
+    // strategies
+    email: {
+      link: {
+        title: "Email me a link",
+        checkEmail: "Check your email",
+      },
+      code: {
+        title: "Email me a code",
+        checkEmail: "Check your email",
+      },
+    },
+    sms: {
+      code: {
+        title: "Text me a code",
+        enterCode: "Enter your verification code",
+      },
+    },
+  },
+  reset: {
+    title: "Reset your password",
+    requestResetTitle: "Reset your password",
+    setNewPasswordTitle: "Set a new password",
+    done: "Password reset",
+
+    // strategies
+    email: {
+      link: {
+        title: "Reset your password",
+        checkEmail: "Check your email",
+      },
+    },
+  },
+  general: {
+    redirecting: "Redirecting...",
+    verified: "Verified",
+    welcome: "Welcome",
+  },
+  email: {
+    loginLink: {
+      title: "Email me a link",
+      checkEmail: "Check your email",
+    },
+    code: {
+      title: "Email me a code",
+      enterCode: "Enter your verification code",
+    },
+    checkEmail: "Check your email",
+  },
+  sms: {
+    code: {
+      title: "Text me a code",
+      enterCode: "Enter your verification code",
+    },
+  },
+};
 
 // Map a state node to component, title, and props
 const componentForStep = (state) => {
-  const type = state.value;
-  let typeString = "";
-  // Could be string or object of shape
-  // {
-  //   majorStep: "subStep"
-  // }
-  if (typeof type === "object") {
-    const key = Object.keys(type)[0];
-    const val = type[key];
-    typeString = `${key}.${val}`;
+  let step = "";
+  if (typeof state.value === "object") {
+    const key = Object.keys(state.value)[0];
+    const val = state.value[key];
+    step = `${key}.${val}`;
   } else {
-    typeString = type;
+    step = state.value;
   }
+
   const canShowFlow = state.context.config.flow?.firstFactors;
-  switch (typeString) {
-    // While flow is being set up, show placeholder or preview as appropriate
-    // TODO might need to tweak a little for placeholder vs preview? Not super important.
+  const type = state.context.config.type;
+
+  console.log("type", type);
+
+  const PasswordViewForType =
+    type === "login" ? LogInWithPassword : SignUpWithPassword;
+
+  console.log(PasswordViewForType);
+
+  switch (step) {
     case "init":
     case "getGlobalTenantId":
-    case "initFlow":
+    case "initForm":
     case "beginFlow":
     case "showPreviewAndFetchFlow":
     case "showPlaceholderAndFetchFlow":
-    case "handleLoginWithLink":
+    case "initPasswordReset":
       if (canShowFlow) {
         return {
-          title: "Sign up",
+          title: strings[type].title,
           Component: SelectFactor,
           props: {
             isPlaceholder: !!state.context.config.flow,
@@ -55,7 +144,7 @@ const componentForStep = (state) => {
             flow: state.context.config.flow,
             isSecondFactor: false,
             tenantId: state.context.tenantId,
-            isLogin: false,
+            isLogin: type === "login",
           },
         };
       } else {
@@ -64,21 +153,21 @@ const componentForStep = (state) => {
         };
       }
 
-    // SelectFactor flow, with password possibly included inline
     case "selectFirstFactor.showForm":
       return {
-        title: "Sign up",
+        title: strings[type].title,
         Component: SelectFactor,
         props: {
           isCompact: state.context.config.compact,
           flow: state.context.config.flow,
           isSecondFactor: false,
           tenantId: state.context.tenantId,
+          isLogin: type === "login",
         },
       };
     case "selectFirstFactor.send":
       return {
-        title: "Sign up",
+        title: strings[type].title,
         Component: SelectFactor,
         props: {
           // isCompact should always be false here
@@ -87,6 +176,7 @@ const componentForStep = (state) => {
           isSecondFactor: false,
           tenantId: state.context.tenantId,
           submittingPassword: true,
+          isLogin: type === "login",
         },
       };
 
@@ -95,7 +185,7 @@ const componentForStep = (state) => {
     case "beginSecondFactor":
     case "selectSecondFactor.showForm":
       return {
-        title: "Sign up",
+        title: strings[type].title,
         Component: SelectFactor,
         props: {
           isCompact: state.context.config.compact,
@@ -107,7 +197,7 @@ const componentForStep = (state) => {
       };
     case "selectSecondFactor.send":
       return {
-        title: "Sign up",
+        title: strings[type].title,
         Component: SelectFactor,
         props: {
           // isCompact should always be false here
@@ -124,7 +214,7 @@ const componentForStep = (state) => {
     case "ssoProvider":
       // We should have already redirected to the relevant SSO provider
       return {
-        title: "Redirecting...",
+        title: strings.general.redirecting,
         Component: Message,
         props: {
           text: "",
@@ -134,7 +224,7 @@ const componentForStep = (state) => {
     // EmailLink flow
     case "emailLink.showForm":
       return {
-        title: "Email me a link",
+        title: strings[type].email.link.title,
         Component: EnterEmail,
         props: {
           errorMessage: state.context.errorMessage,
@@ -142,7 +232,7 @@ const componentForStep = (state) => {
       };
     case "emailLink.send":
       return {
-        title: "Email me a link",
+        title: strings[type].email.link.title,
         Component: EnterEmail,
         props: {
           isLoading: true,
@@ -150,7 +240,7 @@ const componentForStep = (state) => {
       };
     case "emailLink.showEmailSent":
       return {
-        title: "Check your email",
+        title: strings[type].email.link.checkEmail,
         Component: EmailLinkSent,
         props: {
           message: state.context.view.message,
@@ -158,7 +248,7 @@ const componentForStep = (state) => {
       };
     case "emailLink.resend":
       return {
-        title: "Check your email",
+        title: strings[type].email.link.checkEmail,
         Component: EmailLinkSent,
         props: {
           message: state.context.view.message,
@@ -168,13 +258,13 @@ const componentForStep = (state) => {
     // EmailCode flow
     case "emailCode.showForm":
       return {
-        title: "Email me a code",
+        title: strings[type].email.code.title,
         Component: EnterEmail,
         props: {},
       };
     case "emailCode.send":
       return {
-        title: "Email me a code",
+        title: strings[type].email.code.title,
         Component: EnterEmail,
         props: {
           isLoading: true,
@@ -182,32 +272,21 @@ const componentForStep = (state) => {
       };
     case "emailCode.showCodeForm":
       return {
-        title: "Enter your verification code",
+        title: strings[type].email.code.enterCode,
         Component: EnterVerificationCode,
-        props: {
-          message: state.context.view.message,
-        },
-      };
-    case "emailCode.resend":
-      return {
-        title: "Enter your verification code",
-        Component: EnterVerificationCode,
-        props: {
-          message: state.context.view.message,
-        },
+        props: {},
       };
     case "emailCode.verifyCode":
       return {
-        title: "Enter your verification code",
+        title: strings[type].email.code.enterCode,
         Component: EnterVerificationCode,
         props: {
-          message: state.context.view.message,
           isLoading: true,
         },
       };
     case "emailCode.showCodeVerified":
       return {
-        title: "Verified",
+        title: strings.general.verified,
         Component: Success,
         props: {},
       };
@@ -215,13 +294,13 @@ const componentForStep = (state) => {
     // SmsCode flow
     case "smsCode.showForm":
       return {
-        title: "Text me a code",
+        title: strings[type].sms.code.title,
         Component: EnterPhone,
         props: {},
       };
     case "smsCode.send":
       return {
-        title: "Text me a code",
+        title: strings[type].sms.code.title,
         Component: EnterPhone,
         props: {
           isLoading: true,
@@ -229,13 +308,13 @@ const componentForStep = (state) => {
       };
     case "smsCode.showCodeForm":
       return {
-        title: "Enter your verification code",
+        title: strings[type].sms.code.enterCode,
         Component: EnterVerificationCode,
         props: {},
       };
     case "smsCode.verifyCode":
       return {
-        title: "Enter your verification code",
+        title: strings[type].sms.code.enterCode,
         Component: EnterVerificationCode,
         props: {
           isLoading: true,
@@ -243,7 +322,7 @@ const componentForStep = (state) => {
       };
     case "smsCode.showCodeVerified":
       return {
-        title: "Verified",
+        title: strings.general.verified,
         Component: Success,
         props: {},
       };
@@ -251,22 +330,60 @@ const componentForStep = (state) => {
     // Password flow (alone, not inline)
     case "password.showForm":
       return {
-        title: "Sign up",
-        Component: SignUpWithPassword,
+        title: strings[type].title,
+        Component: PasswordViewForType,
         props: {},
       };
     case "password.send":
       return {
-        title: "Sign up",
-        Component: SignUpWithPassword,
+        title: strings[type].title,
+        Component: PasswordViewForType,
         props: {
           isLoading: true,
         },
       };
-    case "password.showPasswordSet":
+    case "password.showPasswordSuccess":
       return {
-        title: "Successfully signed up",
+        title: strings[type].done,
         Component: Success,
+      };
+
+    // TOTP flow
+    case "totpCode.showForm": {
+      const useBackupCode = state.context.view.useBackupCode;
+      const title = useBackupCode
+        ? "Enter a backup code"
+        : "Enter your six-digit code";
+      return {
+        title,
+        Component: EnterTotpCode,
+        props: {
+          errorMessage: state.context.errorMessage,
+          useBackupCode,
+          showEmailOrUsername: state.context.view.showEmailOrUsername,
+        },
+      };
+    }
+    case "totpCode.send": {
+      const useBackupCode = state.context.view.useBackupCode;
+      const title = useBackupCode
+        ? "Enter a backup code"
+        : "Enter your six-digit code";
+      return {
+        title,
+        Component: EnterTotpCode,
+        props: {
+          isLoading: true,
+          useBackupCode,
+          showEmailOrUsername: state.context.view.showEmailOrUsername,
+        },
+      };
+    }
+    case "totpCode.showTotpSuccess":
+      return {
+        title: strings.general.verified,
+        Component: Success,
+        props: {},
       };
 
     // SetUpTotp flow
@@ -330,9 +447,42 @@ const componentForStep = (state) => {
     // Top-level "signed up" confirmation, in case we don't redirect
     case "finish":
       return {
-        title: "Successfully signed up",
+        title: strings[type].done,
         Component: Success,
         props: {},
+      };
+
+    // Set new password
+    case "setNewPassword.showForm":
+      return {
+        title: strings.reset.setNewPasswordTitle,
+        Component: SetNewPassword,
+        props: {
+          requireExistingPassword: isLoggedIn(),
+        },
+      };
+
+    case "setNewPassword.send":
+      return {
+        title: strings.reset.setNewPasswordTitle,
+        Component: SetNewPassword,
+        props: {
+          requireExistingPassword: isLoggedIn(),
+          isLoading: true,
+        },
+      };
+
+    case "setNewPassword.showNewPasswordSet":
+      return {
+        title: strings.reset.done,
+        Component: SetNewPasswordSuccess,
+      };
+
+    // Already logged in - for forms on pages without redirect-on-load
+    case "alreadyLoggedIn":
+      return {
+        title: strings.general.welcome,
+        Component: AlreadyLoggedIn,
       };
 
     // Shouldn't get here.
@@ -345,15 +495,7 @@ const componentForStep = (state) => {
   }
 };
 
-/**
- * A signup form that operates in conjunction with a login XState machine.
- *
- * @param {object} props
- * @param {object} props.state - the machine's state
- * @param {function} onEvent
- * @returns
- */
-const SignupForm = ({ state, onEvent }) => {
+const UniversalForm = ({ state, onEvent }) => {
   // Apply CSS classes based on the size of the form's container
   const [containerRef, setContainerRef] = useState();
   const sizeClass = useSizeClass(containerRef);
@@ -384,4 +526,4 @@ const SignupForm = ({ state, onEvent }) => {
   );
 };
 
-export default SignupForm;
+export default UniversalForm;

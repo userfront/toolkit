@@ -54,7 +54,7 @@ import {
   Loading,
   AuthMachineConfig,
   View,
-  SignupMachineEvent,
+  AuthMachineEvent,
 } from "../types";
 import { callUserfront, getUserfrontProperty } from "../../services/userfront";
 import {
@@ -240,7 +240,7 @@ const signupMachineConfig: AuthMachineConfig = {
   // Enables TypeScript typings
   schema: {
     context: {} as AuthContext<View>,
-    events: {} as SignupMachineEvent,
+    events: {} as AuthMachineEvent,
   },
   id: "signup",
   predictableActionArguments: true,

@@ -5,6 +5,7 @@ import { MachineConfig } from "xstate";
 export type Factor = {
   channel: string;
   strategy: string;
+  isConfiguredByUser?: boolean;
 };
 
 // An auth flow, per the Userfront API
@@ -22,7 +23,11 @@ export type FormError = {
 };
 
 // Types of form in the toolkit
-export type FormType = "signup" | "login";
+export type FormType = "signup" | "login" | "reset";
+export type SignOnFormType = "signup" | "login";
+
+// Designates whether we are intended to set up or use factors at this time
+export type FactorAction = "setup" | "use";
 
 // Configuration data for the form - intended to be set either by the caller
 // or during initial setup steps of the form, then fixed afterward.
@@ -118,6 +123,17 @@ export interface Loading extends CommonFormData {
   type: "loading";
 }
 
+export interface RequestPasswordReset extends CommonFormData {
+  type: "requestPasswordReset";
+  message: string;
+}
+
+export interface SetNewPassword extends CommonFormData {
+  type: "password";
+  password: string;
+  existingPassword?: string;
+}
+
 // A utility type that encompasses all factors.
 export type View =
   | EmailLink
@@ -151,6 +167,7 @@ export interface AuthContext<ViewType> {
   view: ViewType;
 
   // Transitory form state
+  action: FactorAction;
   isSecondFactor: boolean;
   activeFactor?: Factor;
   allowedSecondFactors?: Factor[];
@@ -173,6 +190,7 @@ export type TotpCodeContext = AuthContext<TotpCode>;
 export type FirstFactorsContext = AuthContext<FirstFactors>;
 export type SecondFactorsContext = AuthContext<SecondFactors>;
 export type LoadingContext = AuthContext<Loading>;
+export type SetNewPasswordContext = AuthContext<SetNewPassword>;
 
 // EVENT TYPES
 
@@ -290,8 +308,15 @@ export type SelectFactorEvent = {
   isSecondFactor: boolean;
 };
 
+export type SetNewPasswordSubmitEvent = {
+  type: "setNewPassword";
+  password: string;
+  confirmPassword: string;
+  existingPassword?: string;
+};
+
 // All events used in the signup machine
-export type SignupMachineEvent =
+export type AuthMachineEvent =
   | BackEvent
   | FinishEvent
   | ResendEvent
@@ -304,11 +329,12 @@ export type SignupMachineEvent =
   | PhoneNumberSubmitEvent
   | TotpCodeSubmitEvent
   | UseBackupCodeEvent
-  | SelectFactorEvent;
+  | SelectFactorEvent
+  | SetNewPasswordSubmitEvent;
 
 // The full type of the signup machine's config
 export type AuthMachineConfig = MachineConfig<
   AuthContext<View>,
   any,
-  SignupMachineEvent
+  AuthMachineEvent
 >;
