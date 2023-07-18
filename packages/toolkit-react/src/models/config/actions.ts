@@ -381,6 +381,9 @@ export const setSecondFactorAction = assign((context: AuthContext<View>) => {
   if (hasExistingSecondFactors) {
     return {
       action: <FactorAction>"use",
+      allowedSecondFactors: context.allowedSecondFactors?.filter(
+        (factor) => factor.isConfiguredByUser
+      ),
     };
   } else {
     return {
