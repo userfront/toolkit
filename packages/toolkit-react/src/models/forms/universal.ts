@@ -41,6 +41,7 @@ import {
   isSecondFactor,
   isPasswordReset,
   isLoggedInOrHasLinkCredentials,
+  isSetup,
 } from "../config/guards";
 import {
   setActiveFactor,
@@ -193,6 +194,7 @@ export const defaultOptions = {
     isSecondFactor,
     isPasswordReset,
     isLoggedInOrHasLinkCredentials,
+    isSetup,
   },
   actions: {
     setActiveFactor,
@@ -454,7 +456,6 @@ const universalMachineConfig: AuthMachineConfig = {
         // Set the appropriate action for first factors for this form.
         // Login form = use
         // Signup form = setup
-        // TODO NEW setFirstFactorAction setSecondFactorAction
         "setFirstFactorAction",
 
         // Setup the view
@@ -533,7 +534,19 @@ const universalMachineConfig: AuthMachineConfig = {
     emailCode: emailCodeConfig,
     smsCode: smsCodeConfig,
     password: passwordConfig,
-    totpCode: totpCodeConfig,
+    totpCode: {
+      id: "totpCode",
+      always: [
+        {
+          target: "setUpTotp",
+          cond: "isSetup",
+        },
+        {
+          target: "useTotpCode",
+        },
+      ],
+    },
+    useTotpCode: totpCodeConfig,
     setUpTotp: setUpTotpConfig,
     // Start an SSO provider login flow
     ssoProvider: {
@@ -598,10 +611,11 @@ const universalMachineConfig: AuthMachineConfig = {
       },
     },
 
-    // Check to see if a second factor is needed, and if so, proceed to the appropriate view
+    // Check to see if a second factor is needed, and if so, determine whether we are
+    // using or setting up the second factor, then proceed to the appropriate view
     beginSecondFactor: {
       id: "beginSecondFactor",
-      entry: ["setupView"],
+      entry: ["setSecondFactorAction", "setupView"],
       always: [
         // If a second factor isn't needed, finish the flow.
         {

@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { useMachine } from "@xstate/react";
 import Urlon from "urlon";
 import { useState, useEffect } from "react";
-import createMockUserfront from "../mockUserfront.js";
 import { useMockUserfront } from "../hooks.js";
+import createMockUserfront from "../mockUserfront.js";
 
 const {
   UnboundUniversalForm,
@@ -14,7 +14,8 @@ const {
 
 const config = {
   ...defaultUniversalFormContext.config,
-  type: "login",
+  shouldFetchFlow: false,
+  type: "reset",
 };
 const context = {
   ...defaultUniversalFormContext,

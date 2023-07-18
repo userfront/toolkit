@@ -28,7 +28,10 @@ const Index = () => {
           <Link to="/login">Login form demo</Link>
         </li>
         <li>
-          <Link to="/reset">Request password reset form demo</Link>
+          <Link to="/reset">Password reset form demo (universal)</Link>
+        </li>
+        <li>
+          <Link to="/request-reset">Request password reset form demo</Link>
         </li>
         <li>
           <Link to="/set-password">Set new password form demo</Link>

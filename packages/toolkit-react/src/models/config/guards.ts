@@ -120,3 +120,7 @@ export const isLoggedInOrHasLinkCredentials = (context: AuthContext<any>) => {
 export const isPasswordReset = (context: AuthContext<any>) => {
   return context.config.type === "reset";
 };
+
+export const isSetup = (context: AuthContext<any>) => {
+  return context.action === "setup";
+};

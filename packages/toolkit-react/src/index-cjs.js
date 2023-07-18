@@ -42,6 +42,7 @@ UserfrontCore.build = (toolId) => {
 // "Unbound" forms: the signup and login forms without a model to drive their behavior
 import { default as UnboundSignupForm } from "./forms/SignupForm";
 import { default as UnboundLoginForm } from "./forms/LoginForm";
+import { default as UnboundUniversalForm } from "./forms/UniversalForm";
 
 // Factories for creating models to pair with the unbound forms
 import {
@@ -53,15 +54,23 @@ import {
   defaultAuthContext as defaultLoginFormContext,
 } from "./models/forms/login";
 
+import {
+  default as createUniversalFormModel,
+  defaultAuthContext as createUniversalFormContext,
+} from "./models/forms/universal";
+
 // Function that allows overriding the Userfront singleton used by the forms with a custom object of your choice
 import { overrideUserfrontSingleton } from "./services/userfront";
 const _devTools = {
   UnboundSignupForm,
   UnboundLoginForm,
+  UnboundUniversalForm,
   createSignupFormModel,
   defaultSignupFormContext,
   createLoginFormModel,
   defaultLoginFormContext,
+  createUniversalFormModel,
+  createUniversalFormContext,
   overrideUserfrontSingleton,
 };
 

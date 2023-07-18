@@ -5,6 +5,9 @@ import EnterPhone from "../views/EnterPhone";
 import EnterVerificationCode from "../views/EnterVerificationCode";
 import SelectFactor from "../views/SelectFactor";
 import EnterTotpCode from "../views/EnterTotpCode";
+import SetUpTotp from "../views/SetUpTotp";
+import TotpErrorMessage from "../views/TotpErrorMessage";
+import SetUpTotpSuccess from "../views/SetUpTotpSuccess";
 import LogInWithPassword from "../views/LogInWithPassword";
 import SecuredByUserfront from "../components/SecuredByUserfront";
 import Message from "../views/Message";
@@ -21,10 +24,22 @@ import { useSizeClass } from "../utils/hooks";
 import SignUpWithPassword from "../views/SignUpWithPassword";
 import { isLoggedIn } from "../models/config/guards";
 
+// TODO DEV-484: expand on string handling and localization, extract to
+// a separate JSON file, add capability for client to pass in its own
+// locale file.
 const strings = {
   login: {
     title: "Log in",
     done: "Logged in",
+
+    secondFactor: {
+      setup: {
+        title: "Set up a second factor",
+      },
+      use: {
+        title: "Log in",
+      },
+    },
 
     // strategies
     email: {
@@ -41,6 +56,18 @@ const strings = {
       code: {
         title: "Text me a code",
         enterCode: "Enter your verification code",
+      },
+    },
+    totp: {
+      use: {
+        success: {
+          title: "Verified",
+        },
+      },
+      setup: {
+        success: {
+          title: "Added authenticator to your account",
+        },
       },
     },
   },
@@ -48,6 +75,12 @@ const strings = {
     title: "Sign up",
     done: "Signed up",
 
+    secondFactor: {
+      setup: {
+        title: "Sign up",
+      },
+    },
+
     // strategies
     email: {
       link: {
@@ -63,6 +96,13 @@ const strings = {
       code: {
         title: "Text me a code",
         enterCode: "Enter your verification code",
+      },
+    },
+    totp: {
+      setup: {
+        success: {
+          title: "Signed up",
+        },
       },
     },
   },
@@ -72,6 +112,15 @@ const strings = {
     setNewPasswordTitle: "Set a new password",
     done: "Password reset",
 
+    secondFactor: {
+      setup: {
+        title: "Set up a second factor",
+      },
+      use: {
+        title: "Enter your second factor",
+      },
+    },
+
     // strategies
     email: {
       link: {
@@ -79,11 +128,20 @@ const strings = {
         checkEmail: "Check your email",
       },
     },
+
+    totp: {
+      use: {
+        success: {
+          title: "Your password was reset",
+        },
+      },
+    },
   },
   general: {
     redirecting: "Redirecting...",
     verified: "Verified",
     welcome: "Welcome",
+    unhandledError: "Oops, something went wrong",
   },
   email: {
     loginLink: {
@@ -117,13 +175,10 @@ const componentForStep = (state) => {
 
   const canShowFlow = state.context.config.flow?.firstFactors;
   const type = state.context.config.type;
-
-  console.log("type", type);
+  const action = state.context.action;
 
   const PasswordViewForType =
     type === "login" ? LogInWithPassword : SignUpWithPassword;
-
-  console.log(PasswordViewForType);
 
   switch (step) {
     case "init":
@@ -185,7 +240,7 @@ const componentForStep = (state) => {
     case "beginSecondFactor":
     case "selectSecondFactor.showForm":
       return {
-        title: strings[type].title,
+        title: strings[type].secondFactor[action].title,
         Component: SelectFactor,
         props: {
           isCompact: state.context.config.compact,
@@ -197,7 +252,7 @@ const componentForStep = (state) => {
       };
     case "selectSecondFactor.send":
       return {
-        title: strings[type].title,
+        title: strings[type].secondFactor[action].title,
         Component: SelectFactor,
         props: {
           // isCompact should always be false here
@@ -349,7 +404,7 @@ const componentForStep = (state) => {
       };
 
     // TOTP flow
-    case "totpCode.showForm": {
+    case "useTotpCode.showForm": {
       const useBackupCode = state.context.view.useBackupCode;
       const title = useBackupCode
         ? "Enter a backup code"
@@ -364,7 +419,7 @@ const componentForStep = (state) => {
         },
       };
     }
-    case "totpCode.send": {
+    case "useTotpCode.send": {
       const useBackupCode = state.context.view.useBackupCode;
       const title = useBackupCode
         ? "Enter a backup code"
@@ -379,9 +434,9 @@ const componentForStep = (state) => {
         },
       };
     }
-    case "totpCode.showTotpSuccess":
+    case "useTotpCode.showTotpSuccess":
       return {
-        title: strings.general.verified,
+        title: strings[type].totp[action].success.title,
         Component: Success,
         props: {},
       };
@@ -421,7 +476,7 @@ const componentForStep = (state) => {
       };
     case "setUpTotp.showTotpSetupComplete":
       return {
-        title: "Successfully signed up",
+        title: strings[type].totp[action].success.title,
         Component: Success,
         props: {},
       };
@@ -488,7 +543,7 @@ const componentForStep = (state) => {
     // Shouldn't get here.
     default:
       return {
-        title: "Oops, something went wrong",
+        title: strings.general.unhandledError,
         Component: GeneralErrorMessage,
         props: {},
       };
