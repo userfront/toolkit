@@ -50,6 +50,7 @@ const strings = {
       code: {
         title: "Email me a code",
         checkEmail: "Check your email",
+        enterCode: "Enter your verification code",
       },
     },
     sms: {
@@ -60,11 +61,15 @@ const strings = {
     },
     totp: {
       use: {
+        title: "Enter your six-digit code",
+        backupCode: "Enter a backup code",
         success: {
           title: "Verified",
         },
       },
       setup: {
+        title: "Set up two-factor authentication",
+        backupCode: "Save your backup codes",
         success: {
           title: "Added authenticator to your account",
         },
@@ -90,6 +95,7 @@ const strings = {
       code: {
         title: "Email me a code",
         checkEmail: "Check your email",
+        enterCode: "Enter your verification code",
       },
     },
     sms: {
@@ -100,6 +106,7 @@ const strings = {
     },
     totp: {
       setup: {
+        title: "Set up two-factor authentication",
         success: {
           title: "Signed up",
         },
@@ -142,23 +149,6 @@ const strings = {
     verified: "Verified",
     welcome: "Welcome",
     unhandledError: "Oops, something went wrong",
-  },
-  email: {
-    loginLink: {
-      title: "Email me a link",
-      checkEmail: "Check your email",
-    },
-    code: {
-      title: "Email me a code",
-      enterCode: "Enter your verification code",
-    },
-    checkEmail: "Check your email",
-  },
-  sms: {
-    code: {
-      title: "Text me a code",
-      enterCode: "Enter your verification code",
-    },
   },
 };
 
@@ -407,8 +397,8 @@ const componentForStep = (state) => {
     case "useTotpCode.showForm": {
       const useBackupCode = state.context.view.useBackupCode;
       const title = useBackupCode
-        ? "Enter a backup code"
-        : "Enter your six-digit code";
+        ? strings[type].totp[action].backupCode
+        : strings[type].totp[action].title;
       return {
         title,
         Component: EnterTotpCode,
@@ -422,8 +412,8 @@ const componentForStep = (state) => {
     case "useTotpCode.send": {
       const useBackupCode = state.context.view.useBackupCode;
       const title = useBackupCode
-        ? "Enter a backup code"
-        : "Enter your six-digit code";
+        ? strings[type].totp[action].backupCode
+        : strings[type].totp[action].title;
       return {
         title,
         Component: EnterTotpCode,
@@ -444,7 +434,7 @@ const componentForStep = (state) => {
     // SetUpTotp flow
     case "setUpTotp.getQrCode":
       return {
-        title: "Set up two-factor authentication",
+        title: strings[type].totp[action].title,
         Component: SetUpTotp,
         props: {
           qrCode: state.context.view.qrCode || "",
@@ -452,7 +442,7 @@ const componentForStep = (state) => {
       };
     case "setUpTotp.showQrCode":
       return {
-        title: "Set up two-factor authentication",
+        title: strings[type].totp[action].title,
         Component: SetUpTotp,
         props: {
           qrCode: state.context.view.qrCode || "",
@@ -460,7 +450,7 @@ const componentForStep = (state) => {
       };
     case "setUpTotp.confirmTotpCode":
       return {
-        title: "Set up two-factor authentication",
+        title: strings[type].totp[action].title,
         Component: SetUpTotp,
         props: {
           qrCode: state.context.view.qrCode || "",
@@ -468,7 +458,7 @@ const componentForStep = (state) => {
       };
     case "setUpTotp.showBackupCodes":
       return {
-        title: "Save your backup codes",
+        title: strings[type].totp[action].backupCode,
         Component: SetUpTotpSuccess,
         props: {
           backupCodes: state.context.view.backupCodes || [],
@@ -483,7 +473,7 @@ const componentForStep = (state) => {
     // Show a standalone error message if we fail to fetch the QR code
     case "setUpTotp.showErrorMessage":
       return {
-        title: "Oops, something went wrong",
+        title: strings.general.unhandledError,
         Component: TotpErrorMessage,
         props: {},
       };
@@ -494,7 +484,7 @@ const componentForStep = (state) => {
     case "missingFlowFromServerError":
     case "UnhandledError":
       return {
-        title: "Oops, something went wrong",
+        title: strings.general.unhandledError,
         Component: GeneralErrorMessage,
         props: {},
       };
