@@ -5,9 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { inspect } from "@xstate/inspect";
 import SignupDemo from "./pages/SignupDemo";
 import LoginDemo from "./pages/LoginDemo";
-import ResetDemo from "./pages/ResetDemo";
 import LogoutDemo from "./pages/LogoutDemo";
-import SetNewPasswordDemo from "./pages/SetNewPasswordDemo";
 import PasswordResetDemo from "./pages/PasswordResetDemo";
 import Index from "./pages/Index";
 import Redirect from "./pages/Redirect";
@@ -34,14 +32,6 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginDemo />,
-  },
-  {
-    path: "/request-reset",
-    element: <ResetDemo />,
-  },
-  {
-    path: "/set-password",
-    element: <SetNewPasswordDemo />,
   },
   {
     path: "/logout",

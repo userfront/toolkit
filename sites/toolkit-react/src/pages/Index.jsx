@@ -31,12 +31,6 @@ const Index = () => {
           <Link to="/reset">Password reset form demo (universal)</Link>
         </li>
         <li>
-          <Link to="/request-reset">Request password reset form demo</Link>
-        </li>
-        <li>
-          <Link to="/set-password">Set new password form demo</Link>
-        </li>
-        <li>
           <Link to="/logout">Logout button demo</Link>
         </li>
       </ul>
@@ -52,7 +46,7 @@ const Index = () => {
           <ul>
             <li>
               <Link to="/live/signup?redirectOnLoad=true">
-                (with redirect on load)
+                (with redirect on load for logged-in users)
               </Link>
             </li>
           </ul>
@@ -62,7 +56,7 @@ const Index = () => {
           <ul>
             <li>
               <Link to="/live/login?redirectOnLoad=true">
-                (with redirect on load)
+                (with redirect on load for logged-in users)
               </Link>
             </li>
           </ul>
@@ -74,18 +68,9 @@ const Index = () => {
               Should display the "request password reset" form when accessed
               directly, and the "set new password" form when provided{" "}
               <code>uuid</code> and
-              <code>token</code> in the query parameters.
-            </li>
-          </ul>
-        </li>
-        <li>
-          <Link to="/redirects/password-reset">
-            Set new password form (live)
-          </Link>
-          <ul>
-            <li>
-              At the password reset path. For full flow, use the password reset
-              form, then follow the link there.
+              <code>token</code> in the query parameters. For the full flow,
+              copy the query params from the link you receive and paste them
+              into the password reset form page's URL.
             </li>
           </ul>
         </li>

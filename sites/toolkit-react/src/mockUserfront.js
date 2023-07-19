@@ -22,7 +22,7 @@ const mockUserfrontResponses = {
           {
             strategy: "verificationCode",
             channel: "sms",
-            isConfiguredByUser: true,
+            isConfiguredByUser: false,
           },
         ],
       },
@@ -368,8 +368,8 @@ class MockUserfront {
       },
     };
     this.logAllMethodCalls = false;
-    this.requireMfa = false;
-    this.requireMfaSetup = true;
+    this.requireMfa = true;
+    this.requireMfaSetup = false;
     this.isAwaitingSecondFactor = false;
 
     this.login = this.login.bind(this);

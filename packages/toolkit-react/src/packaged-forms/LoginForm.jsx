@@ -1,10 +1,5 @@
 "use client";
 
-import LoginForm from "../forms/LoginForm";
-import createLoginFormMachine, {
-  defaultAuthContext,
-} from "../models/forms/login";
-import { useMachine } from "@xstate/react";
 import PackagedUniversalForm from "./UniversalForm";
 
 /**
@@ -31,41 +26,6 @@ import PackagedUniversalForm from "./UniversalForm";
  *   Defaults to false; should remain false in production.
  *   Only useful when developing this library.
  */
-// function PackagedLoginForm({
-//   tenantId,
-//   flow,
-//   compact,
-//   redirect,
-//   redirectOnLoadIfLoggedIn = false,
-//   shouldFetchFlow = true,
-//   xstateDevTools = false,
-// }) {
-//   const [state, send] = useMachine(
-//     () => {
-//       const config = {
-//         ...defaultAuthContext.config,
-//       };
-//       if (tenantId) {
-//         config.tenantId = tenantId;
-//       }
-//       if (flow) {
-//         config.flow = flow;
-//       }
-//       config.compact = !!compact;
-//       config.shouldFetchFlow = !!shouldFetchFlow;
-//       config.redirect = redirect;
-//       config.redirectOnLoad = !!redirectOnLoadIfLoggedIn;
-//       const context = {
-//         ...defaultAuthContext,
-//         config,
-//       };
-//       return createLoginFormMachine(context);
-//     },
-//     { devTools: xstateDevTools }
-//   );
-
-//   return <LoginForm state={state} onEvent={send} />;
-// }
 function PackagedLoginForm(props) {
   return <PackagedUniversalForm type="login" {...props} />;
 }
