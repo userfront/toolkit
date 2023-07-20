@@ -43,8 +43,6 @@ const SelectFactor = ({
 
   let showingPassword = false;
 
-  console.log("isLogin", isLogin);
-
   const PasswordForm = isLogin ? LogInWithPassword : SignUpWithPassword;
 
   // Build list of buttons for factors,
