@@ -13,7 +13,6 @@ import LiveSignupDemo from "./pages/LiveSignupDemo";
 import LiveLoginDemo from "./pages/LiveLoginDemo";
 import LiveResetDemo from "./pages/LiveResetDemo";
 import LiveLogoutDemo from "./pages/LiveLogoutDemo";
-import LiveSetNewPasswordDemo from "./pages/LiveSetNewPasswordDemo";
 
 import Userfront from "../../../packages/toolkit-react/src/index.js";
 import { useEffect } from "react";

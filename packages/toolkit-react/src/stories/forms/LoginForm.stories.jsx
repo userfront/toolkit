@@ -1,9 +1,9 @@
-import LoginForm from "../../forms/LoginForm";
+import UniversalForm from "../../forms/UniversalForm";
 import FixedWidth from "../utils/FixedWidth";
 
 export default {
   title: "Forms/Login form",
-  component: LoginForm,
+  component: UniversalForm,
   argTypes: {
     width: {
       name: "Width of container",
@@ -18,22 +18,22 @@ export default {
   },
 };
 
-// export const Default = (args) => {
-//   if (args.width) {
-//     return (
-//       <FixedWidth width={args.width}>
-//         <LoginForm />
-//       </FixedWidth>
-//     );
-//   }
-//   let width;
-//   return (
-//     <FixedWidth width={width}>
-//       <LoginForm />
-//     </FixedWidth>
-//   );
-// };
-// Default.args = {
-//   width: 340,
-// };
-// Default.storyName = "Login form";
+export const Default = (args) => {
+  if (args.width) {
+    return (
+      <FixedWidth width={args.width}>
+        <UniversalForm type="login" />
+      </FixedWidth>
+    );
+  }
+  let width;
+  return (
+    <FixedWidth width={width}>
+      <UniversalForm type="login" />
+    </FixedWidth>
+  );
+};
+Default.args = {
+  width: 340,
+};
+Default.storyName = "Login form";
