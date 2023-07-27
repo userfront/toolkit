@@ -138,9 +138,18 @@ const strings = {
 
     totp: {
       use: {
+        title: "Enter your six-digit authenticator code",
+        backupCode: "Enter a backup code",
         success: {
           title: "Your password was reset",
         },
+      },
+    },
+
+    sms: {
+      code: {
+        title: "Text me a code",
+        enterCode: "Enter your verification code",
       },
     },
   },
