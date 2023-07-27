@@ -366,16 +366,46 @@ const universalMachineConfig: AuthMachineConfig = {
     // Choose "set new password" if the user is logged in or link credentials are in query params,
     // "request password reset" otherwise.
     initPasswordReset: {
-      always: [
-        {
-          target: "setNewPassword",
-          cond: "isLoggedInOrHasLinkCredentials",
-        },
-        // Request password reset = email link with a different title
-        {
-          target: "emailLink",
-        },
-      ],
+      invoke: {
+        // Retrieve mode from userfront-core
+        // @ts-ignore - TS doesn't infer all of the valid methods correctly
+        src: () => callUserfront({ method: "setMode" }),
+
+        // Recoverable; proceed without resetting mode
+        onError: [
+          {
+            target: "setNewPassword",
+            cond: "isLoggedInOrHasLinkCredentials",
+          },
+          // Request password reset = email link with a different title
+          {
+            target: "emailLink",
+          },
+        ],
+
+        onDone: [
+          {
+            target: "setNewPassword",
+            cond: "isLoggedInOrHasLinkCredentials",
+            actions: "setFlowFromUserfrontApi",
+          },
+          // Request password reset = email link with a different title
+          {
+            target: "emailLink",
+            actions: "setFlowFromUserfrontApi",
+          },
+        ],
+      },
+      // always: [
+      //   {
+      //     target: "setNewPassword",
+      //     cond: "isLoggedInOrHasLinkCredentials",
+      //   },
+      //   // Request password reset = email link with a different title
+      //   {
+      //     target: "emailLink",
+      //   },
+      // ],
     },
 
     // Show and run the "set new password" flow
