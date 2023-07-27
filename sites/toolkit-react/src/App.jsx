@@ -70,7 +70,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/redirects/password-reset",
-    element: <LiveSetNewPasswordDemo />,
+    element: <PasswordResetDemo />,
   },
 ]);
 
