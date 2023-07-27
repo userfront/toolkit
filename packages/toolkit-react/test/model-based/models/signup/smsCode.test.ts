@@ -5,7 +5,7 @@ import { createTestMachine, createTestModel } from "@xstate/test";
 import * as actions from "../../../../src/models/config/actions";
 import * as guards from "../../../../src/models/config/guards";
 import { useMockUserfront, addGlobalStates } from "../../../utils";
-import { defaultAuthContext } from "../../../../src/models/forms/signup";
+import { defaultAuthContext } from "../../../../src/models/forms/universal";
 import { SmsCodeContext } from "../../../../src/models/types";
 
 const machineOptions = {
@@ -104,10 +104,10 @@ describe("model-based: models/signup/smsCode", () => {
             const state = smsCodeService.getSnapshot();
             expect(state.value).toEqual("send");
             expect(state.context.error).toBeFalsy();
-            expect(mockUserfront.lastCall.method).toEqual(
+            expect(mockUserfront.lastCall?.method).toEqual(
               "sendVerificationCode"
             );
-            const arg = mockUserfront.lastCall.args[0];
+            const arg = mockUserfront.lastCall?.args[0];
             expect(arg.channel).toEqual("sms");
             expect(arg.phoneNumber).toEqual(phoneNumber);
           },
@@ -129,8 +129,8 @@ describe("model-based: models/signup/smsCode", () => {
             const state = smsCodeService.getSnapshot();
             expect(state.value).toEqual("verifyCode");
             expect(state.context.error).toBeFalsy();
-            expect(mockUserfront.lastCall.method).toEqual("login");
-            const arg = mockUserfront.lastCall.args[0];
+            expect(mockUserfront.lastCall?.method).toEqual("login");
+            const arg = mockUserfront.lastCall?.args[0];
             expect(arg.channel).toEqual("sms");
             expect(arg.method).toEqual("verificationCode");
             expect(arg.verificationCode).toEqual(verificationCode);
