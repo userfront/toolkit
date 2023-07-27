@@ -6,7 +6,7 @@ import { overrideUserfrontSingleton } from "../../../src/services/userfront";
 
 const PasswordResetForm = (props) => <UniversalForm type="reset" {...props} />;
 
-describe.only("forms/PasswordResetForm.jsx", () => {
+describe("forms/PasswordResetForm.jsx", () => {
   it("should show the 'request password reset' form for the corresponding state", async () => {
     const state = {
       context: {

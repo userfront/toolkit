@@ -396,16 +396,6 @@ const universalMachineConfig: AuthMachineConfig = {
           },
         ],
       },
-      // always: [
-      //   {
-      //     target: "setNewPassword",
-      //     cond: "isLoggedInOrHasLinkCredentials",
-      //   },
-      //   // Request password reset = email link with a different title
-      //   {
-      //     target: "emailLink",
-      //   },
-      // ],
     },
 
     // Show and run the "set new password" flow
