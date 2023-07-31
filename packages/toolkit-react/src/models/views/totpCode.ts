@@ -3,7 +3,6 @@ import { AuthMachineConfig, TotpCodeContext } from "../types";
 
 // TOTP Authenticator state machine config
 const totpCodeConfig: AuthMachineConfig = {
-  // TODO would need to update specific forms
   id: "useTotpCode",
   initial: "showForm",
   // If this is the first factor, the user needs to provide an email or username.

@@ -207,6 +207,7 @@ export const setTotpCode = assign(
     view: {
       ...context.view,
       totpCode: event.totpCode ?? "",
+      backupCode: event.backupCode ?? "",
       emailOrUsername: event.emailOrUsername ?? "",
     },
   })
