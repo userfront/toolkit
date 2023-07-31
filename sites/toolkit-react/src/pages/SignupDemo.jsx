@@ -4,22 +4,32 @@ import { useMachine } from "@xstate/react";
 import Urlon from "urlon";
 import { useState, useEffect } from "react";
 import { useMockUserfront } from "../hooks.js";
+import createMockUserfront from "../mockUserfront.js";
 
-const { UnboundSignupForm, createSignupFormModel, defaultSignupFormContext } =
-  _devTools;
+const {
+  UnboundUniversalForm,
+  createUniversalFormModel,
+  defaultUniversalFormContext,
+} = _devTools;
 
 const config = {
-  ...defaultSignupFormContext.config,
-  shouldFetchFlow: true,
+  ...defaultUniversalFormContext.config,
+  type: "signup",
 };
 const context = {
-  ...defaultSignupFormContext,
+  ...defaultUniversalFormContext,
   config,
 };
-const signupFormModel = createSignupFormModel(context);
+
+const LoginFormModel = createUniversalFormModel(context);
+
+const mockUserfront = createMockUserfront();
+
+mockUserfront.requireMfa = true;
+mockUserfront.requireMfaSetup = true;
 
 function App() {
-  useMockUserfront();
+  useMockUserfront(mockUserfront);
   const [hasSetInitialState, setHasSetInitialState] = useState(false);
   const [initialState, setInitialState] = useState({});
   if (!hasSetInitialState) {
@@ -43,7 +53,7 @@ function App() {
     machineOptions.state = initialState;
   }
 
-  const machine = signupFormModel;
+  const machine = LoginFormModel;
   const [stateJson, setStateJson] = useState({});
   const [stateUrlon, setStateUrlon] = useState("");
   const [state, send] = useMachine(machine, machineOptions);
@@ -61,6 +71,7 @@ function App() {
     setStateJson(stateObj);
     const newUrlon = Urlon.stringify(JSON.parse(JSON.stringify(state)));
     setStateUrlon(newUrlon);
+    mockUserfront.attachToWindow();
   }, [state]);
 
   const handleEvent = (event) => {
@@ -72,7 +83,7 @@ function App() {
       <div>
         <Link to="/">Home</Link>
       </div>
-      <UnboundSignupForm state={state} onEvent={handleEvent} />
+      <UnboundUniversalForm state={state} onEvent={handleEvent} />
       <hr />
       <div>
         <h2>State JSON:</h2>

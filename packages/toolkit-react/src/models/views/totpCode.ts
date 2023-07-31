@@ -3,11 +3,11 @@ import { AuthMachineConfig, TotpCodeContext } from "../types";
 
 // TOTP Authenticator state machine config
 const totpCodeConfig: AuthMachineConfig = {
-  id: "totpCode",
+  id: "useTotpCode",
   initial: "showForm",
   // If this is the first factor, the user needs to provide an email or username.
   // If it's the second factor, we already have that info.
-  entry: ["setupView", "setShowEmailOrUsernameIfFirstFactor"],
+  entry: ["clearError", "setupView", "setShowEmailOrUsernameIfFirstFactor"],
   states: {
     // Show the TOTP code entry form
     showForm: {

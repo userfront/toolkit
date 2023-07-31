@@ -1,9 +1,9 @@
-import SignupForm from "../../forms/SignupForm";
+import UniversalForm from "../../forms/UniversalForm";
 import FixedWidth from "../utils/FixedWidth";
 
 export default {
   title: "Forms/Signup form",
-  component: SignupForm,
+  component: UniversalForm,
   argTypes: {
     width: {
       name: "Width of container",
@@ -18,22 +18,22 @@ export default {
   },
 };
 
-// export const Default = (args) => {
-//   if (args.width) {
-//     return (
-//       <FixedWidth width={args.width}>
-//         <SignupForm />
-//       </FixedWidth>
-//     );
-//   }
-//   let width;
-//   return (
-//     <FixedWidth width={width}>
-//       <SignupForm />
-//     </FixedWidth>
-//   );
-// };
-// Default.args = {
-//   width: 340,
-// };
-// Default.storyName = "Signup form";
+export const Default = (args) => {
+  if (args.width) {
+    return (
+      <FixedWidth width={args.width}>
+        <UniversalForm type="signup" />
+      </FixedWidth>
+    );
+  }
+  let width;
+  return (
+    <FixedWidth width={width}>
+      <UniversalForm type="signup" />
+    </FixedWidth>
+  );
+};
+Default.args = {
+  width: 340,
+};
+Default.storyName = "Signup form";

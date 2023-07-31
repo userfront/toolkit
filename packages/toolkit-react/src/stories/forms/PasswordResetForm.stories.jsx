@@ -1,9 +1,9 @@
-import PasswordResetForm from "../../forms/PasswordResetForm";
+import UniversalForm from "../../forms/UniversalForm";
 import FixedWidth from "../utils/FixedWidth";
 
 export default {
   title: "Forms/Password reset form",
-  component: PasswordResetForm,
+  component: UniversalForm,
   argTypes: {
     width: {
       name: "Width of container",
@@ -29,14 +29,20 @@ export const Default = (args) => {
   if (args.width) {
     return (
       <FixedWidth width={args.width}>
-        <PasswordResetForm shouldConfirmPassword={args.shouldConfirmPassword} />
+        <UniversalForm
+          type="reset"
+          shouldConfirmPassword={args.shouldConfirmPassword}
+        />
       </FixedWidth>
     );
   }
   let width;
   return (
     <FixedWidth width={width}>
-      <PasswordResetForm shouldConfirmPassword={args.shouldConfirmPassword} />
+      <UniversalForm
+        type="reset"
+        shouldConfirmPassword={args.shouldConfirmPassword}
+      />
     </FixedWidth>
   );
 };

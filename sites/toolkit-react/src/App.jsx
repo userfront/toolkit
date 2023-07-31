@@ -5,16 +5,14 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { inspect } from "@xstate/inspect";
 import SignupDemo from "./pages/SignupDemo";
 import LoginDemo from "./pages/LoginDemo";
-import ResetDemo from "./pages/ResetDemo";
 import LogoutDemo from "./pages/LogoutDemo";
-import SetNewPasswordDemo from "./pages/SetNewPasswordDemo";
+import PasswordResetDemo from "./pages/PasswordResetDemo";
 import Index from "./pages/Index";
 import Redirect from "./pages/Redirect";
 import LiveSignupDemo from "./pages/LiveSignupDemo";
 import LiveLoginDemo from "./pages/LiveLoginDemo";
 import LiveResetDemo from "./pages/LiveResetDemo";
 import LiveLogoutDemo from "./pages/LiveLogoutDemo";
-import LiveSetNewPasswordDemo from "./pages/LiveSetNewPasswordDemo";
 
 import Userfront from "../../../packages/toolkit-react/src/index.js";
 import { useEffect } from "react";
@@ -35,16 +33,12 @@ const router = createBrowserRouter([
     element: <LoginDemo />,
   },
   {
-    path: "/reset",
-    element: <ResetDemo />,
-  },
-  {
-    path: "/set-password",
-    element: <SetNewPasswordDemo />,
-  },
-  {
     path: "/logout",
     element: <LogoutDemo />,
+  },
+  {
+    path: "/reset",
+    element: <PasswordResetDemo />,
   },
   {
     path: "/live/login",
@@ -76,7 +70,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/redirects/password-reset",
-    element: <LiveSetNewPasswordDemo />,
+    element: <PasswordResetDemo />,
   },
 ]);
 

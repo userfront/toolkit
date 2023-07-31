@@ -22,6 +22,9 @@ import {
   UseBackupCodeEvent,
   Factor,
   EmailLinkContext,
+  FactorAction,
+  SetNewPasswordContext,
+  SetNewPasswordSubmitEvent,
 } from "../types";
 import { getTargetForFactor, factorConfig, hasValue } from "./utils";
 // @ts-ignore
@@ -166,6 +169,17 @@ export const setPassword = assign(
   })
 );
 
+export const setPasswordForReset = assign(
+  (context: SetNewPasswordContext, event: SetNewPasswordSubmitEvent) => ({
+    view: {
+      ...context.view,
+      password: event.password,
+      confirmPassword: event.confirmPassword,
+      existingPassword: event.existingPassword,
+    },
+  })
+);
+
 // Store the user's phone number so we can send it
 export const setPhoneNumber = assign(
   (context: SmsCodeContext, event: PhoneNumberSubmitEvent) => ({
@@ -193,6 +207,7 @@ export const setTotpCode = assign(
     view: {
       ...context.view,
       totpCode: event.totpCode ?? "",
+      backupCode: event.backupCode ?? "",
       emailOrUsername: event.emailOrUsername ?? "",
     },
   })
@@ -355,3 +370,25 @@ export const clearResentMessage = assign((context: EmailLinkContext) => ({
     message: "",
   },
 }));
+
+export const setFirstFactorAction = assign((context: AuthContext<View>) => ({
+  action: <FactorAction>(context.config.type === "login" ? "use" : "setup"),
+}));
+
+export const setSecondFactorAction = assign((context: AuthContext<View>) => {
+  const hasExistingSecondFactors = context.allowedSecondFactors?.some(
+    (factor) => factor.isConfiguredByUser
+  );
+  if (hasExistingSecondFactors) {
+    return {
+      action: <FactorAction>"use",
+      allowedSecondFactors: context.allowedSecondFactors?.filter(
+        (factor) => factor.isConfiguredByUser
+      ),
+    };
+  } else {
+    return {
+      action: <FactorAction>"setup",
+    };
+  }
+});

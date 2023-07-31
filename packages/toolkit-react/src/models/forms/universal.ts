@@ -1,4 +1,48 @@
 import { createMachine, assign } from "xstate";
+
+import {
+  AuthContext,
+  SelectFactorEvent,
+  Loading,
+  AuthMachineConfig,
+  View,
+  AuthMachineEvent,
+} from "../types";
+
+import { callUserfront, getUserfrontProperty } from "../../services/userfront";
+import {
+  createOnlyFactorCondition,
+  matchFactor,
+  factorConfig,
+  missingFlowError,
+  unhandledError,
+} from "../config/utils";
+import passwordConfig from "../views/password";
+import selectFactorConfig from "../views/selectFactor";
+import totpCodeConfig from "../views/totpCode";
+import setUpTotpConfig from "../views/setUpTotp";
+import smsCodeConfig from "../views/smsCode";
+import emailCodeConfig from "../views/emailCode";
+import emailLinkConfig from "../views/emailLink";
+import setNewPasswordConfig from "../views/setNewPassword";
+import {
+  isSsoProvider,
+  hasNoActiveFactor,
+  isLocalMode,
+  isMissingFlow,
+  isMissingFlowFromServer,
+  isLocalModeWithoutFlow,
+  isMissingTenantId,
+  passwordsMatch,
+  hasLinkQueryParams,
+  secondFactorRequired,
+  secondFactorRequiredFromView,
+  isLoggedIn,
+  isSecondFactor,
+  isPasswordReset,
+  isLoggedInOrHasLinkCredentials,
+  isSetup,
+} from "../config/guards";
 import {
   setActiveFactor,
   resumeIfNeeded,
@@ -9,13 +53,14 @@ import {
   setTenantIdIfPresent,
   setTotpCode,
   setUseBackupCode,
-  setShowEmailOrUsernameIfFirstFactor,
+  setQrCode,
   redirectIfLoggedIn,
   redirectOnLoad,
   setCode,
   setErrorFromApiError,
   clearError,
   setErrorForPasswordMismatch,
+  setShowEmailOrUsernameIfFirstFactor,
   markAsSecondFactor,
   setAllowedSecondFactors,
   setAllowedSecondFactorsFromView,
@@ -27,49 +72,18 @@ import {
   markQueryParamsInvalid,
   setResentMessage,
   clearResentMessage,
+  setFirstFactorAction,
+  setSecondFactorAction,
+  setPasswordForReset,
 } from "../config/actions";
-import emailCodeConfig from "../views/emailCode";
-import emailLinkConfig from "../views/emailLink";
-import {
-  isSsoProvider,
-  hasNoActiveFactor,
-  isLocalMode,
-  isMissingFlow,
-  isLocalModeWithoutFlow,
-  isMissingTenantId,
-  hasLinkQueryParams,
-  secondFactorRequired,
-  secondFactorRequiredFromView,
-  isLoggedIn,
-  isSecondFactor,
-  alwaysSucceed,
-} from "../config/guards";
-import passwordConfig from "../views/password";
-import selectFactorConfig from "../views/selectFactor";
-import totpCodeConfig from "../views/totpCode";
-import smsCodeConfig from "../views/smsCode";
-import {
-  AuthContext,
-  SelectFactorEvent,
-  Loading,
-  AuthMachineConfig,
-  View,
-  SignupMachineEvent,
-} from "../types";
-import { callUserfront, getUserfrontProperty } from "../../services/userfront";
-import {
-  createOnlyFactorCondition,
-  matchFactor,
-  factorConfig,
-  missingFlowError,
-  unhandledError,
-} from "../config/utils";
 
-// SIGNUP FORM MACHINE CONFIG
+// UNIVERSAL FORM MACHINE CONFIG
+// The universal form can act as a signup, login, or password reset form
+// (Password reset includes both requesting a reset email and setting a new password)
 
 // Options: provide the guards and actions for the state machine as
 // a separate object, so we can override them as needed for testing.
-export const defaultSignupOptions = {
+export const defaultOptions = {
   guards: {
     // Predicates for first factors:
     // Does the flow have multiple first factors?
@@ -171,14 +185,18 @@ export const defaultSignupOptions = {
     hasNoActiveFactor,
     isLocalMode,
     isMissingFlow,
+    isMissingFlowFromServer,
     isLocalModeWithoutFlow,
     isMissingTenantId,
-    passwordsMatch: alwaysSucceed,
+    passwordsMatch,
     hasLinkQueryParams,
     secondFactorRequired,
     secondFactorRequiredFromView,
     isLoggedIn,
     isSecondFactor,
+    isPasswordReset,
+    isLoggedInOrHasLinkCredentials,
+    isSetup,
   },
   actions: {
     setActiveFactor,
@@ -190,13 +208,14 @@ export const defaultSignupOptions = {
     setTenantIdIfPresent,
     setTotpCode,
     setUseBackupCode,
-    setShowEmailOrUsernameIfFirstFactor,
+    setQrCode,
     redirectIfLoggedIn,
     redirectOnLoad,
     setCode,
     setErrorFromApiError,
     clearError,
     setErrorForPasswordMismatch,
+    setShowEmailOrUsernameIfFirstFactor,
     markAsSecondFactor,
     setAllowedSecondFactors,
     setAllowedSecondFactorsFromView,
@@ -208,10 +227,12 @@ export const defaultSignupOptions = {
     markQueryParamsInvalid,
     setResentMessage,
     clearResentMessage,
+    setFirstFactorAction,
+    setSecondFactorAction,
+    setPasswordForReset,
   },
 };
 
-// A default/starting context for the signup machine
 export const defaultAuthContext = {
   user: {
     email: "",
@@ -224,25 +245,18 @@ export const defaultAuthContext = {
     compact: false,
     locale: "en-US",
     type: "login",
+    action: "use",
   },
   view: {} as Loading,
   isSecondFactor: false,
-  allowBack: true,
-  error: null,
-  query: {
-    token: "",
-    uuid: "",
-  },
 };
 
-// Signup machine top-level configuration
-const signupMachineConfig: AuthMachineConfig = {
-  // Enables TypeScript typings
+const universalMachineConfig: AuthMachineConfig = {
   schema: {
     context: {} as AuthContext<View>,
-    events: {} as SignupMachineEvent,
+    events: {} as AuthMachineEvent,
   },
-  id: "signup",
+  id: "universal",
   predictableActionArguments: true,
   initial: "init",
   states: {
@@ -259,22 +273,23 @@ const signupMachineConfig: AuthMachineConfig = {
         },
       ],
     },
+
     // Initial state
-    // Start the form's loading process
+    // Start the loading process
     init: {
       always: [
-        // If no tenant ID is provided inline/as a prop,
+        // If no tenant ID is provided inline or as a prop,
         // then get it from the global Userfront instance
         {
           target: "getGlobalTenantId",
           cond: "isMissingTenantId",
         },
-        // If a tenant ID is present, proceed
         {
           target: "initFlow",
         },
       ],
     },
+
     // Get the tenant ID from the global Userfront instance
     getGlobalTenantId: {
       invoke: {
@@ -296,46 +311,100 @@ const signupMachineConfig: AuthMachineConfig = {
         ],
       },
     },
-    // Start the flow, if possible, or report an error.
+
+    // Start form-specific initialization
     initFlow: {
       // If there are uuid and token query params, add them to the context
       entry: ["readQueryParams"],
       always: [
+        // If this is a password reset form, proceed
+        {
+          target: "initPasswordReset",
+          cond: "isPasswordReset",
+        },
+        // This is a signup or login form, do shared initialization
+
+        // If there's already a user, proceed.
+        {
+          target: "alreadyLoggedIn",
+          cond: "isLoggedIn",
+        },
+
         // If shouldFetchFlow = false but we don't have a flow, we can't proceed.
         // Report the error.
         {
           target: "missingFlowInLocalModeError",
           cond: "isLocalModeWithoutFlow",
         },
+
         // If shouldFetchFlow = true and we don't have a flow, then show a placeholder,
         // and fetch the flow from Userfront.
         {
           target: "showPlaceholderAndFetchFlow",
           cond: "isMissingFlow",
         },
-        // If we have a flow and shouldFetchFlow = false, proceed to the first step.
+
+        // If we have a flow and shouldFetchFlow = false, proceed to the form's first step.
         {
           target: "beginFlow",
           cond: "isLocalMode",
         },
+
         // If we have a flow and shouldFetchFlow = true, proceed to a preview of the first step;
-        // the preview shouldn't proceed to a specific factor.
+        // the preview won't proceed to a specific factor.
         {
           target: "showPreviewAndFetchFlow",
         },
       ],
     },
-    // Report the errors above
-    missingFlowInLocalModeError: {
-      entry: assign({ error: missingFlowError("Missing flow in local mode") }),
+
+    // This is a login or signup form, but we're already logged in.
+    // Show a message, and redirect if config.redirectOnLoad !== false.
+    alreadyLoggedIn: {
+      entry: ["redirectOnLoad"],
+      id: "alreadyLoggedIn",
+      type: "final",
     },
-    missingFlowFromServerError: {
-      entry: assign({ error: missingFlowError("Missing flow from server") }),
+
+    // Initialize the password reset flow -
+    // Choose "set new password" if the user is logged in or link credentials are in query params,
+    // "request password reset" otherwise.
+    initPasswordReset: {
+      invoke: {
+        // Retrieve mode from userfront-core
+        // @ts-ignore - TS doesn't infer all of the valid methods correctly
+        src: () => callUserfront({ method: "setMode" }),
+
+        // Recoverable; proceed without resetting mode
+        onError: [
+          {
+            target: "setNewPassword",
+            cond: "isLoggedInOrHasLinkCredentials",
+          },
+          // Request password reset = email link with a different title
+          {
+            target: "emailLink",
+          },
+        ],
+
+        onDone: [
+          {
+            target: "setNewPassword",
+            cond: "isLoggedInOrHasLinkCredentials",
+            actions: "setFlowFromUserfrontApi",
+          },
+          // Request password reset = email link with a different title
+          {
+            target: "emailLink",
+            actions: "setFlowFromUserfrontApi",
+          },
+        ],
+      },
     },
-    unhandledError: {
-      id: "unhandledError",
-      entry: assign({ error: unhandledError }),
-    },
+
+    // Show and run the "set new password" flow
+    setNewPassword: setNewPasswordConfig,
+
     // Show the placeholder while fetching the flow from Userfront servers.
     showPlaceholderAndFetchFlow: {
       invoke: {
@@ -355,6 +424,7 @@ const signupMachineConfig: AuthMachineConfig = {
         ],
       },
     },
+
     // Show a partially functional preview based on the locally provided flow
     // while fetching the updated flow from Userfront servers
     showPreviewAndFetchFlow: {
@@ -387,11 +457,34 @@ const signupMachineConfig: AuthMachineConfig = {
         },
       },
     },
-    // Start the flow
+
+    // Report possible errors from initialization
+    missingFlowInLocalModeError: {
+      entry: assign({ error: missingFlowError("Missing flow in local mode") }),
+    },
+    missingFlowFromServerError: {
+      entry: assign({ error: missingFlowError("Missing flow from server") }),
+    },
+    unhandledError: {
+      id: "unhandledError",
+      entry: assign({ error: unhandledError }),
+    },
+
+    // Start the signup or login flow
     beginFlow: {
-      // At this point the Userfront singleton is fully initialized, so we should
-      // try to redirect if the user is logged in and config.redirectOnLoad !== false.
-      entry: ["redirectOnLoad", "setupView"],
+      entry: [
+        // At this point the Userfront singleton is fully initialized, so we should
+        // try to redirect if the user is logged in and config.redirectOnLoad !== false.
+        "redirectOnLoad",
+
+        // Set the appropriate action for first factors for this form.
+        // Login form = use
+        // Signup form = setup
+        "setFirstFactorAction",
+
+        // Setup the view
+        "setupView",
+      ],
       always: [
         // If we're returning from a passwordless/email link or SSO first factor, attempt to use
         // the query params to proceed.
@@ -456,6 +549,7 @@ const signupMachineConfig: AuthMachineConfig = {
         },
       ],
     },
+
     // Show the first factor selection view, non-compact
     // Parallel states for the Password view and the rest of the form
     selectFirstFactor: selectFactorConfig,
@@ -464,7 +558,20 @@ const signupMachineConfig: AuthMachineConfig = {
     emailCode: emailCodeConfig,
     smsCode: smsCodeConfig,
     password: passwordConfig,
-    totpCode: totpCodeConfig,
+    totpCode: {
+      id: "totpCode",
+      always: [
+        {
+          target: "setUpTotp",
+          cond: "isSetup",
+        },
+        {
+          target: "useTotpCode",
+        },
+      ],
+    },
+    useTotpCode: totpCodeConfig,
+    setUpTotp: setUpTotpConfig,
     // Start an SSO provider login flow
     ssoProvider: {
       id: "ssoProvider",
@@ -486,6 +593,7 @@ const signupMachineConfig: AuthMachineConfig = {
         },
       },
     },
+
     // Handle an incoming login link, using its query parameters to continue the login flow
     handleLoginWithLink: {
       id: "handleLoginWithLink",
@@ -504,6 +612,7 @@ const signupMachineConfig: AuthMachineConfig = {
         },
         onDone: [
           // If we need to enter a second factor, proceed to that step
+          // TODO NEW/CHANGE setAllowedSecondFactors -> set action too
           {
             actions: "setAllowedSecondFactors",
             target: "beginSecondFactor",
@@ -525,10 +634,12 @@ const signupMachineConfig: AuthMachineConfig = {
         ],
       },
     },
-    // Check to see if a second factor is needed, and if so, proceed to the appropriate view
+
+    // Check to see if a second factor is needed, and if so, determine whether we are
+    // using or setting up the second factor, then proceed to the appropriate view
     beginSecondFactor: {
       id: "beginSecondFactor",
-      entry: "setupView",
+      entry: ["setSecondFactorAction", "setupView"],
       always: [
         // If a second factor isn't needed, finish the flow.
         {
@@ -601,16 +712,16 @@ const signupMachineConfig: AuthMachineConfig = {
   },
 };
 
-// Create a state machine for the signup flow
-const createSignupMachine = (
+// Create a state machine for the universal auth form
+const createUniversalMachine = (
   initialContext: AuthContext<View>,
   options: any = {}
 ) => {
-  const machine = createMachine(signupMachineConfig, {
-    ...defaultSignupOptions,
+  const machine = createMachine(universalMachineConfig, {
+    ...defaultOptions,
     ...options,
   }).withContext(initialContext);
   return machine;
 };
 
-export default createSignupMachine;
+export default createUniversalMachine;

@@ -5,7 +5,7 @@ import { factorConfig } from "../config/utils";
 const selectFactorConfig: AuthMachineConfig = {
   id: "selectFactor",
   initial: "showForm",
-  entry: ["setupView", "enableBack"],
+  entry: ["clearError", "setupView", "enableBack"],
   states: {
     // Bring over the Password state nodes, and override the showForm
     // node to add SelectFactor events to it.

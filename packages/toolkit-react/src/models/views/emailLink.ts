@@ -1,11 +1,11 @@
-import { AuthMachineConfig } from "../types";
+import { AuthMachineConfig, SignOnFormType } from "../types";
 import { callUserfront } from "../../services/userfront";
 import { hasValue } from "../config/utils";
 
 const emailLinkConfig: AuthMachineConfig = {
   id: "emailLink",
   initial: "showForm",
-  entry: "setupView",
+  entry: ["clearError", "setupView"],
   states: {
     // Show the form to enter an email
     showForm: {
@@ -31,6 +31,15 @@ const emailLinkConfig: AuthMachineConfig = {
       invoke: {
         // Set the method and email, and name and/or username if present, as arguments
         src: (context) => {
+          // Could be sending a login or reset link
+          // Reset link
+          if (context.config.type === "reset") {
+            return callUserfront({
+              method: "sendResetLink",
+              args: [context.user.email],
+            });
+          }
+          // Login link
           const arg: Record<string, any> = {
             method: "passwordless",
             email: context.user.email,
@@ -43,7 +52,7 @@ const emailLinkConfig: AuthMachineConfig = {
             arg.username = context.user.username;
           }
           return callUserfront({
-            method: context.config.type,
+            method: <SignOnFormType>context.config.type,
             args: [arg],
           });
         },
@@ -88,7 +97,7 @@ const emailLinkConfig: AuthMachineConfig = {
             arg.username = context.user.username;
           }
           return callUserfront({
-            method: context.config.type,
+            method: <SignOnFormType>context.config.type,
             args: [arg],
           });
         },

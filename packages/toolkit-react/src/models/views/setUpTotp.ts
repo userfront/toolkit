@@ -2,16 +2,16 @@ import { callUserfront } from "../../services/userfront";
 import {
   AuthContext,
   AuthMachineConfig,
-  SignupMachineEvent,
+  AuthMachineEvent,
   TotpCodeContext,
   TotpCodeSubmitEvent,
 } from "../types";
 
 // TOTP Authenticator setup state machine config
 const setUpTotpConfig: AuthMachineConfig = {
-  id: "totpCode",
+  id: "setUpTotp",
   initial: "getQrCode",
-  entry: "setupView",
+  entry: ["clearError", "setupView"],
   states: {
     // First we need to get the QR code from the Userfront API,
     // so we can show it
@@ -51,7 +51,7 @@ const setUpTotpConfig: AuthMachineConfig = {
       entry: "clearError",
       invoke: {
         // Set the code and call the API method
-        src: (context: AuthContext<any>, event: SignupMachineEvent) =>
+        src: (context: AuthContext<any>, event: AuthMachineEvent) =>
           callUserfront({
             // Should ALWAYS be Userfront.login here
             method: "login",

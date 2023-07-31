@@ -10,9 +10,7 @@ import Userfront from "@userfront/core";
  */
 export { default as SignupForm } from "./packaged-forms/SignupForm";
 export { default as LoginForm } from "./packaged-forms/LoginForm";
-export { default as PasswordResetForm } from "./forms/PasswordResetForm";
-export { default as SetNewPasswordForm } from "./forms/SetNewPasswordForm";
-export { default as RequestPasswordResetForm } from "./forms/RequestPasswordResetForm";
+export { default as PasswordResetForm } from "./packaged-forms/PasswordResetForm";
 export { default as LogoutButton } from "./components/LogoutButton";
 /*
  * CSS styles for the forms
@@ -32,28 +30,20 @@ Userfront.build = (toolId) => {
  */
 
 // "Unbound" forms: the signup and login forms without a model to drive their behavior
-import { default as UnboundSignupForm } from "./forms/SignupForm";
-import { default as UnboundLoginForm } from "./forms/LoginForm";
+import { default as UnboundUniversalForm } from "./forms/UniversalForm";
 
 // Factories for creating models to pair with the unbound forms
 import {
-  default as createSignupFormModel,
-  defaultAuthContext as defaultSignupFormContext,
-} from "./models/forms/signup";
-import {
-  default as createLoginFormModel,
-  defaultAuthContext as defaultLoginFormContext,
-} from "./models/forms/login";
+  default as createUniversalFormModel,
+  defaultAuthContext as defaultUniversalFormContext,
+} from "./models/forms/universal";
 
 // Function that allows overriding the Userfront singleton used by the forms with a custom object of your choice
 import { overrideUserfrontSingleton } from "./services/userfront";
 export const _devTools = {
-  UnboundSignupForm,
-  UnboundLoginForm,
-  createSignupFormModel,
-  defaultSignupFormContext,
-  createLoginFormModel,
-  defaultLoginFormContext,
+  UnboundUniversalForm,
+  createUniversalFormModel,
+  defaultUniversalFormContext,
   overrideUserfrontSingleton,
 };
 

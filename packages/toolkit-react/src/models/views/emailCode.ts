@@ -5,7 +5,7 @@ import { hasValue } from "../config/utils";
 const emailCodeConfig: AuthMachineConfig = {
   id: "emailCode",
   initial: "showForm",
-  entry: "setupView",
+  entry: ["clearError", "setupView"],
   states: {
     // Show the form to enter an email address
     showForm: {
