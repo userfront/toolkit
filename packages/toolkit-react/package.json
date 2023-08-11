@@ -1,6 +1,6 @@
 {
   "name": "@userfront/react",
-  "version": "1.0.0-alpha.16",
+  "version": "1.0.0-alpha.17",
   "description": "React bindings and components for authentication with Userfront",
   "type": "module",
   "directories": {
@@ -32,12 +32,17 @@
       "import": "./dist/userfront-react.js",
       "require": "./dist/userfront-react.umd.cjs"
     },
+    "./web-components": {
+      "import": "./dist/userfront-web-components.es.js",
+      "require": "./dist/userfront-web-components.umd.js"
+    },
     "./themes/default.css": "./dist/style.css"
   },
   "files": [
     "dist"
   ],
   "dependencies": {
+    "@r2wc/react-to-web-component": "^2.0.2",
     "@react-hook/resize-observer": "^1.2.6",
     "@userfront/core": "^0.6.5-beta.1",
     "@xstate/react": "3.0.1",
@@ -47,6 +52,7 @@
     "react-icons": "^4.4.0",
     "react-phone-input-2": "^2.15.1",
     "urlon": "^3.1.0",
+    "vite-plugin-css-injected-by-js": "^3.3.0",
     "xstate": "4.33.6"
   },
   "devDependencies": {
