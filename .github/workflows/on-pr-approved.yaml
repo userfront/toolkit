@@ -25,7 +25,7 @@ jobs:
       - name: Increment alpha version
         id: version
         run: |
-          npm version -w package prerelease --preid alpha | xargs -0 -L1 -I '%' echo "VERSION=%" >> "$GITHUB_OUTPUT"
+          npm version prerelease --preid alpha -w package | sed -n '2p' | xargs -0 -L1 -I '%' echo "VERSION=%" >> "$GITHUB_OUTPUT"
       - name: push changes
         run: |
           git push
