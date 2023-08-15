@@ -53,6 +53,7 @@ const esmPlugins = [
   dts({
     insertTypesEntry: true,
   }),
+  cssInjectedByJsPlugin()
 ];
 
 const esmOptions = {
@@ -65,9 +66,10 @@ const esmOptions = {
     lib: {
       entry: resolve(__dirname, "../src/index.js"),
       formats: ["es"],
-      fileName: "userfront-react"
+      fileName: "react"
     },
-    rollupOptions
+    rollupOptions,
+    emptyOutDir: false
   }
 };
 
@@ -76,7 +78,8 @@ const esmOptions = {
 // The dts (.d.ts file generation) plugin throws if it's
 // run with the UMD build
 const umdPlugins = [
-  react()
+  react(),
+  cssInjectedByJsPlugin()
 ];
 
 const umdOptions = {
@@ -89,10 +92,11 @@ const umdOptions = {
     lib: {
       entry: resolve(__dirname, "../src/index-cjs.js"),
       formats: ["umd"],
-      fileName: "userfront-react",
+      fileName: "react",
       name: "Userfront"
     },
-    rollupOptions
+    rollupOptions,
+    emptyOutDir: false
   }
 };
 
@@ -111,18 +115,19 @@ const webComponentOptions = {
   },
   build: {
     lib: {
-      entry: resolve(__dirname, "../src/web-components.js"),
+      entry: resolve(__dirname, "../src/web-component.js"),
       formats: ["es", "umd"],
-      fileName: (format) => `userfront-web-components.${format}.js`,
-      name: "userfront-web-components"
-    }
+      fileName: (format) => `web-component.${format}.js`,
+      name: "web-component"
+    },
+    emptyOutDir: false
   }
 }
 
-function perform() {
-  build(esmOptions);
-  build(umdOptions);
-  build(webComponentOptions);
+async function perform() {
+  await build(esmOptions);
+  await build(umdOptions);
+  await build(webComponentOptions);
 };
 
 perform();

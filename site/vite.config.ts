@@ -7,4 +7,12 @@ export default defineConfig({
   build: {
     sourcemap: "inline",
   },
+  server: {
+    watch: {
+      ignored: ["!**/node_modules/@userfront/toolkit/**"],
+    },
+  },
+  optimizeDeps: {
+    exclude: ["@userfront/toolkit"],
+  },
 });

@@ -1,4 +1,4 @@
-import { _devTools } from "../../../../packages/toolkit-react/src/index.js";
+import { _devTools } from "@userfront/toolkit";
 import { Link } from "react-router-dom";
 import { useMachine } from "@xstate/react";
 import Urlon from "urlon";
@@ -14,8 +14,7 @@ const {
 
 const config = {
   ...defaultUniversalFormContext.config,
-  shouldFetchFlow: false,
-  type: "reset",
+  type: "signup",
 };
 const context = {
   ...defaultUniversalFormContext,

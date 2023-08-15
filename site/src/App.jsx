@@ -1,5 +1,4 @@
 import "./App.css";
-import "../../../packages/toolkit-react/src/themes/default.css";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { inspect } from "@xstate/inspect";
@@ -14,7 +13,7 @@ import LiveLoginDemo from "./pages/LiveLoginDemo";
 import LiveResetDemo from "./pages/LiveResetDemo";
 import LiveLogoutDemo from "./pages/LiveLogoutDemo";
 
-import Userfront from "../../../packages/toolkit-react/src/index.js";
+import Userfront from "@userfront/toolkit";
 import { useEffect } from "react";
 
 Userfront.init("wbm95g4b");

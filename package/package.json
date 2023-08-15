@@ -1,13 +1,15 @@
 {
-  "name": "@userfront/react",
+  "name": "@userfront/toolkit",
   "version": "1.0.0-alpha.17",
-  "description": "React bindings and components for authentication with Userfront",
+  "description": "Bindings and components for authentication with Userfront with React, Vue, other frameworks, and plain JS + HTML",
   "type": "module",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "dev": "vite build --watch",
+    "dev-build": "node ./build/watch.cjs",
+    "dev-tsc": "tsc --watch --noEmit",
+    "dev": "npm-run-all --parallel dev-tsc dev-build",
     "build": "tsc && node ./build/build.cjs",
     "test": "vitest run",
     "watch": "vitest",
@@ -24,17 +26,21 @@
   ],
   "author": "Userfront",
   "license": "MIT",
-  "main": "./dist/userfront-react.umd.cjs",
-  "module": "./dist/userfront-react.js",
+  "main": "./dist/react.umd.cjs",
+  "module": "./dist/react.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/userfront-react.js",
-      "require": "./dist/userfront-react.umd.cjs"
+      "import": "./dist/react.js",
+      "require": "./dist/react.umd.cjs"
+    },
+    "./react": {
+      "import": "./dist/react.js",
+      "require": "./dist/react.umd.cjs"
     },
     "./web-components": {
-      "import": "./dist/userfront-web-components.es.js",
-      "require": "./dist/userfront-web-components.umd.js"
+      "import": "./dist/web-component.es.js",
+      "require": "./dist/web-component.umd.js"
     },
     "./themes/default.css": "./dist/style.css"
   },
@@ -47,6 +53,8 @@
     "@userfront/core": "^0.6.5-beta.1",
     "@xstate/react": "3.0.1",
     "lodash": "^4.17.21",
+    "node-watch": "^0.7.4",
+    "npm-run-all": "^4.1.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",

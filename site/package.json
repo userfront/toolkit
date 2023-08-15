@@ -1,5 +1,5 @@
 {
-  "name": "react-ts",
+  "name": "toolkit-demo",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,11 +11,11 @@
   "dependencies": {
     "@xstate/inspect": "^0.7.0",
     "@xstate/react": "^3.0.1",
+    "@userfront/toolkit": "^1.0.0-alpha.17",
     "lodash.get": "^4.4.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.3",
-    "toolkit-react": "../../packages/toolkit-react",
     "urlon": "^3.1.0"
   },
   "devDependencies": {

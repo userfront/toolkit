@@ -1,7 +1,4 @@
-import { useEffect } from "react";
-import Userfront, {
-  SignupForm,
-} from "../../../../packages/toolkit-react/src/index.js";
+import { SignupForm } from "@userfront/toolkit";
 
 function LiveSignupDemo() {
   const redirectOnLoad =

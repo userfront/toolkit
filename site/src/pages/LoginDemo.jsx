@@ -1,10 +1,10 @@
-import { _devTools } from "../../../../packages/toolkit-react/src/index.js";
+import { _devTools } from "@userfront/toolkit";
 import { Link } from "react-router-dom";
 import { useMachine } from "@xstate/react";
 import Urlon from "urlon";
 import { useState, useEffect } from "react";
-import { useMockUserfront } from "../hooks.js";
 import createMockUserfront from "../mockUserfront.js";
+import { useMockUserfront } from "../hooks.js";
 
 const {
   UnboundUniversalForm,
@@ -14,7 +14,7 @@ const {
 
 const config = {
   ...defaultUniversalFormContext.config,
-  type: "signup",
+  type: "login",
 };
 const context = {
   ...defaultUniversalFormContext,
@@ -26,7 +26,7 @@ const LoginFormModel = createUniversalFormModel(context);
 const mockUserfront = createMockUserfront();
 
 mockUserfront.requireMfa = true;
-mockUserfront.requireMfaSetup = true;
+mockUserfront.requireMfaSetup = false;
 
 function App() {
   useMockUserfront(mockUserfront);

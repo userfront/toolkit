@@ -1,7 +1,5 @@
 import { useEffect } from "react";
-import Userfront, {
-  _devTools,
-} from "../../../packages/toolkit-react/src/index.js";
+import Userfront, { _devTools } from "@userfront/toolkit";
 import createMockUserfront from "./mockUserfront.js";
 
 export function useMockUserfront(mockUserfront) {

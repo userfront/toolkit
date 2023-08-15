@@ -1,4 +1,4 @@
-import { LogoutButton } from "../../../../packages/toolkit-react/src/index.js";
+import { LogoutButton } from "@userfront/toolkit";
 
 function LiveLogoutDemo() {
   return <LogoutButton />;
