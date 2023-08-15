@@ -1,7 +1,8 @@
 name: "Open PR for tagged release branch"
 on:
   release:
-    types: [published]
+    types:
+      - published
 
 jobs:
   build:
@@ -19,9 +20,12 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global user.name "Userfront Robot"
       - name: Update package.json version
+        run: |
+          npm version ${{ github.event.release.tag_name }} --git-tag-version=false -w package
+      - name: Get new version from package.json
         id: version
         run: |
-          npm version ${{ github.event.release.tag_name }} --git-tag-version=false -w package | xargs -0 -L1 -I '%' echo "VERSION=%" >> "$GITHUB_OUTPUT"
+          npm pkg get version -ws | jq -r '."@userfront/toolkit"' | xargs -0 -L1 -I '%' echo "VERSION=%" >> "$GITHUB_OUTPUT"
       - uses: peter-evans/create-pull-request@v5
         with:
           branch: 'release/${{ steps.version.outputs.VERSION }}'

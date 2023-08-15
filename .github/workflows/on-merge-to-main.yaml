@@ -32,13 +32,13 @@ jobs:
           else
             echo "NAME=alpha" >> "$GITHUB_OUTPUT"
           fi
-      - run: npm publish -w package --tag ${{ steps.dist-tag.outputs.NAME }} --access=public
+      - run: npm publish -w package --tag ${{ steps.dist-tag.outputs.NAME }} --access=public --dry-run
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Get package version
         id: version
         run: |
-          npm pkg -w package get version | jq -r '.["@userfront/toolkit"]' | xargs -0 -L1 -I '%' echo "VERSION=%" >> "$GITHUB_OUTPUT"
+          npm pkg get version -ws | jq -r '."@userfront/toolkit"' | xargs -0 -L1 -I '%' echo "VERSION=%" >> "$GITHUB_OUTPUT"
       - uses: actions/github-script@v6
         with:
           script: |

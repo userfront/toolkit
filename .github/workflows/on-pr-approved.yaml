@@ -1,4 +1,4 @@
-name: "Increment alpha version on PR approval"
+name: "On PR approval, merge if release branch, otherwise increment alpha version"
 on:
   pull_request_review:
     types: [submitted]
@@ -29,3 +29,18 @@ jobs:
       - name: push changes
         run: |
           git push
+  stable:
+    if: github.event.review.state == 'approved' && startsWith(github.event.pull_request.head.ref, 'release/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.pulls.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: ${{ github.event.pull_request.number }},
+              merge_method: 'merge'
+            })
