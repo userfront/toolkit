@@ -1,3 +1,4 @@
+name: "Increment alpha version on PR approval"
 on:
   pull_request_review:
     types: [submitted]
@@ -23,10 +24,8 @@ jobs:
           git config --global user.name "Userfront Robot"
       - name: Increment alpha version
         id: version
-        working-directory: ./packages/toolkit-react
         run: |
-          npm version prerelease --preid alpha | xargs -0 -L1 -I '%' echo "VERSION=%" >> "$GITHUB_OUTPUT"
+          npm version -w package prerelease --preid alpha | xargs -0 -L1 -I '%' echo "VERSION=%" >> "$GITHUB_OUTPUT"
       - name: push changes
-        working-directory: ./packages/toolkit-react
         run: |
           git push

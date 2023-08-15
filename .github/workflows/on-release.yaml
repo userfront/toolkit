@@ -20,9 +20,8 @@ jobs:
           git config --global user.name "Userfront Robot"
       - name: Update package.json version
         id: version
-        working-directory: ./packages/toolkit-react
         run: |
-          npm version ${{ github.event.release.tag_name }} --git-tag-version=false | xargs -0 -L1 -I '%' echo "VERSION=%" >> "$GITHUB_OUTPUT"
+          npm version ${{ github.event.release.tag_name }} --git-tag-version=false -w package | xargs -0 -L1 -I '%' echo "VERSION=%" >> "$GITHUB_OUTPUT"
       - uses: peter-evans/create-pull-request@v5
         with:
           branch: 'release/${{ steps.version.outputs.VERSION }}'

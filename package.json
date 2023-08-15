@@ -18,9 +18,9 @@
     "prepare": "husky install",
     "lint": "prettier --check \"package/**/*.{jsx?,tsx?}\"",
     "dev": "npm run build -w package && npm-run-all --parallel \"dev -w package\" \"dev -w site\"",
-    "build": "npm build -ws",
-    "test": "npm test -ws",
-    "coverage": "npm run coverage -ws"
+    "build": "npm run build -ws",
+    "build:package": "npm run build -w package",
+    "test": "npm test -w package"
   },
   "repository": {
     "type": "git",
