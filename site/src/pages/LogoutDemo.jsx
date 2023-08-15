@@ -1,4 +1,4 @@
-import { LogoutButton } from "@userfront/toolkit";
+import { LogoutButton } from "@userfront/toolkit/react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useMockUserfront } from "../hooks.js";

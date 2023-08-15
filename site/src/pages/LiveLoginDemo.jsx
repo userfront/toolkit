@@ -1,4 +1,4 @@
-import { LoginForm } from "@userfront/toolkit";
+import { LoginForm } from "@userfront/toolkit/react";
 
 function LiveLoginDemo() {
   const redirectOnLoad =

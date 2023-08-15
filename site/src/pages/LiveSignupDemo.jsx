@@ -1,4 +1,4 @@
-import { SignupForm } from "@userfront/toolkit";
+import { SignupForm } from "@userfront/toolkit/react";
 
 function LiveSignupDemo() {
   const redirectOnLoad =

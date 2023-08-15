@@ -1,4 +1,4 @@
-import { PasswordResetForm } from "@userfront/toolkit";
+import { PasswordResetForm } from "@userfront/toolkit/react";
 
 function LivePasswordResetDemo() {
   return <PasswordResetForm />;
