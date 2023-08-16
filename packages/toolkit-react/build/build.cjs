@@ -2,6 +2,7 @@ const path = require("path");
 const vite = require("vite");
 const react = require("@vitejs/plugin-react");
 const dts = require("vite-plugin-dts");
+const cssInjectedByJsPlugin = require("vite-plugin-css-injected-by-js").default;
 
 const resolve = path.resolve;
 const build = vite.build;
@@ -95,9 +96,33 @@ const umdOptions = {
   }
 };
 
+/* Web Components */
+
+const webComponentPlugins = [
+  react(),
+  cssInjectedByJsPlugin()
+];
+
+const webComponentOptions = {
+  ...defaultOptions,
+  plugins: webComponentPlugins,
+  define: {
+    "process.env.NODE_ENV": "\"production\""
+  },
+  build: {
+    lib: {
+      entry: resolve(__dirname, "../src/web-components.js"),
+      formats: ["es", "umd"],
+      fileName: (format) => `userfront-web-components.${format}.js`,
+      name: "userfront-web-components"
+    }
+  }
+}
+
 function perform() {
   build(esmOptions);
   build(umdOptions);
+  build(webComponentOptions);
 };
 
 perform();
