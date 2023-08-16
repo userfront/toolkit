@@ -4,3 +4,5 @@ export default {
   title: "Views/Placeholder",
   component: Placeholder,
 };
+
+export const View = () => <Placeholder />;
