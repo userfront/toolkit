@@ -40,6 +40,11 @@ const Index = () => {
         with the domain <code>https://toolkit-dev-app-react.vercel.app/</code>{" "}
         set as a live domain.
       </p>
+      <p>
+        <a href="/html-example.html">
+          All forms as Web Components in plain HTML
+        </a>
+      </p>
       <ul>
         <li>
           <Link to="/live/signup">Signup form (live)</Link>
