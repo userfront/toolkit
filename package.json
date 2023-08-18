@@ -10,13 +10,17 @@
     "doc": "docs",
     "test": "test"
   },
+  "workspaces": [
+    "package",
+    "site"
+  ],
   "scripts": {
     "prepare": "husky install",
-    "lint": "prettier --check \"packages/**/*.{jsx?,tsx?}\"",
-    "install:package:react": "cd packages/toolkit-react && npm install",
-    "install:site:react": "npm run install:package:react && cd sites/toolkit-react && npm install",
-    "build:package:react": "cd packages/toolkit-react && npm run build",
-    "build:site:react": "npm run build:package:react && cd sites/toolkit-react && npm run build"
+    "lint": "prettier --check \"package/**/*.{jsx?,tsx?}\"",
+    "dev": "npm run build -w package && npm-run-all --parallel \"dev -w package\" \"dev -w site\"",
+    "build": "npm run build -ws",
+    "build:package": "npm run build -w package",
+    "test": "npm test -w package"
   },
   "repository": {
     "type": "git",
@@ -31,6 +35,7 @@
   "devDependencies": {
     "husky": "^8.0.0",
     "lint-staged": "^13.0.3",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1"
   }
 }

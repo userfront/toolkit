@@ -14,14 +14,15 @@ jobs:
         with:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
+      - name: Install jq
+        uses: dcarbone/install-jq-action@v1.0.1
       - name: Configure git identity
         run: |
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global user.name "Userfront Robot"
       - run: npm ci
-      - run: npm run build:package:react
+      - run: npm run build:package
       - name: Get dist-tag name
-        working-directory: ./packages/toolkit-react
         id: dist-tag
         env:
           BRANCH: "${{ github.event.pull_request.head.ref }}"
@@ -31,15 +32,13 @@ jobs:
           else
             echo "NAME=alpha" >> "$GITHUB_OUTPUT"
           fi
-      - run: npm publish --tag ${{ steps.dist-tag.outputs.NAME }} --access=public
-        working-directory: ./packages/toolkit-react
+      - run: npm publish -w package --tag ${{ steps.dist-tag.outputs.NAME }} --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Get package version
-        working-directory: ./packages/toolkit-react
         id: version
         run: |
-          npm pkg get version | tr -d \" | xargs -0 -L1 -I '%' echo "VERSION=%" >> "$GITHUB_OUTPUT"
+          npm pkg get version -ws | jq -r '."@userfront/toolkit"' | xargs -0 -L1 -I '%' echo "VERSION=%" >> "$GITHUB_OUTPUT"
       - uses: actions/github-script@v6
         with:
           script: |

@@ -4,24 +4,19 @@ on:
 
 jobs:
   test:
-    defaults:
-      run:
-        working-directory: packages/toolkit-react
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: 'Install Node'
         uses: actions/setup-node@v2
         with:
-          node-version: '>16.14'
-      - name: 'Install root dependencies'
-        run: cd ../.. && npm install
+          node-version: '18.x'
       - name: 'Install dependencies'
-        run: npm install
+        run: npm install -ws=false && npm install -w package
       - name: 'Run unit tests'
-        run: npm run coverage
+        run: npm run coverage -w package
       - name: 'Report coverage'
         if: ${{ always() }} # Generate report if tests are failing, too
         uses: davelosert/vitest-coverage-report-action@v1
         with:
-          working-directory: 'packages/toolkit-react'
+          working-directory: 'package'
