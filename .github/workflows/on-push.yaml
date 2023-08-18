@@ -1,7 +1,0 @@
-name: 'Run tasks on push to branch'
-on:
-  push:
-
-jobs:
-  run-tests:
-    uses: ./.github/workflows/run-tests.yaml
