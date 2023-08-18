@@ -124,3 +124,5 @@ customElements.define(
     },
   })
 );
+
+export default Userfront;
