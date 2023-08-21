@@ -94,6 +94,10 @@ export const getUserfrontPropertySync = (key: string) => {
  * @returns {Promise} result of the call, wrapped in a Promise even if the method is sync
  */
 export const callUserfront = async ({ method, args = [] }: CallUserfront) => {
+  // Allow Userfront.init() when singleton is present but not initialized
+  if (method === "init" && !!singleton) {
+    return (<any>singleton.init)(...args);
+  }
   if (!singleton || !singleton.store?.tenantId) {
     console.warn(
       "Tried to call a Userfront method before the Userfront service was initialized."
@@ -124,6 +128,10 @@ export const callUserfront = async ({ method, args = [] }: CallUserfront) => {
  * @returns result of the call, which may be a Promise if the method is async
  */
 export const callUserfrontSync = ({ method, args = [] }: CallUserfront) => {
+  // Allow Userfront.init() when singleton is present but not initialized
+  if (method === "init" && !!singleton) {
+    return (<any>singleton.init)(...args);
+  }
   if (!singleton || !singleton.store?.tenantId) {
     console.warn(
       "Tried to call a Userfront method before the Userfront service was initialized."
