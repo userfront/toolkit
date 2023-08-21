@@ -324,7 +324,7 @@ const universalMachineConfig: AuthMachineConfig = {
           // @ts-ignore
           callUserfrontSync({
             method: "init",
-            args: [context.config.tenantId],
+            args: [context.config.tenantId!],
           });
           return context.config.tenantId;
         },
