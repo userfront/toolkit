@@ -120,7 +120,8 @@ const webComponentOptions = {
       fileName: (format) => `web-component.${format}.js`,
       name: "web-component"
     },
-    emptyOutDir: false
+    emptyOutDir: false,
+    sourcemap: process.env.NODE_ENV === "production" ? false : true
   }
 }
 

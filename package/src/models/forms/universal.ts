@@ -9,7 +9,11 @@ import {
   AuthMachineEvent,
 } from "../types";
 
-import { callUserfront, getUserfrontProperty } from "../../services/userfront";
+import {
+  callUserfront,
+  callUserfrontSync,
+  getUserfrontProperty,
+} from "../../services/userfront";
 import {
   createOnlyFactorCondition,
   matchFactor,
@@ -285,7 +289,7 @@ const universalMachineConfig: AuthMachineConfig = {
           cond: "isMissingTenantId",
         },
         {
-          target: "initFlow",
+          target: "initUserfront",
         },
       ],
     },
@@ -297,6 +301,36 @@ const universalMachineConfig: AuthMachineConfig = {
         src: () => getUserfrontProperty("store.tenantId"),
         // Set the tenant ID if one was present, otherwise set isDevMode = true.
         // Then proceed to start the flow.
+        onDone: [
+          {
+            target: "initFlow",
+            actions: "setTenantIdIfPresent",
+          },
+        ],
+        onError: [
+          {
+            target: "initFlow",
+            actions: "setTenantIdIfPresent",
+          },
+        ],
+      },
+    },
+
+    // If Userfront.init hasn't been called yet and we're given a tenant ID, call init
+    initUserfront: {
+      invoke: {
+        // @ts-ignore
+        src: async (context) => {
+          // @ts-ignore
+          callUserfrontSync({
+            method: "init",
+            args: [context.config.tenantId!],
+          });
+          return context.config.tenantId;
+        },
+
+        // Proceed to initFlow no matter the result.
+        // Userfront.init isn't expected to throw.
         onDone: [
           {
             target: "initFlow",
