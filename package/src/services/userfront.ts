@@ -110,7 +110,16 @@ export const callUserfront = async ({ method, args = [] }: CallUserfront) => {
     return Promise.reject();
   }
   try {
-    return await (<any>_method)(...args);
+    const res = await (<any>_method)(...args);
+    // Workaround to avoid flickering when CoreJS redirects:
+    // wait for the current iteration of the event loop to finish,
+    // and for the async task queue to finish,
+    // and for the NEXT event loop cycle to finish,
+    // then return.
+    // TODO DEV-658 fix this in a nicer and more reliable way
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(res), 1);
+    });
   } catch (err: any) {
     console.warn(
       `Method ${method} on Userfront object threw. Error: ${err.message}`
