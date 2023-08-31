@@ -89,9 +89,10 @@ const setUpTotpConfig: AuthMachineConfig = {
             cond: "secondFactorRequiredFromView",
           },
           // We're signed in.
-          // Core JS redirects as appropriate here.
+          // Instruct CoreJS to redirect as appropriate here
           // Show the "verified" view in case we don't redirect.
           {
+            actions: "redirectIfLoggedIn",
             target: "showTotpSetupComplete",
           },
         ],
