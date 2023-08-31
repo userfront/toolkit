@@ -14,6 +14,7 @@ declare module "@userfront/core" {
 }
 
 let singleton = Userfront;
+let isSingletonOverridden = false;
 
 /**
  * Override the Userfront singleton imported from @userfront/core with an object of your choice.
@@ -22,6 +23,7 @@ let singleton = Userfront;
  */
 export const overrideUserfrontSingleton = (newSingleton: any) => {
   singleton = newSingleton as typeof Userfront;
+  isSingletonOverridden = true;
 };
 
 // A type with the keys of all functions in Type
@@ -117,6 +119,11 @@ export const callUserfront = async ({ method, args = [] }: CallUserfront) => {
     // and for the NEXT event loop cycle to finish,
     // then return.
     // TODO DEV-658 fix this in a nicer and more reliable way
+    if (isSingletonOverridden) {
+      // Don't wait if we've overridden the CoreJS singleton,
+      // i.e. mocked it out for tests.
+      return res;
+    }
     return new Promise((resolve) => {
       setTimeout(() => resolve(res), 1);
     });
