@@ -14,6 +14,7 @@ declare module "@userfront/core" {
 }
 
 let singleton = Userfront;
+let isSingletonOverridden = false;
 
 /**
  * Override the Userfront singleton imported from @userfront/core with an object of your choice.
@@ -22,6 +23,7 @@ let singleton = Userfront;
  */
 export const overrideUserfrontSingleton = (newSingleton: any) => {
   singleton = newSingleton as typeof Userfront;
+  isSingletonOverridden = true;
 };
 
 // A type with the keys of all functions in Type
@@ -110,7 +112,21 @@ export const callUserfront = async ({ method, args = [] }: CallUserfront) => {
     return Promise.reject();
   }
   try {
-    return await (<any>_method)(...args);
+    const res = await (<any>_method)(...args);
+    // Workaround to avoid flickering when CoreJS redirects:
+    // wait for the current iteration of the event loop to finish,
+    // and for the async task queue to finish,
+    // and for the NEXT event loop cycle to finish,
+    // then return.
+    // TODO DEV-658 fix this in a nicer and more reliable way
+    if (isSingletonOverridden) {
+      // Don't wait if we've overridden the CoreJS singleton,
+      // i.e. mocked it out for tests.
+      return res;
+    }
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(res), 1);
+    });
   } catch (err: any) {
     console.warn(
       `Method ${method} on Userfront object threw. Error: ${err.message}`

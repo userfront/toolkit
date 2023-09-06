@@ -396,7 +396,7 @@ const componentForStep = (state) => {
           isLoading: true,
         },
       };
-    case "password.showPasswordSuccess":
+    case "password.showPasswordSet":
       return {
         title: strings[type].done,
         Component: Success,
