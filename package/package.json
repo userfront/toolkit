@@ -10,7 +10,8 @@
     "dev-build": "node ./build/watch.cjs",
     "dev-tsc": "tsc --watch --noEmit",
     "dev": "npm-run-all --parallel dev-tsc dev-build",
-    "build": "tsc && node ./build/build.cjs",
+    "build": "tsc && node ./build/build.cjs && npm run build-types",
+    "build-types": "tsc src/**/*.{js,jsx} src/index.js --declaration --allowJs --emitDeclarationOnly --outDir dist/types",
     "test": "vitest run",
     "watch": "vitest",
     "coverage": "vitest run --coverage",
@@ -28,7 +29,7 @@
   "license": "MIT",
   "main": "./dist/react.umd.cjs",
   "module": "./dist/react.js",
-  "types": "./types/index.d.ts",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/react.js",
