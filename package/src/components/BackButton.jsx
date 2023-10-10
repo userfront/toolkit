@@ -4,7 +4,7 @@
  * If no children are provided, contains the text "Back".
  * Additional props are passed through to the underlying <button>
  *
- * @param {props} props
+ * @param {object} props
  * @param {function} props.onEvent
  * @param {function} props.onClick
  * @param {Array} props.children
