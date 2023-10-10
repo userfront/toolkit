@@ -28,7 +28,7 @@
   "license": "MIT",
   "main": "./dist/react.umd.cjs",
   "module": "./dist/react.js",
-  "types": "./dist/index.d.ts",
+  "types": "./types/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/react.js",
