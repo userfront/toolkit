@@ -6,11 +6,11 @@ import PackagedUniversalForm from "./UniversalForm";
  * reset link or for logged-in users.
  *
  * @param {object} props
- * @param {string} props.tenantId - the tenant ID to use
- * @param {string | boolean} props.redirect - URL to redirect to after successful login.
+ * @param {string=} props.tenantId - the tenant ID to use
+ * @param {(string|boolean)=} props.redirect - URL to redirect to after successful login.
  *   If false, do not redirect.
  *   If absent, use the after-login path from the server.
- * @param {boolean} props.xstateDevTools - if true, enable XState dev tools on the form's model.
+ * @param {boolean=} props.xstateDevTools - if true, enable XState dev tools on the form's model.
  *   Defaults to false; should remain false in production.
  *   Only useful when developing this library.
  */

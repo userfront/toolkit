@@ -1,6 +1,6 @@
 {
   "name": "@userfront/toolkit",
-  "version": "1.0.1",
+  "version": "1.0.2-alpha.8",
   "description": "Bindings and components for authentication with Userfront with React, Vue, other frameworks, and plain JS + HTML",
   "type": "module",
   "directories": {
@@ -10,7 +10,8 @@
     "dev-build": "node ./build/watch.cjs",
     "dev-tsc": "tsc --watch --noEmit",
     "dev": "npm-run-all --parallel dev-tsc dev-build",
-    "build": "tsc && node ./build/build.cjs",
+    "build": "tsc && node ./build/build.cjs && npm run build-types",
+    "build-types": "tsc src/**/*.{js,jsx} --declaration --allowJs --emitDeclarationOnly --outDir dist; cp types/index.d.ts dist/index.d.ts; cp types/index.d.ts dist/react.d.ts",
     "test": "vitest run",
     "watch": "vitest",
     "coverage": "vitest run --coverage",

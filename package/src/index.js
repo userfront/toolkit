@@ -17,11 +17,10 @@ export { default as LogoutButton } from "./components/LogoutButton";
  */
 import "./themes/default.css";
 
-// TODO #9: add link to upgrade guide
 Userfront.build = (toolId) => {
   console.error(`Userfront.build(${toolId}) has been removed. Instead, import the component directly:
-    import { SignupForm, LoginForm, PasswordResetForm, SetNewPasswordForm, LogoutButton } from "@userfront/react"
-  See TODO DOCS LINK for more information about upgrading to the new toolkit.`);
+    import { SignupForm, LoginForm, PasswordResetForm, SetNewPasswordForm, LogoutButton } from "@userfront/toolkit/react"
+  See https://userfront.com/dashboard/toolkit for more information about upgrading to the new toolkit.`);
 };
 
 /*

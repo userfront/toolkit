@@ -1,7 +1,6 @@
 const path = require("path");
 const vite = require("vite");
 const react = require("@vitejs/plugin-react");
-const dts = require("vite-plugin-dts");
 const cssInjectedByJsPlugin = require("vite-plugin-css-injected-by-js").default;
 
 const resolve = path.resolve;
@@ -50,9 +49,6 @@ const rollupOptions = {
 
 const esmPlugins = [
   react(),
-  dts({
-    insertTypesEntry: true,
-  }),
   cssInjectedByJsPlugin()
 ];
 
@@ -75,8 +71,6 @@ const esmOptions = {
 
 /* UMD (CommonJS and bundle) build config */
 
-// The dts (.d.ts file generation) plugin throws if it's
-// run with the UMD build
 const umdPlugins = [
   react(),
   cssInjectedByJsPlugin()
