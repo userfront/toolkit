@@ -1,44 +1,4 @@
-# Userfront Toolkit - React
-
-## Toolkit installation and usage
-
-**Install:** `npm install --save @userfront/react`
-
-**Use:**
-
-```js
-import Userfront, { SignupForm } from "@userfront/react";
-
-Userfront.init("myTenantId");
-
-export default function MyComponent() {
-  return <SignupForm />;
-}
-```
-
-_or_
-
-```js
-// App.js
-import { UserfrontContext } from "@userfront/react"
-
-export default function App() {
-  return (
-    <UserfrontContext tenantId="myTenantId">
-      <Component>
-    </UserfrontContext>
-  )
-}
-```
-
-```js
-// MyComponent.js
-import { SignupForm } from "@userfront/react";
-
-export default function MyComponent() {
-  return <SignupForm />;
-}
-```
+# Userfront Toolkit
 
 ## Development
 
@@ -59,6 +19,28 @@ To install and run this package only for development, in this folder:
 This project uses [Vite](https://vitejs.dev/) to build the bundle, using Vite's build-in support for TypeScript.
 
 Some parts of the project are in TypeScript `.ts/.tsx` and other parts are in JavaScript `.js/.jsx`. TypeScript is used where its features are particularly beneficial, mostly in the models that describe forms' behavior.
+
+There are two entry points.
+
+One exports the forms as React components:
+
+```js
+import Userfront, { LoginForm } from "@userfront/toolkit/react";
+```
+
+The other registers the forms as Web Components, suitable for usage with most front-end frameworks or in plain JS:
+
+```js
+import Userfront from "@userfront/toolkit/web-components";
+```
+
+After import, the Web Components are registered and can be used anywhere in the app:
+
+```html
+<body>
+  <login-form tenant-id="mytenantid"></login-form>
+</body>
+```
 
 **Testing**
 
