@@ -2,6 +2,8 @@
 
 ## Toolkit installation and usage
 
+For more information and examples, visit the Userfront Toolkit home page: https://userfront.com/dashboard/toolkit
+
 To install and use the Userfront Toolkit, follow the instructions for your framework or platform:
 
 ### React
