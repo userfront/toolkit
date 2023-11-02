@@ -2,16 +2,18 @@
 
 ## Toolkit installation and usage
 
+For more information and examples, visit the Userfront Toolkit home page: https://userfront.com/dashboard/toolkit
+
 To install and use the Userfront Toolkit, follow the instructions for your framework or platform:
 
 ### React
 
-**Install:** `npm install --save @userfront/react`
+**Install:** `npm install --save @userfront/toolkit`
 
 **Use:**
 
 ```js
-import Userfront, { SignupForm } from "@userfront/react";
+import Userfront, { SignupForm } from "@userfront/toolkit/react";
 
 Userfront.init("myTenantId");
 
@@ -20,89 +22,132 @@ export default function MyComponent() {
 }
 ```
 
-_or_
-
-```js
-// App.js
-import { UserfrontContext } from "@userfront/react"
-
-export default function App() {
-  return (
-    <UserfrontContext tenantId="myTenantId">
-      <Component>
-    </UserfrontContext>
-  )
-}
-```
-
-```js
-// MyComponent.js
-import { SignupForm } from "@userfront/react";
-
-export default function MyComponent() {
-  return <SignupForm />;
-}
-```
-
 ### Vue
 
-**Install:** `npm install --save @userfront/vue`
+**Install:** `npm install --save @userfront/toolkit`
 
-**Use:** (TODO)
+**Use:**
+
+```js
+<template>
+  <div id="app">
+    <signup-form />
+  </div>
+</template>
+
+<script setup>
+import Userfront from "@userfront/toolkit/vue";
+
+Userfront.init("8b68vwdb");
+</script>
+
+<style>
+...
+</style>
+```
 
 ### Without framework
 
-**Install:** `npm install --save @userfront/html`
+**Install:** `npm install --save @userfront/toolkit`
 
-**Use:** (TODO)
+**Use:**
+
+```html
+<html>
+  <head>
+    <script
+      defer
+      src="https://cdn.userfront.com/@userfront/toolkit@latest/dist/web-component.umd.js"
+    ></script>
+  </head>
+  <body>
+    <signup-form tenant-id="8b68vwdb"></signup-form>
+  </body>
+</html>
+```
+
+_or_
+
+If bundling, or if you want to use the npm library rather than a script, run this on page load:
+
+```js
+import Userfront from "@userfront/toolkit/web-components";
+
+Userfront.init("myTenantId");
+
+// Now Toolkit components are registered as Web Components
+```
+
+```html
+<body>
+  <signup-form></signup-form>
+</body>
+```
+
+## Components
+
+| React                   | Vue & Web Components                          |
+| ----------------------- | --------------------------------------------- |
+| `<SignupForm />`        | `<signup-form></signup-form>`                 |
+| `<LoginForm />`         | `<login-form></login-form>`                   |
+| `<PasswordResetForm />` | `<password-reset-form></password-reset-form>` |
+| `<LogoutButton />`      | `<logout-button></logout-button>`             |
+
+Note: when using them in plain HTML, Web Components are not self-closing and must have the full closing tag.
+When using in Vue, they can be written in self-closing form: `<signup-form />`.
+
+The Vue components are `<kebab-case>` because they are Web Components under the hood, and Web Components are required to be in kebab-case.
+
+### Props
+
+In React, props are `camelCase`. In Vue and Web Components, props are `kebab-case`, as required by the Web Components standard.
+
+All props are optional.
+
+- `tenantId` / `tenant-id`: your tenant ID, from the Userfront dashboard. If you call `Userfront.init("yourTenantId")` before using the components, it's not necessary to provide this prop.
+- `compact`: if `true` and username/password is an allowed factor in your tenant's [authentication flow](https://userfront.com/dashboard/authentication), show a "Password" button. If `false`, show the username and password fields directly in the form's sign-on method selection view.
+  - Default: `false`
+- `redirect`: controls if and where the form should redirect **after** sign-on. If `false`, the form does not redirect. If set to a path, redirects to that path. If empty, redirects [as configured in your Userfront dashboard](https://userfront.com/dashboard/paths).
+  - Default: `undefined`
+- `redirectOnLoadIfLoggedIn` / `redirect-on-load-if-logged-in`: if `true` and the user is already logged in when they load the form, redirects per the `redirect` parameter. If `false`, do not redirect if the user is already logged in when they load the form.
+  - Default: `false`
 
 ## Development
 
-## Repo structure
+### Repo structure
 
 This repo holds several different libraries.
 
 - `(root)` - you are here
-  - `/.github/workflows` - CI/CD scripts for all libraries.
-  - `/packages` - npm packages
-    - `/toolkit-react` - the `@userfront/react` toolkit. This is the primary library at the moment - the other libraries depend on this one for the form UI and logic.
-      - `/.storybook` - Storybook stories for the UI components, deployed to (TODO public link)
-    - `/toolkit-html` - the `@userfront/html` toolkit.
-    - `/toolkit-vue` - the `@userfront/vue` toolkit.
-  - `/sites` - standalone dev/test sites for all libraries.
-    - `/toolkit-react` - standalone dev/test site for `@userfront/react`
-    - `/toolkit-html` - standalone dev/test site for `@userfront/html`
-    - `/toolkit-vue` - standalone dev/test site for `@userfront/vue`
-  - `/strings` - (TODO/FUTURE) localized strings for toolkit components
+  - `/.github/workflows` - CI/CD scripts.
+  - `/package` - source for the npm package
+  - `/site` - standalone dev/test app for all libraries.
 
-## Development installation and setup
+The repo is configured as an npm workspace to enable sharing of libraries and dynamically linking the package to the dev app.
+
+### Development installation and setup
 
 1. Clone this repo.
-2. Install the packages:
+2. Install:
 
-- In a new terminal, `cd packages/toolkit-react` and `npm install`
-
-3. Install dev/test apps:
-
-- In a new terminal, `cd sites/toolkit-react` and `npm install`
+- `npm install`
 
 4. Run dev servers:
 
-- In the `packages/toolkit-react` terminal, `npm run dev`
-- In the `sites/toolkit-react` terminal, `npm run dev`
-  - Find the link to the local dev site in the output.
-  - Dev site should hot reload on changes to the package or the site. Note that any flow must be restarted after changes - refresh the page to go back to the beginning.
+- `npm run dev`
 
-5. Run unit tests:
+This will run the live dev servers for both the package and the site.
 
-- In the `packages/toolkit-react` terminal, `npm run test`
+5. Run unit test:
+
+- `npm run test`
 
 6. Run Storybook:
 
-- In the `packages/toolkit-react` terminal, `npm run storybook`
+- `npm run storybook -w package`
   - Find the link to the local Storybook server in the output.
   - Storybook should hot reload on changes to the package. Each UI state has its own component, so changes should show immediately and shouldn't require reloading the page.
 
-## Architecture
+### Architecture
 
 See the `README.md` in `packages/toolkit-react` for a more detailed overview of the toolkit's architecture.
