@@ -41,9 +41,9 @@ jobs:
       - uses: actions/github-script@v6
         with:
           script: |
-            github.rest.pulls.merge({
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: ${{ github.event.pull_request.number }},
-              merge_method: 'merge'
+              body: 'Merge this PR to publich version ${{ steps.version.outputs.VERSION }} to npm as the latest stable version.'
             })
