@@ -3,7 +3,7 @@
  *
  */
 const AlreadyLoggedIn = () => {
-  return <p>You're logged in!</p>;
+  return <p>You're logged in</p>;
 };
 
 export default AlreadyLoggedIn;

@@ -42,6 +42,9 @@ const strings = {
     },
 
     // strategies
+    password: {
+      checkEmail: "Check your email for a link to set your password",
+    },
     email: {
       link: {
         title: "Email me a link",
@@ -233,6 +236,18 @@ const componentForStep = (state) => {
           isLogin: type === "login",
         },
       };
+    case "selectFirstFactor.showEmailSent":
+      return {
+        title: strings[type].title,
+        Component: SelectFactor,
+        props: {
+          isCompact: state.context.config.compact,
+          flow: state.context.config.flow,
+          isSecondFactor: false,
+          tenantId: state.context.tenantId,
+          isLogin: type === "login",
+        },
+      };
 
     // SelectFactor flow for second factor,
     // with password possibly inlined
@@ -400,6 +415,14 @@ const componentForStep = (state) => {
       return {
         title: strings[type].done,
         Component: Success,
+      };
+    case "password.showEmailSent":
+      return {
+        title: strings[type].password.checkEmail,
+        Component: EmailLinkSent,
+        props: {
+          message: state.context.view.message,
+        },
       };
 
     // TOTP flow

@@ -10,7 +10,7 @@ const Success = ({ redirect }) => {
   return (
     <>
       <p>
-        You're logged in!
+        You're logged in
         {redirect &&
           "If you aren't redirected, click the button below to continue."}
       </p>

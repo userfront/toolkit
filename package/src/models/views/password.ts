@@ -68,6 +68,13 @@ const passwordConfig: AuthMachineConfig = {
           target: "showForm",
         },
         onDone: [
+          // If the user did not have a password previously, let them
+          // know that an email was sent to set their password.
+          {
+            cond: "passwordResetEmailSent",
+            actions: "setEmailSentMessage",
+            target: "showEmailSent",
+          },
           // On success, proceed to second factor if required
           {
             actions: "setAllowedSecondFactors",
@@ -86,6 +93,12 @@ const passwordConfig: AuthMachineConfig = {
     // Show a confirmation view, in case we don't redirect
     showPasswordSet: {
       type: "final",
+    },
+    // Show that an email was sent, in the case where the user did not have a password
+    showEmailSent: {
+      on: {
+        back: "showForm",
+      },
     },
   },
 };
