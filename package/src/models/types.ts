@@ -251,6 +251,11 @@ export type UserfrontApiFactorResponseEvent = {
       firstFactor: Factor;
       secondFactors: Factor[];
     };
+    sessionId?: string;
+    result?: {
+      channel: string;
+      email: string;
+    };
   };
 };
 

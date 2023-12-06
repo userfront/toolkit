@@ -72,7 +72,7 @@ const passwordConfig: AuthMachineConfig = {
           // know that an email was sent to set their password.
           {
             cond: "passwordResetEmailSent",
-            actions: "setEmailSentMessage",
+            actions: "setEmailFromResponse",
             target: "showEmailSent",
           },
           // On success, proceed to second factor if required

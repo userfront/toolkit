@@ -140,6 +140,15 @@ export const setEmail = assign({
   }),
 });
 
+// Store the user's email when it is returned from the API,
+// for example when a password reset email is sent when a user tries to log in
+// but doesn't have a password set.
+export const setEmailFromResponse = assign({
+  user: (context, event: UserfrontApiFactorResponseEvent) => ({
+    email: event.data.result?.email,
+  }),
+});
+
 // Store the verification code so we can send it
 export const setCode = assign(
   (

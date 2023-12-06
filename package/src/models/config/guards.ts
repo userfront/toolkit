@@ -124,3 +124,15 @@ export const isPasswordReset = (context: AuthContext<any>) => {
 export const isSetup = (context: AuthContext<any>) => {
   return context.action === "setup";
 };
+
+// For password logins, check the response to see if a password reset email was sent instead,
+// which is the default behavior when the user tries to log in with no password set.
+export const passwordResetEmailSent = (
+  context: AuthContext<Password>,
+  event: UserfrontApiFactorResponseEvent
+) => {
+  if (event.data.sessionId) {
+    return false;
+  }
+  return event.data.result?.channel === "email";
+};

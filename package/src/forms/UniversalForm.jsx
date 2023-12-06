@@ -238,14 +238,10 @@ const componentForStep = (state) => {
       };
     case "selectFirstFactor.showEmailSent":
       return {
-        title: strings[type].title,
-        Component: SelectFactor,
+        title: strings[type].password.checkEmail,
+        Component: EmailLinkSent,
         props: {
-          isCompact: state.context.config.compact,
-          flow: state.context.config.flow,
-          isSecondFactor: false,
-          tenantId: state.context.tenantId,
-          isLogin: type === "login",
+          message: state.context.view.message,
         },
       };
 
@@ -276,6 +272,14 @@ const componentForStep = (state) => {
           allowedSecondFactors: state.context.allowedSecondFactors,
           tenantId: state.context.tenantId,
           submittingPassword: true,
+        },
+      };
+    case "selectSecondFactor.showEmailSent":
+      return {
+        title: strings[type].password.checkEmail,
+        Component: EmailLinkSent,
+        props: {
+          message: state.context.view.message,
         },
       };
 
