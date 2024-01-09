@@ -30,22 +30,22 @@ import emailCodeConfig from "../views/emailCode";
 import emailLinkConfig from "../views/emailLink";
 import setNewPasswordConfig from "../views/setNewPassword";
 import {
-  isSsoProvider,
+  hasLinkQueryParams,
   hasNoActiveFactor,
   isLocalMode,
+  isLocalModeWithoutFlow,
+  isLoggedIn,
+  isLoggedInOrHasLinkCredentials,
   isMissingFlow,
   isMissingFlowFromServer,
-  isLocalModeWithoutFlow,
   isMissingTenantId,
+  isPasswordReset,
+  isSecondFactor,
+  isSetup,
+  isSsoProvider,
   passwordsMatch,
-  hasLinkQueryParams,
   secondFactorRequired,
   secondFactorRequiredFromView,
-  isLoggedIn,
-  isSecondFactor,
-  isPasswordReset,
-  isLoggedInOrHasLinkCredentials,
-  isSetup,
 } from "../config/guards";
 import {
   setActiveFactor,
@@ -92,7 +92,12 @@ export const defaultOptions = {
     // Predicates for first factors:
     // Does the flow have multiple first factors?
     hasMultipleFirstFactors: (context: AuthContext<any>, event: any) => {
-      return (context.config.flow?.firstFactors?.length ?? 0) > 1;
+      const firstFactors = context.config.flow?.firstFactors ?? [];
+      return firstFactors.length > 1;
+    },
+    hasNoFirstFactors: (context: AuthContext<any>) => {
+      const firstFactors = context.config.flow?.firstFactors ?? [];
+      return firstFactors.length === 0;
     },
     // Is the flow only one factor? One predicate per factor type.
     // If there's only one allowed factor, allows us to skip the select screen
@@ -186,54 +191,54 @@ export const defaultOptions = {
       return isSsoProvider(event.factor);
     },
 
+    hasLinkQueryParams,
     hasNoActiveFactor,
     isLocalMode,
+    isLocalModeWithoutFlow,
+    isLoggedIn,
+    isLoggedInOrHasLinkCredentials,
     isMissingFlow,
     isMissingFlowFromServer,
-    isLocalModeWithoutFlow,
     isMissingTenantId,
+    isPasswordReset,
+    isSecondFactor,
+    isSetup,
     passwordsMatch,
-    hasLinkQueryParams,
     secondFactorRequired,
     secondFactorRequiredFromView,
-    isLoggedIn,
-    isSecondFactor,
-    isPasswordReset,
-    isLoggedInOrHasLinkCredentials,
-    isSetup,
   },
   actions: {
-    setActiveFactor,
-    resumeIfNeeded,
-    setFlowFromUserfrontApi,
-    setEmail,
-    setPassword,
-    setPhoneNumber,
-    setTenantIdIfPresent,
-    setTotpCode,
-    setUseBackupCode,
-    setQrCode,
-    redirectIfLoggedIn,
-    redirectOnLoad,
-    setCode,
-    setErrorFromApiError,
     clearError,
-    setErrorForPasswordMismatch,
-    setShowEmailOrUsernameIfFirstFactor,
-    markAsSecondFactor,
-    setAllowedSecondFactors,
-    setAllowedSecondFactorsFromView,
-    storeFactorResponse,
+    clearResentMessage,
     disableBack,
     enableBack,
-    setupView,
-    readQueryParams,
+    markAsSecondFactor,
     markQueryParamsInvalid,
-    setResentMessage,
-    clearResentMessage,
+    readQueryParams,
+    redirectIfLoggedIn,
+    redirectOnLoad,
+    resumeIfNeeded,
+    setActiveFactor,
+    setAllowedSecondFactors,
+    setAllowedSecondFactorsFromView,
+    setCode,
+    setEmail,
+    setErrorForPasswordMismatch,
+    setErrorFromApiError,
     setFirstFactorAction,
-    setSecondFactorAction,
+    setFlowFromUserfrontApi,
+    setPassword,
     setPasswordForReset,
+    setPhoneNumber,
+    setQrCode,
+    setResentMessage,
+    setSecondFactorAction,
+    setShowEmailOrUsernameIfFirstFactor,
+    setTenantIdIfPresent,
+    setTotpCode,
+    setupView,
+    setUseBackupCode,
+    storeFactorResponse,
   },
 };
 
@@ -526,6 +531,11 @@ const universalMachineConfig: AuthMachineConfig = {
           target: "handleLoginWithLink",
           cond: "hasLinkQueryParams",
         },
+        // Handle no first factors
+        {
+          target: "noFirstFactors",
+          cond: "hasNoFirstFactors",
+        },
         // If there are multiple first factors, then show the factor selection view
         {
           actions: "enableBack",
@@ -582,6 +592,22 @@ const universalMachineConfig: AuthMachineConfig = {
           target: "unhandledError",
         },
       ],
+    },
+
+    // Show the disabled view if there are no first factors
+    noFirstFactors: {
+      id: "noFirstFactors",
+      always: [
+        {
+          target: "disabled",
+        },
+      ],
+    },
+
+    // Show the disabled error view
+    disabled: {
+      id: "disabled",
+      type: "final",
     },
 
     // Show the first factor selection view, non-compact
