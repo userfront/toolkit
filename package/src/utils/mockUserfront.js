@@ -1,3 +1,5 @@
+import { overrideUserfrontSingleton } from "../services/userfront";
+
 const mockUserfrontResponses = {
   store: {
     tenantId: "demo1234",
@@ -55,16 +57,6 @@ const mockUserfrontResponses = {
     };
   },
   login: async () => {
-    return {
-      message: "OK",
-      result: {
-        channel: "email",
-        email: "some.email@example.com",
-        messageId: "a9c9b41c-ce76-4f7e-915a-abf18a36a4ae",
-        submittedAt: "2022-12-15T23:36:33.299Z",
-        expiresAt: "2022-12-15T23:36:33.299Z",
-      },
-    };
     return {
       mode: "test",
       message: "OK",
@@ -468,5 +460,11 @@ class MockUserfront {
 }
 
 const createMockUserfront = () => new MockUserfront();
+
+export const useMockUserfront = () => {
+  const mockUserfront = createMockUserfront();
+  overrideUserfrontSingleton(mockUserfront);
+  return mockUserfront;
+};
 
 export default createMockUserfront;

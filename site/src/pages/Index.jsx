@@ -33,6 +33,9 @@ const Index = () => {
         <li>
           <Link to="/logout">Logout button demo</Link>
         </li>
+        <li>
+          <Link to="/demo/signup">DemoForm signup</Link>
+        </li>
       </ul>
       <h2>Live demos</h2>
       <p>

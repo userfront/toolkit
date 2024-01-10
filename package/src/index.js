@@ -12,6 +12,7 @@ export { default as SignupForm } from "./packaged-forms/SignupForm";
 export { default as LoginForm } from "./packaged-forms/LoginForm";
 export { default as PasswordResetForm } from "./packaged-forms/PasswordResetForm";
 export { default as LogoutButton } from "./components/LogoutButton";
+export { default as DemoForm } from "./packaged-forms/DemoForm";
 /*
  * CSS styles for the forms
  */
