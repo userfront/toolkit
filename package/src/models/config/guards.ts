@@ -14,20 +14,20 @@ import { getUserfrontPropertySync } from "../../services/userfront";
 
 // GUARDS / PREDICATES
 
+const ssoStrategies = [
+  "apple",
+  "azure",
+  "google",
+  "github",
+  "twitter",
+  "facebook",
+  "linkedin",
+  "okta",
+];
+
 // Is this factor an SSO provider?
-export const isSsoProvider = (factor: Factor) => {
-  return (
-    factor.channel === "email" &&
-    (factor.strategy === "apple" ||
-      factor.strategy === "azure" ||
-      factor.strategy === "google" ||
-      factor.strategy === "github" ||
-      factor.strategy === "twitter" ||
-      factor.strategy === "facebook" ||
-      factor.strategy === "linkedin" ||
-      factor.strategy === "okta")
-  );
-};
+export const isSsoProvider = (factor: Factor) =>
+  factor.channel === "email" && ssoStrategies.includes(factor.strategy);
 
 // Is a second factor required to complete the signup or login?
 export const secondFactorRequired = (

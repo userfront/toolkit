@@ -8,11 +8,14 @@ import ErrorMessage from "../components/ErrorMessage";
  * @param {object} props
  * @param {object} error - a Userfront error to display
  */
-const GeneralErrorMessage = ({ error }) => {
+const GeneralErrorMessage = ({
+  error,
+  message = "An unhandled error occurred. Please try again later.",
+}) => {
   return (
     <div>
-      <p>An unhandled error occurred. Please try again later.</p>
-      <ErrorMessage error={error} />
+      {message && <p>{message}</p>}
+      {error && <ErrorMessage error={error} />}
     </div>
   );
 };
