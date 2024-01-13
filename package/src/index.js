@@ -16,7 +16,7 @@ export { default as DemoForm } from "./packaged-forms/DemoForm";
 /*
  * CSS styles for the forms
  */
-import "./themes/default.css";
+import "./themes/dynamic.css";
 
 Userfront.build = (toolId) => {
   console.error(`Userfront.build(${toolId}) has been removed. Instead, import the component directly:

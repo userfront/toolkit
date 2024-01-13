@@ -47,7 +47,7 @@
       "import": "./dist/web-component.es.js",
       "require": "./dist/web-component.umd.js"
     },
-    "./themes/default.css": "./dist/style.css"
+    "./themes/dynamic.css": "./dist/style.css"
   },
   "files": [
     "dist"

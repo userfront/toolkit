@@ -7,7 +7,7 @@ import LoginForm from "./packaged-forms/LoginForm";
 import PasswordResetForm from "./packaged-forms/PasswordResetForm";
 import LogoutButton from "./components/LogoutButton";
 
-import "./themes/default.css";
+import "./themes/dynamic.css";
 
 if (typeof window === "object" && !window.Userfront) {
   window.Userfront = Userfront;

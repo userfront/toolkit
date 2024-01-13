@@ -23,7 +23,7 @@ UserfrontCore.DemoForm = DemoForm;
 /*
  * CSS styles for the forms
  */
-import "./themes/default.css";
+import "./themes/dynamic.css";
 
 // TODO #9: add link to upgrade guide
 UserfrontCore.build = (toolId) => {

@@ -57,7 +57,7 @@ const DemoForm = ({ type, theme }) => {
     <UnboundUniversalForm
       state={state}
       onEvent={handleEvent}
-      customTheme={demoTheme}
+      theme={demoTheme}
     />
   );
 };
