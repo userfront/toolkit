@@ -28,15 +28,6 @@ const brightness = (hexColor) => {
 
 const SignupFormModel = createUniversalFormModel(context);
 const DemoForm = ({ type, theme }) => {
-  const demoTheme = {
-    colors: {
-      light: "#ec6279",
-      dark: "#333335",
-      accent: "#6a6a6a",
-    },
-    fonts: {},
-  };
-
   context.config.type = type;
 
   const mockUserfront = useMockUserfront();
@@ -54,11 +45,7 @@ const DemoForm = ({ type, theme }) => {
   };
 
   return (
-    <UnboundUniversalForm
-      state={state}
-      onEvent={handleEvent}
-      theme={demoTheme}
-    />
+    <UnboundUniversalForm state={state} onEvent={handleEvent} theme={theme} />
   );
 };
 
