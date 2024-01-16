@@ -1,4 +1,4 @@
-import styles from "../../src/themes/dark.css?inline";
+import styles from "../../src/themes/dynamic.css?inline";
 
 const styleSheet = new CSSStyleSheet();
 styleSheet.replaceSync(styles);
