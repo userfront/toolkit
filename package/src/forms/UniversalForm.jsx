@@ -183,11 +183,14 @@ const componentForStep = (state) => {
   switch (step) {
     case "init":
     case "getGlobalTenantId":
+    case "initUserfront":
+    case "initFlow":
     case "initForm":
     case "beginFlow":
     case "showPreviewAndFetchFlow":
     case "showPlaceholderAndFetchFlow":
     case "initPasswordReset":
+    case "handleLoginWithLink":
       if (canShowFlow) {
         return {
           title: strings[type].title,
@@ -207,6 +210,7 @@ const componentForStep = (state) => {
           Component: Placeholder,
         };
       }
+    case "noFirstFactors":
     case "disabled":
       return {
         title: strings.general.disabled,
