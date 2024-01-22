@@ -190,7 +190,6 @@ const componentForStep = (state) => {
     case "showPreviewAndFetchFlow":
     case "showPlaceholderAndFetchFlow":
     case "initPasswordReset":
-    case "handleLoginWithLink":
       if (canShowFlow) {
         return {
           title: strings[type].title,
@@ -210,6 +209,10 @@ const componentForStep = (state) => {
           Component: Placeholder,
         };
       }
+    case "handleLoginWithLink":
+      return {
+        Component: Placeholder,
+      };
     case "noFirstFactors":
     case "disabled":
       return {
