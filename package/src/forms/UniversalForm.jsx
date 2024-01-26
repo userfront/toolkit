@@ -604,6 +604,7 @@ const UniversalForm = ({ theme = {}, state, onEvent }) => {
   if (theme.size === "mini") {
     style["--userfront-em-size"] = "12px";
     style["--userfront-spacing"] = "0.5em";
+    style["--userfront-container-width"] = "250px";
   }
   if (theme.size === "spaced") {
     style["--userfront-em-size"] = "14px";

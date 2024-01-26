@@ -1480,6 +1480,13 @@
   }
 }
 
+/* Phone number input */
+/* Mostly controlled by the library, but we need to set a max-width
+  outside of a layer so it's more specific */
+.userfront-toolkit .react-tel-input .form-control {
+  max-width: var(--userfront-container-width);
+}
+
 /* Theme customizations */
 
 @layer extras {
