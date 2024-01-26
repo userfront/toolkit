@@ -1506,9 +1506,9 @@
     display: none;
   }
 
-  /** FUN theming element **/
-  /* Adds 100% more FUN to the buttons */
-  .userfront-toolkit.userfront-fun .userfront-button.userfront-button-primary {
+  /** Interactive gradients on buttons **/
+  .userfront-toolkit.userfront-gradient-buttons
+    .userfront-button.userfront-button-primary {
     background-image: linear-gradient(
       90deg,
       var(--userfront-primary-color) 0,
@@ -1519,12 +1519,12 @@
     transition: 0.33s ease-out;
   }
 
-  .userfront-toolkit.userfront-fun
+  .userfront-toolkit.userfront-gradient-buttons
     .userfront-button.userfront-button-primary:hover {
     background-position: 50%;
   }
 
-  .userfront-toolkit.userfront-fun
+  .userfront-toolkit.userfront-gradient-buttons
     .userfront-button.userfront-button-secondary {
     background-image: linear-gradient(
       90deg,
@@ -1536,7 +1536,7 @@
     transition: 0.33s ease-out;
   }
 
-  .userfront-toolkit.userfront-fun
+  .userfront-toolkit.userfront-gradient-buttons
     .userfront-button.userfront-button-secondary:hover {
     background-position: 50%;
   }

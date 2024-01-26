@@ -567,7 +567,6 @@ const UniversalForm = ({ theme = {}, state, onEvent }) => {
   };
 
   // Build the theme
-  // TODO this is all very open to change!
 
   // Define CSS variables
   const themeColors = theme.colors || {};
@@ -616,13 +615,21 @@ const UniversalForm = ({ theme = {}, state, onEvent }) => {
   }
 
   // Attach classes for theme customizations
-  // TODO: syntax and terminology is flexible here.
+  // TODO: syntax and terminology is flexible here
+  const extrasClassMap = {
+    gradientButtons: "gradient-buttons",
+    hideSecuredMessage: "hide-branding",
+  };
   const extras = theme.extras || {};
   let customizationClasses = "";
   Object.entries(extras)
     .filter(([key, val]) => Boolean(val))
     .forEach(([key]) => {
-      customizationClasses += ` userfront-${key}`;
+      if (key in extrasClassMap) {
+        customizationClasses += ` ${extrasClassMap[key]}`;
+      } else {
+        customizationClasses += ` userfront-${key}`;
+      }
     });
   customizationClasses = customizationClasses.trim();
 

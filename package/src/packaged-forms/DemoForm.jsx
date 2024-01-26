@@ -16,17 +16,27 @@ const context = {
   ...defaultUniversalFormContext,
 };
 
-const brightness = (hexColor) => {
-  const hasFullSpec = color.length == 7;
-  var m = color.substr(1).match(hasFullSpec ? /(\S{2})/g : /(\S{1})/g);
-  if (m)
-    var r = parseInt(m[0] + (hasFullSpec ? "" : m[0]), 16),
-      g = parseInt(m[1] + (hasFullSpec ? "" : m[1]), 16),
-      b = parseInt(m[2] + (hasFullSpec ? "" : m[2]), 16);
-  if (typeof r != "undefined") return (r * 299 + g * 587 + b * 114) / 1000;
-};
-
 const SignupFormModel = createUniversalFormModel(context);
+
+/**
+ * A demo authentication form that does not interact with the Userfront API
+ *
+ * @param {string=} props.type - "signup", "login", "passwordReset"
+ * @param {object=} props.authFlow - authentication flow to use in the demo form
+ * @param {object=} props.theme - theme information: color scheme, font, sizing, options
+ * @param {string=} props.theme.colors.light - light color to use when deriving color scheme
+ * @param {string=} props.theme.colors.dark - dark color to use when deriving color scheme
+ * @param {object=} props.theme.colors - theme colors
+ * @param {string=} props.theme.colors.accent - accent color to use when deriving color scheme (optional)
+ * @param {string=} props.theme.colors.lightBackground - background color for light mode (optional)
+ * @param {string=} props.theme.colors.darkBackground - background color for dark mode (optional)
+ * @param {string=} props.theme.fontFamily - CSS font family to use for the form
+ * @param {object=} props.theme.options - additional options to modify the form's appearance
+ * @param {boolean=} props.theme.options.rounded - make form elements appear more rounded generally
+ * @param {boolean=} props.theme.options.squared - make form elements appear more squared-off generally
+ * @param {boolean=} props.theme.options.gradientButtons - add an interactive gradient to buttons
+ * @param {boolean=} props.theme.options.hideSecuredMessage - hide the "secured by Userfront" message
+ */
 const DemoForm = ({ type, theme }) => {
   context.config.type = type;
 
