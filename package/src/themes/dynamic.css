@@ -30,25 +30,11 @@
 */
 @layer base, color-scheme, extras;
 
+/* High level styles */
 @layer base {
   /* Common styles between color schemes */
   .userfront-toolkit {
     /* Outer container */
-
-    /* Box shadow applied to the outer container */
-    --userfront-container-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-
-    /* Box shadow of form, when hovered or active */
-    --userfront-container-active-box-shadow: var(
-      --userfront-container-box-shadow
-    );
-
-    /* Border radius of the outer container */
-    --userfront-container-border-radius: 4px;
-
-    /* Container border (color from color scheme) */
-    --userfront-container-border: 1px solid
-      var(--userfront-container-border-color);
 
     /* Width of outer container */
     --userfront-container-width: auto;
@@ -68,7 +54,24 @@
     /* Padding of outer container */
     --userfront-container-padding: 2em 1.5em;
 
+    /* Box shadow applied to the outer container */
+    --userfront-container-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+
+    /* Box shadow of form, when hovered or active */
+    --userfront-container-active-box-shadow: var(
+      --userfront-container-box-shadow
+    );
+
+    /* Container border (color from color scheme) */
+    --userfront-container-border: 1px solid
+      var(--userfront-container-border-color);
+
+    /* Border radius of the outer container */
+    --userfront-container-border-radius: 4px;
+
     /* Toolkit form globals */
+
+    /* Form-wide and targeted sizing */
 
     /* Default font size; scales entire form, since sizes are set with em units */
     --userfront-em-size: 14px;
@@ -76,20 +79,46 @@
     /* Overall spacing: padding of form, distance between inputs */
     --userfront-spacing: 1em;
 
-    /* Font to be applied to the whole form */
-    --userfront-font-family: Avenir, Helvetica, Arial, sans-serif;
+    /* Spacing between input and label */
+    --userfront-label-spacing: 0.5em;
+
+    /* Primary and secondary button height */
+    --userfront-button-height: 2em;
+
+    /* Primary and secondary button padding */
+    --userfront-button-padding: 0.5em;
+
+    /* Button icon size - icons are always square */
+    --userfront-button-icon-size: 2em;
+
+    /* Secured by Userfront font size */
+    --userfront-secured-font-size: 1em;
+
+    /* Height of the placeholder form, if no flow is available to be shown */
+    --userfront-placeholder-height: 300px;
+
+    /* General toolkit alignment */
+    --userfront-alignment: center;
+
+    /* Label alignment, relative to attached input */
+    --userfront-label-alignment: left;
+
+    /* Transform to apply on non-disabled button hover */
+    --userfront-button-hover-transform: none;
 
     /* Rounding for edges of buttons and inputs */
     --userfront-border-radius: 4px;
+
+    /* Font and font sizing */
+
+    /* Font to be applied to the whole form */
+    --userfront-font-family: Avenir, Helvetica, Arial, sans-serif;
 
     /* Input font size */
     --userfront-input-font-size: 1em;
 
     /* Label size */
     --userfront-label-font-size: 0.8em;
-
-    /* Spacing between input and label */
-    --userfront-label-spacing: 0.5em;
 
     /* Title font size */
     --userfront-title-font-size: 1.5em;
@@ -102,30 +131,6 @@
 
     /* Subtle button font size */
     --userfront-subtle-button-font-size: 1em;
-
-    /* Primary and secondary button height */
-    --userfront-button-height: 2em;
-
-    /* Primary and secondary button padding */
-    --userfront-button-padding: 0.5em;
-
-    /* Transform to apply on non-disabled button hover */
-    --userfront-button-hover-transform: none;
-
-    /* Button icon size - icons are always square */
-    --userfront-button-icon-size: 2em;
-
-    /* General toolkit alignment */
-    --userfront-alignment: center;
-
-    /* Label alignment, relative to attached input */
-    --userfront-label-alignment: left;
-
-    /* Secured by Userfront font size */
-    --userfront-secured-font-size: 1em;
-
-    /* Height of the placeholder form, if no flow is available to be shown */
-    --userfront-placeholder-height: 300px;
   }
 }
 
@@ -1474,12 +1479,35 @@
 }
 
 /* Theme customizations */
-/* TODO: 
-
-/** FUN theming element **/
-/* Adds 100% more FUN to the buttons */
 
 @layer extras {
+  /** Rounded element theming **/
+  /* Makes things more rounded generally **/
+  .userfront-toolkit.userfront-rounded .userfront-button {
+    border-radius: 12px;
+  }
+
+  .userfront-toolkit.userfront-rounded .userfront-input {
+    border-radius: 8px;
+  }
+
+  /** Squared element theming **/
+  /* Makes things more squared generally */
+  .userfront-toolkit.userfront-squared .userfront-button {
+    border-radius: 0px;
+  }
+
+  .userfront-toolkit.userfront-squared .userfront-input {
+    border-radius: 0px;
+  }
+
+  /** Hide "Secured by Userfront" **/
+  .userfront-toolkit.userfront-hide-branding .userfront-secured {
+    display: none;
+  }
+
+  /** FUN theming element **/
+  /* Adds 100% more FUN to the buttons */
   .userfront-toolkit.userfront-fun .userfront-button.userfront-button-primary {
     background-image: linear-gradient(
       90deg,
@@ -1511,15 +1539,5 @@
   .userfront-toolkit.userfront-fun
     .userfront-button.userfront-button-secondary:hover {
     background-position: 50%;
-  }
-
-  /** Rounded element theming **/
-  /* Makes things more rounded generally **/
-  .userfront-toolkit.userfront-rounded .userfront-button {
-    border-radius: 12px;
-  }
-
-  .userfront-toolkit.userfront-rounded .userfront-input {
-    border-radius: 8px;
   }
 }
