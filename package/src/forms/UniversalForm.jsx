@@ -617,8 +617,10 @@ const UniversalForm = ({ theme = {}, state, onEvent }) => {
   // Attach classes for theme customizations
   // TODO: syntax and terminology is flexible here
   const extrasClassMap = {
-    gradientButtons: "gradient-buttons",
-    hideSecuredMessage: "hide-branding",
+    gradientButtons: "userfront-gradient-buttons",
+    hideSecuredMessage: "userfront-hide-branding",
+    raisedButtons: "userfront-raised-buttons",
+    dottedOutlines: "userfront-dotted-outlines",
   };
   const extras = theme.extras || {};
   let customizationClasses = "";

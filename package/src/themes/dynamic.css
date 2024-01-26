@@ -211,7 +211,7 @@
     /* Hovered and active version of the secondary color */
     --userfront-secondary-color-active: color-mix(
       in hsl,
-      #ffffff 90%,
+      #ffffff 80%,
       var(--userfront-primary-color)
     );
 
@@ -1102,6 +1102,14 @@
     align-self: stretch;
   }
 
+  .userfront-form .userfront-input-container {
+    flex: 0 0 auto;
+    align-self: stretch;
+    display: flex;
+    flex-flow: column nowrap;
+    position: relative;
+  }
+
   /* Text inputs */
   .userfront-toolkit input.userfront-input {
     color: var(--userfront-input-text-color);
@@ -1140,36 +1148,26 @@
     color: var(--userfront-placeholder-color-active);
   }
 
-  /* Password input */
-  .userfront-toolkit .userfront-password-input-container {
-    position: relative;
-    width: 100%;
-    display: flex;
-    flex-flow: column nowrap;
-  }
-
-  .userfront-toolkit .userfront-password-input-container .userfront-input {
-    padding-right: calc(max(var(--userfront-label-font-size), 16px) + 1.5rem);
-  }
-
-  .userfront-toolkit
-    .userfront-password-input-container
-    .userfront-password-toggle {
+  /* Password reveal toggle */
+  .userfront-toolkit .userfront-password-toggle {
     position: absolute;
-    /* shift padding toward the top to align icon with text center line */
-    /* horizontal padding is in rem as it does not need to vary with input font size */
-    padding: 0.6em 0.75rem 0.4em;
-    right: 3px;
-    height: calc(100% - 1em);
-    /* 100% - 1em total vertical padding */
+    /* Position top of toggle container in line with top of input */
+    top: 1px;
+
+    /* Add some space to the right */
+    right: 8px;
+
+    /* Make toggle container the same size as the input */
+    height: 2.5em;
+
     /* flex/center/center to center the icon within its container */
     display: flex;
     align-items: center;
     justify-content: center;
+
     cursor: pointer;
     color: var(--userfront-placeholder-color);
-    font-size: max(var(--userfront-label-font-size), 13px);
-    width: max(var(--userfront-label-font-size), 16px);
+    width: 15px;
   }
 
   .userfront-toolkit input.userfront-input-error {
@@ -1179,6 +1177,10 @@
   .userfront-toolkit .userfront-input-error-message {
     color: var(--userfront-error-color);
     padding: 0.25em 0;
+  }
+
+  .userfront-toolkit .userfront-input-error-placeholder {
+    height: calc(1.5em + 6px);
   }
 
   /* Labels for text inputs */
@@ -1516,11 +1518,13 @@
       var(--userfront-primary-color)
     );
     background-size: 200% auto;
-    transition: 0.33s ease-out;
+    transition: background-position 0.33s ease-out;
   }
 
   .userfront-toolkit.userfront-gradient-buttons
-    .userfront-button.userfront-button-primary:hover {
+    .userfront-button.userfront-button-primary:hover:not(:disabled),
+  .userfront-toolkit.userfront-gradient-buttons
+    .userfront-button.userfront-button-primary:focus:not(:disabled) {
     background-position: 50%;
   }
 
@@ -1533,11 +1537,121 @@
       var(--userfront-secondary-color)
     );
     background-size: 200% auto;
-    transition: 0.33s ease-out;
+    transition: background-position 0.33s ease-out;
   }
 
   .userfront-toolkit.userfront-gradient-buttons
-    .userfront-button.userfront-button-secondary:hover {
+    .userfront-button.userfront-button-secondary:hover:not(:disabled),
+  .userfront-toolkit.userfront-gradient-buttons
+    .userfront-button.userfront-button-secondary:focus:not(:disabled) {
     background-position: 50%;
+  }
+
+  /* fix a bad animation */
+  .userfront-toolkit.userfront-gradient-buttons.userfront-raised-buttons
+    .userfront-button.userfront-button-primary,
+  .userfront-toolkit.userfront-gradient-buttons.userfront-raised-buttons
+    .userfront-button.userfront-button-secondary {
+    background-position: unset;
+  }
+
+  /* Raised buttons */
+  /* Primary */
+  .userfront-toolkit.userfront-raised-buttons
+    .userfront-button.userfront-button-primary {
+    border: 1px solid var(--userfront-primary-color);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in hwb, #ffffff 10%, var(--userfront-primary-color)) 1%,
+      color-mix(in hwb, #000000 10%, var(--userfront-primary-color)) 100%
+    );
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.25);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    outline-offset: 2px;
+  }
+  .userfront-toolkit.userfront-raised-buttons
+    .userfront-button.userfront-button-primary:hover:not(:disabled),
+  .userfront-toolkit.userfront-raised-buttons
+    .userfront-button.userfront-button-primary:focus:not(:disabled) {
+    background: var(--userfront-primary-color);
+  }
+
+  .userfront-toolkit.userfront-raised-buttons
+    .userfront-button.userfront-button-primary:active:not(:disabled) {
+    background: linear-gradient(
+      to top,
+      color-mix(in hwb, #ffffff 10%, var(--userfront-primary-color)) 1%,
+      color-mix(in hwb, #000000 10%, var(--userfront-primary-color)) 100%
+    );
+  }
+
+  /* Secondary */
+  .userfront-toolkit.userfront-raised-buttons
+    .userfront-button.userfront-button-secondary {
+    border: 1px solid var(--userfront-secondary-button-border-color);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in hwb, #ffffff 10%, var(--userfront-secondary-color)) 1%,
+      color-mix(in hwb, #000000 10%, var(--userfront-secondary-color)) 100%
+    );
+    /* text-shadow: 1px 1px 0 rgba(0,0,0,0.25); */
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    outline-offset: 2px;
+  }
+  .userfront-toolkit.userfront-raised-buttons
+    .userfront-button.userfront-button-secondary:hover:not(:disabled),
+  .userfront-toolkit.userfront-raised-buttons
+    .userfront-button.userfront-button-secondary:focus:not(:disabled) {
+    background: linear-gradient(
+      to bottom,
+      color-mix(in hwb, #ffffff 15%, var(--userfront-secondary-color)) 1%,
+      color-mix(in hwb, #000000 5%, var(--userfront-secondary-color)) 100%
+    );
+  }
+
+  .userfront-toolkit.userfront-raised-buttons
+    .userfront-button.userfront-button-secondary:active:not(:disabled) {
+    background: linear-gradient(
+      to top,
+      color-mix(in hwb, #ffffff 10%, var(--userfront-secondary-color)) 1%,
+      color-mix(in hwb, #000000 10%, var(--userfront-secondary-color)) 100%
+    );
+  }
+
+  /* Inset appearance for inputs */
+  .userfront-toolkit.userfront-raised-buttons .userfront-input {
+    outline-offset: 2px;
+    border-width: 1px;
+    border-color: var(--userfront-secondary-button-border-color);
+    border-style: outset;
+  }
+  .userfront-toolkit.userfront-raised-buttons
+    .userfront-input:hover:not(:disabled),
+  .userfront-toolkit.userfront-raised-buttons
+    .userfront-input:active:not(:disabled) {
+    border-width: 2px;
+    border-style: outset;
+    margin-top: -2px;
+  }
+  .userfront-toolkit.userfront-raised-buttons
+    .userfront-input:focus:not(:disabled) {
+    border-width: 2px;
+    margin-top: -2px;
+    border-style: inset;
+    outline-style: hidden;
+  }
+
+  /* Dotted outlines */
+  .userfront-toolkit.userfront-dotted-outlines
+    .userfront-button:active:not(:disabled),
+  .userfront-toolkit.userfront-dotted-outlines
+    .userfront-button:focus:not(:disabled),
+  .userfront-toolkit.userfront-dotted-outlines
+    .userfront-input:focus:not(:disabled) {
+    outline-offset: 1px;
+    outline-width: 2px;
+    outline-style: dotted;
   }
 }
