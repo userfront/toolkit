@@ -573,7 +573,7 @@ const UniversalForm = ({ theme = {}, state, onEvent }) => {
   const style = {
     "--userfront-light-color": themeColors.light || "#ffffff",
     "--userfront-dark-color": themeColors.dark || "#5e72e4",
-    "--userfront-accent-color": themeColors.accent || "13a0ff",
+    "--userfront-accent-color": themeColors.accent || "#13a0ff",
   };
   if (themeColors.lightBackground) {
     style["--userfront-light-background-color"] = themeColors.lightBackground;
