@@ -18,6 +18,15 @@ const context = {
 
 const SignupFormModel = createUniversalFormModel(context);
 
+const defaultDemoAuthFlow = {
+  firstFactors: [
+    { channel: "email", strategy: "google" },
+    { channel: "email", strategy: "apple" },
+    { channel: "email", strategy: "link" },
+    { channel: "email", strategy: "password" },
+  ],
+};
+
 /**
  * A demo authentication form that does not interact with the Userfront API
  *
@@ -37,10 +46,10 @@ const SignupFormModel = createUniversalFormModel(context);
  * @param {boolean=} props.theme.options.gradientButtons - add an interactive gradient to buttons
  * @param {boolean=} props.theme.options.hideSecuredMessage - hide the "secured by Userfront" message
  */
-const DemoForm = ({ type, theme }) => {
+const DemoForm = ({ type, theme, authFlow = defaultDemoAuthFlow }) => {
   context.config.type = type;
 
-  const mockUserfront = useMockUserfront();
+  const mockUserfront = useMockUserfront({ authFlow });
 
   const machine = SignupFormModel;
   const machineOptions = {};
