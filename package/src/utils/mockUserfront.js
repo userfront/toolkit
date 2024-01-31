@@ -389,8 +389,6 @@ class MockUserfront {
   }
 
   async login() {
-    console.log("login");
-    console.log(this);
     if (this.isAwaitingSecondFactor) {
       this.isAwaitingSecondFactor = false;
       return mockUserfrontResponses.login();
@@ -407,8 +405,6 @@ class MockUserfront {
   }
 
   async signup() {
-    console.log("signup");
-    console.log(this);
     if (this.isAwaitingSecondFactor) {
       this.isAwaitingSecondFactor = false;
       return mockUserfrontResponses.signup();
