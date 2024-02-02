@@ -121,6 +121,27 @@
 
 /* Color schemes */
 
+/* Set default styles for the logout button since it appears outside a form */
+.userfront-toolkit {
+  /* Logout button background color */
+  --userfront-logout-color: #c72a2a;
+
+  /* Hovered and active version of the logout color */
+  /* TODO derived from --userfront-logout-color? */
+  --userfront-logout-color-active: #d84848;
+
+  /* Focused version of the logout color */
+  --userfront-logout-color-focus: var(--userfront-logout-color-active);
+
+  /* Disabled version of the logout color */
+  /* TODO: derived from logout-color? */
+  --userfront-logout-color-disabled: #ff8e8e;
+
+  /* Text color to use on logout color backdrop */
+  /* TODO: derived from logout-color? */
+  --userfront-logout-color-text: #ffffff;
+}
+
 /* Light mode (manual and auto) */
 .userfront-toolkit.userfront-light-scheme,
 .userfront-toolkit.userfront-auto-scheme {
@@ -1482,7 +1503,8 @@
 
 /** Rounded element theming **/
 /* Makes things more rounded generally **/
-.userfront-toolkit.userfront-rounded .userfront-button {
+.userfront-toolkit.userfront-rounded .userfront-button,
+.userfront-toolkit.userfront-rounded.userfront-button {
   border-radius: 12px;
 }
 
@@ -1492,7 +1514,8 @@
 
 /** Squared element theming **/
 /* Makes things more squared generally */
-.userfront-toolkit.userfront-squared .userfront-button {
+.userfront-toolkit.userfront-squared .userfront-button,
+.userfront-toolkit.userfront-squared.userfront-button {
   border-radius: 0px;
 }
 
@@ -1518,10 +1541,27 @@
   transition: background-position 0.33s ease-out;
 }
 
+.userfront-toolkit.userfront-gradient-buttons.userfront-button-logout {
+  background-image: linear-gradient(
+    90deg,
+    var(--userfront-logout-color) 0,
+    var(--userfront-logout-color-active) 51%,
+    var(--userfront-logout-color)
+  );
+  background-size: 200% auto;
+  transition: background-position 0.33s ease-out;
+}
+
 .userfront-toolkit.userfront-gradient-buttons
   .userfront-button.userfront-button-primary:hover:not(:disabled),
 .userfront-toolkit.userfront-gradient-buttons
-  .userfront-button.userfront-button-primary:focus:not(:disabled) {
+  .userfront-button.userfront-button-primary:focus:not(:disabled),
+.userfront-toolkit.userfront-gradient-buttons.userfront-button-logout:hover:not(
+    :disabled
+  ),
+.userfront-toolkit.userfront-gradient-buttons.userfront-button-logout:focus:not(
+    :disabled
+  ) {
   background-position: 50%;
 }
 
@@ -1547,6 +1587,7 @@
 /* fix a bad animation */
 .userfront-toolkit.userfront-gradient-buttons.userfront-raised-buttons
   .userfront-button.userfront-button-primary,
+.userfront-toolkit.userfront-gradient-buttons.userfront-raised-button.userfront-button,
 .userfront-toolkit.userfront-gradient-buttons.userfront-raised-buttons
   .userfront-button.userfront-button-secondary {
   background-position: unset;
@@ -1619,6 +1660,39 @@
   );
 }
 
+/* Logout */
+.userfront-toolkit.userfront-raised-buttons.userfront-button-logout {
+  border: 1px solid var(--userfront-logout-color);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in hwb, #ffffff 10%, var(--userfront-logout-color)) 1%,
+    color-mix(in hwb, #000000 10%, var(--userfront-logout-color)) 100%
+  );
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  outline-offset: 2px;
+}
+
+.userfront-toolkit.userfront-raised-buttons.userfront-button-logout:hover:not(
+    :disabled
+  ),
+.userfront-toolkit.userfront-raised-buttons.userfront-button-logout:focus:not(
+    :disabled
+  ) {
+  background: var(--userfront-logout-color);
+}
+
+.userfront-toolkit.userfront-raised-buttons.userfront-button-logout:active:not(
+    :disabled
+  ) {
+  background: linear-gradient(
+    to top,
+    color-mix(in hwb, #ffffff 10%, var(--userfront-logout-color)) 1%,
+    color-mix(in hwb, #000000 10%, var(--userfront-logout-color)) 100%
+  );
+}
+
 /* Inset appearance for inputs */
 .userfront-toolkit.userfront-raised-buttons .userfront-input {
   outline-offset: 2px;
@@ -1650,7 +1724,13 @@
 .userfront-toolkit.userfront-dotted-outlines
   .userfront-button:focus:not(:disabled),
 .userfront-toolkit.userfront-dotted-outlines
-  .userfront-input:focus:not(:disabled) {
+  .userfront-input:focus:not(:disabled),
+.userfront-toolkit.userfront-dotted-outlines.userfront-button:active:not(
+    :disabled
+  ),
+.userfront-toolkit.userfront-dotted-outlines.userfront-button:focus:not(
+    :disabled
+  ) {
   outline-offset: 1px;
   outline-width: 2px;
   outline-style: dotted;

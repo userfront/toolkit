@@ -26,9 +26,18 @@ import { callUserfront } from "../services/userfront";
  * @param {array=} props.children - children to display in the button. Shows "Log out" if children are absent.
  * @returns
  */
-const LogoutButton = ({ redirect, disabled = false, children }) => {
+const LogoutButton = ({
+  redirect,
+  disabled = false,
+  demo = false,
+  theme = {},
+  children,
+}) => {
   const _children = children || "Log out";
   const handleClick = async () => {
+    if (demo) {
+      return;
+    }
     try {
       const arg = {};
       if (redirect != null) {
@@ -45,10 +54,82 @@ const LogoutButton = ({ redirect, disabled = false, children }) => {
       );
     }
   };
+
+  // Build the theme
+
+  // Define CSS variables
+  const themeColors = theme.colors || {};
+  const style = {
+    "--userfront-light-color": themeColors.light || "#ffffff",
+    "--userfront-dark-color": themeColors.dark || "#5e72e4",
+    "--userfront-accent-color": themeColors.accent || "#13a0ff",
+  };
+  if (themeColors.lightBackground) {
+    style["--userfront-light-background-color"] = themeColors.lightBackground;
+  }
+  if (themeColors.darkBackground) {
+    style["--userfront-dark-background-color"] = themeColors.darkBackground;
+  }
+  if (theme.fontFamily) {
+    style["--userfront-font-family"] = theme.fontFamily;
+  }
+
+  // Classes for color schemes
+  // For now, "light scheme only" is default, to match existing behavior.
+  // In a future iteration "auto scheme" should be made default
+  let colorSchemeClass = "userfront-light-scheme";
+  if (theme.colorScheme === "dark") {
+    colorSchemeClass = "userfront-dark-scheme";
+  }
+  if (theme.colorScheme === "auto") {
+    colorSchemeClass = "userfront-auto-scheme";
+  }
+
+  // CSS variables for sizing
+  if (theme.size === "compact") {
+    style["--userfront-em-size"] = "14px";
+    style["--userfront-spacing"] = "0.5em";
+  }
+  if (theme.size === "mini") {
+    style["--userfront-em-size"] = "12px";
+    style["--userfront-spacing"] = "0.5em";
+    style["--userfront-container-width"] = "250px";
+  }
+  if (theme.size === "spaced") {
+    style["--userfront-em-size"] = "14px";
+    style["--userfront-spacing"] = "20px";
+  }
+  if (theme.size === "large") {
+    style["--userfront-em-size"] = "20px";
+    style["--userfront-spacing"] = "18px";
+  }
+
+  // Attach classes for theme customizations
+  // TODO: syntax and terminology is flexible here
+  const extrasClassMap = {
+    gradientButtons: "userfront-gradient-buttons",
+    hideSecuredMessage: "userfront-hide-branding",
+    raisedButtons: "userfront-raised-buttons",
+    dottedOutlines: "userfront-dotted-outlines",
+  };
+  const extras = theme.extras || {};
+  let customizationClasses = "";
+  Object.entries(extras)
+    .filter(([key, val]) => Boolean(val))
+    .forEach(([key]) => {
+      if (key in extrasClassMap) {
+        customizationClasses += ` ${extrasClassMap[key]}`;
+      } else {
+        customizationClasses += ` userfront-${key}`;
+      }
+    });
+  customizationClasses = customizationClasses.trim();
+
   return (
     <button
       onClick={handleClick}
-      className="userfront-toolkit userfront-element userfront-button userfront-button-logout"
+      style={style}
+      className={`userfront-toolkit userfront-element userfront-button userfront-button-logout ${customizationClasses}`}
       aria-disabled={disabled}
       disabled={disabled}
     >
