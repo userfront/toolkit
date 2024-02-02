@@ -77,7 +77,7 @@ The `src` directory contains the package's source:
 
 **CSS**
 
-The forms' CSS is in `themes/default.css`. This uses CSS variables to allow full customization of forms' appearance. Variables are all prefixed `--userfront` to separate them from variables in client code.
+The forms' CSS is in `themes/dynamic.css`. This uses CSS variables to allow full customization of forms' appearance. Variables are all prefixed `--userfront` to separate them from variables in client code. The `dynamic` theme uses CSS's color modification capabilities (`color-mix` mostly) to derive a full color scheme (with active/hover states etc) from 1-3 main colors: "dark" (primary), "light" (secondary), and "accent".
 
 **Storybook**
 
