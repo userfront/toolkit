@@ -154,10 +154,11 @@ const strings = {
     },
   },
   general: {
+    disabled: "Authentication is disabled",
     redirecting: "Redirecting...",
+    unhandledError: "Oops, something went wrong",
     verified: "Verified",
     welcome: "Welcome",
-    unhandledError: "Oops, something went wrong",
   },
 };
 
@@ -182,6 +183,8 @@ const componentForStep = (state) => {
   switch (step) {
     case "init":
     case "getGlobalTenantId":
+    case "initUserfront":
+    case "initFlow":
     case "initForm":
     case "beginFlow":
     case "showPreviewAndFetchFlow":
@@ -206,7 +209,19 @@ const componentForStep = (state) => {
           Component: Placeholder,
         };
       }
-
+    case "handleLoginWithLink":
+      return {
+        Component: Placeholder,
+      };
+    case "noFirstFactors":
+    case "disabled":
+      return {
+        title: strings.general.disabled,
+        Component: GeneralErrorMessage,
+        props: {
+          message: "Please contact an administrator for assistance",
+        },
+      };
     case "selectFirstFactor.showForm":
       return {
         title: strings[type].title,
@@ -491,7 +506,7 @@ const componentForStep = (state) => {
     case "missingFlowInDevModeError":
     case "missingFlowInLocalModeError":
     case "missingFlowFromServerError":
-    case "UnhandledError":
+    case "unhandledError":
       return {
         title: strings.general.unhandledError,
         Component: GeneralErrorMessage,
