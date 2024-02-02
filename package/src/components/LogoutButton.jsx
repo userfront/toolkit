@@ -70,7 +70,7 @@ const LogoutButton = ({
   if (themeColors.darkBackground) {
     style["--userfront-dark-background-color"] = themeColors.darkBackground;
   }
-  if (theme.fontFamily) {
+  if (theme?.fontFamily) {
     style["--userfront-font-family"] = theme.fontFamily;
   }
 
@@ -78,28 +78,28 @@ const LogoutButton = ({
   // For now, "light scheme only" is default, to match existing behavior.
   // In a future iteration "auto scheme" should be made default
   let colorSchemeClass = "userfront-light-scheme";
-  if (theme.colorScheme === "dark") {
+  if (theme?.colorScheme === "dark") {
     colorSchemeClass = "userfront-dark-scheme";
   }
-  if (theme.colorScheme === "auto") {
+  if (theme?.colorScheme === "auto") {
     colorSchemeClass = "userfront-auto-scheme";
   }
 
   // CSS variables for sizing
-  if (theme.size === "compact") {
+  if (theme?.size === "compact") {
     style["--userfront-em-size"] = "14px";
     style["--userfront-spacing"] = "0.5em";
   }
-  if (theme.size === "mini") {
+  if (theme?.size === "mini") {
     style["--userfront-em-size"] = "12px";
     style["--userfront-spacing"] = "0.5em";
     style["--userfront-container-width"] = "250px";
   }
-  if (theme.size === "spaced") {
+  if (theme?.size === "spaced") {
     style["--userfront-em-size"] = "14px";
     style["--userfront-spacing"] = "20px";
   }
-  if (theme.size === "large") {
+  if (theme?.size === "large") {
     style["--userfront-em-size"] = "20px";
     style["--userfront-spacing"] = "18px";
   }
@@ -112,7 +112,7 @@ const LogoutButton = ({
     raisedButtons: "userfront-raised-buttons",
     dottedOutlines: "userfront-dotted-outlines",
   };
-  const extras = theme.extras || {};
+  const extras = theme?.extras || {};
   let customizationClasses = "";
   Object.entries(extras)
     .filter(([key, val]) => Boolean(val))
