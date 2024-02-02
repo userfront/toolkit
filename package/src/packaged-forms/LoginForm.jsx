@@ -18,11 +18,14 @@ import PackagedUniversalForm from "./UniversalForm";
  * @param {string=} props.theme.colors.lightBackground - background color for light mode (optional)
  * @param {string=} props.theme.colors.darkBackground - background color for dark mode (optional)
  * @param {string=} props.theme.fontFamily - CSS font family to use for the form
- * @param {object=} props.theme.options - additional options to modify the form's appearance
- * @param {boolean=} props.theme.options.rounded - make form elements appear more rounded generally
- * @param {boolean=} props.theme.options.squared - make form elements appear more squared-off generally
- * @param {boolean=} props.theme.options.gradientButtons - add an interactive gradient to buttons
- * @param {boolean=} props.theme.options.hideSecuredMessage - hide the "secured by Userfront" message
+ * @param {object=} props.theme.extras - additional options to modify the form's appearance
+ * @param {boolean=} props.theme.extras.rounded - make form elements appear more rounded generally
+ * @param {boolean=} props.theme.extras.squared - make form elements appear more squared-off generally
+ * @param {boolean=} props.theme.extras.gradientButtons - add an interactive gradient to buttons
+ * @param {boolean=} props.theme.extras.dottedOutline - use a dotted outline with some padding around active elements,
+ *   rather than a solid outline that is flush with the outside of the element
+ * @param {boolean=} props.theme.extras.raisedButtons - use old-school 3D-looking buttons
+ * @param {boolean=} props.theme.extras.hideSecuredMessage - hide the "secured by Userfront" message
  * @param {(string|boolean)=} props.redirect - URL to redirect to after successful login.
  *   If false, do not redirect.
  *   If absent, use the after-login path from the server.

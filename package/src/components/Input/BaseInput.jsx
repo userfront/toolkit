@@ -16,9 +16,6 @@ export default function BaseInput({
   showError = false,
   errorMessage = "Required field",
   isPassword = false,
-  showRevealIcon = false,
-  isRevealed = false,
-  onToggleReveal = () => {},
   ...props
 } = {}) {
   const [hideContents, setHideContents] = useState(isPassword);

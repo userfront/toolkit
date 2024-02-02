@@ -116,9 +116,9 @@ function DemoSignupForm() {
           checked={!!darkBackgroundColor}
           onChange={(evt) => {
             if (evt.target.checked) {
-              setLightBackgroundColor("#ffffff");
+              setDarkBackgroundColor("#2d2d2d");
             } else {
-              setLightBackgroundColor(undefined);
+              setDarkBackgroundColor(undefined);
             }
           }}
         />
