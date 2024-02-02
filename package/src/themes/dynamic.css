@@ -370,6 +370,9 @@
 
   /* Background color for test mode banner */
   --userfront-test-mode-background-color: #ffda96;
+
+  /* Test color for test mode banner */
+  --userfront-test-mode-text-color: #303133;
 }
 
 /* Dark mode (auto) */
@@ -679,6 +682,9 @@
 
     /* Background color for test mode banner */
     --userfront-test-mode-background-color: #ffda96;
+
+    /* Test color for test mode banner */
+    --userfront-test-mode-text-color: #303133;
   }
 }
 
@@ -991,6 +997,9 @@
 
   /* Background color for test mode banner */
   --userfront-test-mode-background-color: #ffda96;
+
+  /* Test color for test mode banner */
+  --userfront-test-mode-text-color: #303133;
 }
 
 /* More base styles */
@@ -1448,7 +1457,7 @@
 /* Test mode notice */
 .userfront-test-mode-notice {
   background-color: var(--userfront-test-mode-background-color);
-  color: var(--userfront-text-color);
+  color: var(--userfront-test-mode-text-color);
   padding: 0.25rem 2rem 0.25rem 2rem;
   margin: 0 auto;
   margin-top: 0.5rem;
