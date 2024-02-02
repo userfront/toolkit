@@ -58,7 +58,7 @@ const LogoutButton = ({
   // Build the theme
 
   // Define CSS variables
-  const themeColors = theme.colors || {};
+  const themeColors = theme?.colors || {};
   const style = {
     "--userfront-light-color": themeColors.light || "#ffffff",
     "--userfront-dark-color": themeColors.dark || "#5e72e4",

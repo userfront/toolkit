@@ -72,7 +72,13 @@ const DemoForm = ({
   };
 
   return (
-    <UnboundUniversalForm state={state} onEvent={handleEvent} theme={theme} />
+    <UnboundUniversalForm
+      state={state}
+      onEvent={handleEvent}
+      theme={theme}
+      isDemo
+      demoMode={mode}
+    />
   );
 };
 

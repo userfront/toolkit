@@ -1294,6 +1294,7 @@
   cursor: pointer;
   line-height: 2;
   font-weight: 500;
+  max-width: 250px;
 }
 
 .userfront-button.userfront-button-logout:hover:not(:disabled),

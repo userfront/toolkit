@@ -549,7 +549,13 @@ const componentForStep = (state) => {
   }
 };
 
-const UniversalForm = ({ theme = {}, state, onEvent }) => {
+const UniversalForm = ({
+  theme = {},
+  state,
+  isDemo = false,
+  demoState = "live",
+  onEvent,
+}) => {
   // Apply CSS classes based on the size of the form's container
   const [containerRef, setContainerRef] = useState();
   const sizeClass = useSizeClass(containerRef);
@@ -645,7 +651,9 @@ const UniversalForm = ({ theme = {}, state, onEvent }) => {
       <h2>{title}</h2>
       <Component onEvent={onEvent} {...defaultProps} {...props} />
       <div>
-        <SecuredByUserfront mode={state.context.config?.mode} />
+        <SecuredByUserfront
+          mode={isDemo ? demoState : state.context.config?.mode}
+        />
       </div>
     </div>
   );
