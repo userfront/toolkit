@@ -46,10 +46,15 @@ const defaultDemoAuthFlow = {
  * @param {boolean=} props.theme.options.gradientButtons - add an interactive gradient to buttons
  * @param {boolean=} props.theme.options.hideSecuredMessage - hide the "secured by Userfront" message
  */
-const DemoForm = ({ type, theme, authFlow = defaultDemoAuthFlow }) => {
+const DemoForm = ({
+  type,
+  theme,
+  authFlow = defaultDemoAuthFlow,
+  mode = "live",
+}) => {
   context.config.type = type;
 
-  const mockUserfront = useMockUserfront({ authFlow });
+  const mockUserfront = useMockUserfront({ authFlow, mode });
 
   const machine = SignupFormModel;
   const machineOptions = {};

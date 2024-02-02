@@ -351,7 +351,7 @@ const mockUserfrontResponses = {
 };
 
 class MockUserfront {
-  constructor({ authFlow }) {
+  constructor({ authFlow, mode }) {
     this.store = {
       tenantId: "demo1234",
       tokens: {},
@@ -374,6 +374,7 @@ class MockUserfront {
     this.requireMfaSetup = false;
     this.isAwaitingSecondFactor = false;
     this.authFlow = authFlow;
+    this.mode = mode;
 
     this.login = this.login.bind(this);
     this.signup = this.signup.bind(this);
@@ -456,7 +457,7 @@ class MockUserfront {
     const modeResponse = mockUserfrontResponses.setMode();
     if (this.authFlow) {
       return {
-        mode: "live",
+        mode: this.mode,
         authentication: this.authFlow,
       };
     }
@@ -464,11 +465,11 @@ class MockUserfront {
   }
 }
 
-const createMockUserfront = ({ authFlow } = {}) =>
-  new MockUserfront({ authFlow });
+const createMockUserfront = ({ authFlow, mode = "live" } = {}) =>
+  new MockUserfront({ authFlow, mode });
 
-export const useMockUserfront = ({ authFlow } = {}) => {
-  const mockUserfront = createMockUserfront({ authFlow });
+export const useMockUserfront = ({ authFlow, mode = "live" } = {}) => {
+  const mockUserfront = createMockUserfront({ authFlow, mode });
   overrideUserfrontSingleton(mockUserfront);
   return mockUserfront;
 };
