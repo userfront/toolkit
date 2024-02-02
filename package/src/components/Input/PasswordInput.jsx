@@ -7,7 +7,7 @@ import BaseInput from "./BaseInput";
  * @returns
  */
 export default function PasswordInput({
-  label = "Password",
+  label = "Choose a password",
   showError,
   errorMessage = "Please enter your password",
   ...props
@@ -19,7 +19,7 @@ export default function PasswordInput({
       aria-describedby="userfront-password-rules"
       showError={showError}
       errorMessage={errorMessage}
-      label="Choose a password"
+      label={label}
       {...props}
     />
   );
