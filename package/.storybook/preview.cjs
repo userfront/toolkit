@@ -1,4 +1,4 @@
-import "../src/themes/default.css";
+import "../src/themes/dynamic.css";
 
 import { withCssVariables } from "./decorators/css-variables"
 

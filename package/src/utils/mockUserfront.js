@@ -1,3 +1,5 @@
+import { overrideUserfrontSingleton } from "../services/userfront";
+
 const mockUserfrontResponses = {
   store: {
     tenantId: "demo1234",
@@ -55,16 +57,6 @@ const mockUserfrontResponses = {
     };
   },
   login: async () => {
-    return {
-      message: "OK",
-      result: {
-        channel: "email",
-        email: "some.email@example.com",
-        messageId: "a9c9b41c-ce76-4f7e-915a-abf18a36a4ae",
-        submittedAt: "2022-12-15T23:36:33.299Z",
-        expiresAt: "2022-12-15T23:36:33.299Z",
-      },
-    };
     return {
       mode: "test",
       message: "OK",
@@ -359,7 +351,7 @@ const mockUserfrontResponses = {
 };
 
 class MockUserfront {
-  constructor() {
+  constructor({ authFlow, mode }) {
     this.store = {
       tenantId: "demo1234",
       tokens: {},
@@ -381,11 +373,14 @@ class MockUserfront {
     this.requireMfa = true;
     this.requireMfaSetup = false;
     this.isAwaitingSecondFactor = false;
+    this.authFlow = authFlow;
+    this.mode = mode;
 
     this.login = this.login.bind(this);
     this.signup = this.signup.bind(this);
     this.resetPassword = this.resetPassword.bind(this);
     this.updatePassword = this.updatePassword.bind(this);
+    this.setMode = this.setMode.bind(this);
   }
 
   attachToWindow() {
@@ -395,8 +390,6 @@ class MockUserfront {
   }
 
   async login() {
-    console.log("login");
-    console.log(this);
     if (this.isAwaitingSecondFactor) {
       this.isAwaitingSecondFactor = false;
       return mockUserfrontResponses.login();
@@ -413,8 +406,6 @@ class MockUserfront {
   }
 
   async signup() {
-    console.log("signup");
-    console.log(this);
     if (this.isAwaitingSecondFactor) {
       this.isAwaitingSecondFactor = false;
       return mockUserfrontResponses.signup();
@@ -463,10 +454,24 @@ class MockUserfront {
   }
 
   async setMode() {
-    return mockUserfrontResponses.setMode();
+    const modeResponse = mockUserfrontResponses.setMode();
+    if (this.authFlow) {
+      return {
+        mode: this.mode,
+        authentication: this.authFlow,
+      };
+    }
+    return modeResponse;
   }
 }
 
-const createMockUserfront = () => new MockUserfront();
+const createMockUserfront = ({ authFlow, mode = "live" } = {}) =>
+  new MockUserfront({ authFlow, mode });
+
+export const useMockUserfront = ({ authFlow, mode = "live" } = {}) => {
+  const mockUserfront = createMockUserfront({ authFlow, mode });
+  overrideUserfrontSingleton(mockUserfront);
+  return mockUserfront;
+};
 
 export default createMockUserfront;

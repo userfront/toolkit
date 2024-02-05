@@ -1,6 +1,6 @@
 {
   "name": "@userfront/toolkit",
-  "version": "1.0.6",
+  "version": "1.1.0-alpha.1",
   "description": "Bindings and components for authentication with Userfront with React, Vue, other frameworks, and plain JS + HTML",
   "type": "module",
   "directories": {
@@ -47,7 +47,7 @@
       "import": "./dist/web-component.es.js",
       "require": "./dist/web-component.umd.js"
     },
-    "./themes/default.css": "./dist/style.css"
+    "./themes/dynamic.css": "./dist/style.css"
   },
   "files": [
     "dist"

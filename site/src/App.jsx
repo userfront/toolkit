@@ -12,6 +12,7 @@ import LiveSignupDemo from "./pages/LiveSignupDemo";
 import LiveLoginDemo from "./pages/LiveLoginDemo";
 import LiveResetDemo from "./pages/LiveResetDemo";
 import LiveLogoutDemo from "./pages/LiveLogoutDemo";
+import DemoSignupForm from "./pages/DemoSignupForm";
 
 import Userfront from "@userfront/toolkit";
 import { useEffect } from "react";
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
   {
     path: "/redirects/password-reset",
     element: <PasswordResetDemo />,
+  },
+  {
+    path: "/demo/signup",
+    element: <DemoSignupForm />,
   },
 ]);
 

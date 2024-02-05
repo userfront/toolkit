@@ -12,10 +12,11 @@ export { default as SignupForm } from "./packaged-forms/SignupForm";
 export { default as LoginForm } from "./packaged-forms/LoginForm";
 export { default as PasswordResetForm } from "./packaged-forms/PasswordResetForm";
 export { default as LogoutButton } from "./components/LogoutButton";
+export { default as DemoForm } from "./packaged-forms/DemoForm";
 /*
  * CSS styles for the forms
  */
-import "./themes/default.css";
+import "./themes/dynamic.css";
 
 Userfront.build = (toolId) => {
   console.error(`Userfront.build(${toolId}) has been removed. Instead, import the component directly:

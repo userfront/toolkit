@@ -12,16 +12,18 @@ import SignupForm from "./packaged-forms/SignupForm";
 import LoginForm from "./packaged-forms/LoginForm";
 import PasswordResetForm from "./packaged-forms/PasswordResetForm";
 import LogoutButton from "./components/LogoutButton";
+import DemoForm from "./packaged-forms/DemoForm";
 
 UserfrontCore.SignupForm = SignupForm;
 UserfrontCore.LoginForm = LoginForm;
 UserfrontCore.PasswordResetForm = PasswordResetForm;
 UserfrontCore.LogoutButton = LogoutButton;
+UserfrontCore.DemoForm = DemoForm;
 
 /*
  * CSS styles for the forms
  */
-import "./themes/default.css";
+import "./themes/dynamic.css";
 
 // TODO #9: add link to upgrade guide
 UserfrontCore.build = (toolId) => {

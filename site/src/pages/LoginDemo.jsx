@@ -25,7 +25,7 @@ const LoginFormModel = createUniversalFormModel(context);
 
 const mockUserfront = createMockUserfront();
 
-mockUserfront.requireMfa = true;
+mockUserfront.requireMfa = false;
 mockUserfront.requireMfaSetup = false;
 
 function App() {
