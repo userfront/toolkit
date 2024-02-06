@@ -23,6 +23,7 @@ if (typeof window === "object" && window.customElements) {
       props: {
         tenantId: "string",
         flow: "json",
+        theme: "json",
         compact: "boolean",
         redirect: "string",
         redirectOnLoadIfLoggedIn: "boolean",
@@ -37,6 +38,7 @@ if (typeof window === "object" && window.customElements) {
       props: {
         tenantId: "string",
         flow: "json",
+        theme: "json",
         compact: "boolean",
         redirect: "string",
         redirectOnLoadIfLoggedIn: "boolean",
@@ -51,6 +53,7 @@ if (typeof window === "object" && window.customElements) {
       props: {
         tenantId: "string",
         flow: "json",
+        theme: "json",
         compact: "boolean",
         redirect: "string",
         redirectOnLoadIfLoggedIn: "boolean",
@@ -65,6 +68,7 @@ if (typeof window === "object" && window.customElements) {
       props: {
         disabled: "boolean",
         redirect: "string",
+        theme: "json",
       },
     })
   );
