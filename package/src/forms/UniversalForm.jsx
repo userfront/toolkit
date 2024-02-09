@@ -568,7 +568,7 @@ const UniversalForm = ({
   theme,
   state,
   isDemo = false,
-  demoState = "live",
+  demoMode = "live",
   onEvent,
 }) => {
   // Apply CSS classes based on the size of the form's container
@@ -667,7 +667,7 @@ const UniversalForm = ({
       <Component onEvent={onEvent} {...defaultProps} {...props} />
       <div>
         <SecuredByUserfront
-          mode={isDemo ? demoState : state.context.config?.mode}
+          mode={isDemo ? demoMode : state.context.config?.mode}
         />
       </div>
     </div>
