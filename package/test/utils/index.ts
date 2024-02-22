@@ -80,11 +80,12 @@ const unexpectedReject = async () => {
  *
  * @returns {MockUserfrontService} - the mock Userfront service. Use service.proxy as the mock singleton.
  */
-export const createMockUserfront = () => {
+export const createMockUserfront = (modifiedStore?: object) => {
   const calls: Call[] = [];
   const singleton = {
     store: {
       tenantId: "tenantId",
+      ...modifiedStore,
     },
   };
   const service = {
@@ -210,8 +211,8 @@ export const createMockUserfront = () => {
  *
  * @returns {MockUserfrontService} - the mock service; the Userfront singleton has already been overridden with service.proxy.
  */
-export const useMockUserfront = () => {
-  const service = createMockUserfront();
+export const useMockUserfront = (modifiedStore?: object) => {
+  const service = createMockUserfront(modifiedStore);
   overrideUserfrontSingleton(service.proxy);
   return service;
 };
