@@ -33,20 +33,14 @@ const LogInWithPassword = ({ onEvent, allowBack, error }) => {
       });
     }
   };
+
   return (
     <form onSubmit={handleSubmit} className="userfront-form">
       <div className="userfront-form-row">
         <Input.EmailOrUsername showError={emailOrUsernameError} />
       </div>
       <div className="userfront-form-row">
-        <Input.Password showError={passwordError} />
-        <span
-          className="userfront-secondary-text"
-          id="userfront-password-rules"
-        >
-          At least 16 characters OR at least 8 characters including a number and
-          a letter.
-        </span>
+        <Input.Password label="Password" showError={passwordError} />
       </div>
       <ErrorMessage error={error} />
       <div className="userfront-button-row">

@@ -1,4 +1,5 @@
 import { callUserfront } from "../../services/userfront";
+import { hasValue } from "../config/utils";
 import {
   AuthContext,
   AuthMachineConfig,
@@ -51,19 +52,32 @@ const setUpTotpConfig: AuthMachineConfig = {
       entry: "clearError",
       invoke: {
         // Set the code and call the API method
-        src: (context: AuthContext<any>, event: AuthMachineEvent) =>
-          callUserfront({
+        src: (context: AuthContext<any>, event: AuthMachineEvent) => {
+          const arg: Record<string, any> = {
+            method: "totp",
+          };
+
+          if (hasValue((<TotpCodeSubmitEvent>event).totpCode)) {
+            arg.totpCode = (<TotpCodeSubmitEvent>event).totpCode;
+          }
+
+          // API only requires email/emailOrUsername when logging in via first factor
+          if (!context.isSecondFactor) {
+            if (hasValue(context.user.email)) {
+              arg.email = context.user.email;
+            } else if (hasValue(context.user.emailOrUsername)) {
+              arg.emailOrUsername = context.user.emailOrUsername;
+            }
+
+            arg.redirect = false;
+          }
+
+          return callUserfront({
             // Should ALWAYS be Userfront.login here
             method: "login",
-            args: [
-              {
-                method: "totp",
-                totpCode: (<TotpCodeSubmitEvent>event).totpCode,
-                email: context.user.email,
-                redirect: false,
-              },
-            ],
-          }),
+            args: [arg],
+          });
+        },
         // On error, show the error message and return to the form
         onError: {
           actions: "setErrorFromApiError",
@@ -98,8 +112,7 @@ const setUpTotpConfig: AuthMachineConfig = {
         ],
       },
     },
-    // Show an error message only - if there's a problem getting
-    // the QR code.
+    // Show an error message — only if there's a problem getting the QR code
     showErrorMessage: {
       on: {
         retry: "getQrCode",
