@@ -68,9 +68,10 @@ const setUpTotpConfig: AuthMachineConfig = {
             } else if (hasValue(context.user.emailOrUsername)) {
               arg.emailOrUsername = context.user.emailOrUsername;
             }
-
-            arg.redirect = false;
           }
+
+          // Don't redirect after TOTP setup so backup codes can be shown
+          arg.redirect = false;
 
           return callUserfront({
             // Should ALWAYS be Userfront.login here
