@@ -22,7 +22,7 @@ import { log } from "../services/logging";
 import { useState } from "react";
 import { useSizeClass } from "../utils/hooks";
 import SignUpWithPassword from "../views/SignUpWithPassword";
-import { isLoggedIn } from "../models/config/guards";
+import { isLoggedInAndInvalidLinkCredentials } from "../models/config/guards";
 
 // TODO DEV-484: expand on string handling and localization, extract to
 // a separate JSON file, add capability for client to pass in its own
@@ -527,7 +527,9 @@ const componentForStep = (state) => {
         title: strings.reset.setNewPasswordTitle,
         Component: SetNewPassword,
         props: {
-          requireExistingPassword: isLoggedIn(),
+          requireExistingPassword: isLoggedInAndInvalidLinkCredentials(
+            state.context
+          ),
         },
       };
 
@@ -536,7 +538,9 @@ const componentForStep = (state) => {
         title: strings.reset.setNewPasswordTitle,
         Component: SetNewPassword,
         props: {
-          requireExistingPassword: isLoggedIn(),
+          requireExistingPassword: isLoggedInAndInvalidLinkCredentials(
+            state.context
+          ),
           isLoading: true,
         },
       };

@@ -117,6 +117,14 @@ export const isLoggedInOrHasLinkCredentials = (context: AuthContext<any>) => {
   return isLoggedIn() || hasLinkQueryParams(context);
 };
 
+export const isLoggedInAndInvalidLinkCredentials = (
+  context: AuthContext<any>
+) => {
+  const validQueryParams =
+    hasLinkQueryParams(context) && context.query?.isValid;
+  return isLoggedIn() && !validQueryParams;
+};
+
 export const isPasswordReset = (context: AuthContext<any>) => {
   return context.config.type === "reset";
 };
