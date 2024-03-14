@@ -363,9 +363,9 @@ const universalMachineConfig: AuthMachineConfig = {
         },
         // This is a signup or login form, do shared initialization
 
-        // If there's already a user, proceed.
+        // If there's already a user refresh their tokens, proceed.
         {
-          target: "alreadyLoggedIn",
+          target: "refreshTokens",
           cond: "isLoggedIn",
         },
 
@@ -395,6 +395,21 @@ const universalMachineConfig: AuthMachineConfig = {
           target: "showPreviewAndFetchFlow",
         },
       ],
+    },
+
+    refreshTokens: {
+      invoke: {
+        // Update the tokens
+        // @ts-ignore - TS doesn't infer all of the valid methods correctly
+        src: () => callUserfront({ method: "refresh" }),
+
+        onDone: {
+          target: "alreadyLoggedIn",
+        },
+        onError: {
+          target: "alreadyLoggedIn",
+        },
+      },
     },
 
     // This is a login or signup form, but we're already logged in.
