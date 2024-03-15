@@ -28,7 +28,11 @@ export const overrideUserfrontSingleton = (newSingleton: any) => {
 
 // A type with the keys of all functions in Type
 type Functions<Type> = {
-  [Key in keyof Type]-?: Type[Key] extends Function ? Key : never;
+  [Key in keyof Type]-?: Type[Key] extends Function
+    ? Key
+    : Type[Key] extends object
+    ? Functions<Type[Key]> // Recursively check nested objects
+    : never;
 }[keyof Type];
 
 export interface CallUserfront {
