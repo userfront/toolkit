@@ -553,6 +553,7 @@ const componentForStep = (state) => {
 
     // Already logged in - for forms on pages without redirect-on-load
     case "alreadyLoggedIn":
+    case "initRefreshTokens":
     case "refreshTokens":
       return {
         title: strings.general.welcome,
@@ -582,6 +583,7 @@ const UniversalForm = ({
 
   // Get the view component, title text, and props corresponding to this state
   const { Component, props, title } = componentForStep(state);
+  console.log(state);
 
   // Construct the default props that are passed to all views
   const defaultProps = {
