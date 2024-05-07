@@ -583,7 +583,6 @@ const UniversalForm = ({
 
   // Get the view component, title text, and props corresponding to this state
   const { Component, props, title } = componentForStep(state);
-  console.log(state);
 
   // Construct the default props that are passed to all views
   const defaultProps = {
