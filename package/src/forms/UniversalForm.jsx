@@ -553,6 +553,7 @@ const componentForStep = (state) => {
 
     // Already logged in - for forms on pages without redirect-on-load
     case "alreadyLoggedIn":
+    case "initRefreshTokens":
     case "refreshTokens":
       return {
         title: strings.general.welcome,

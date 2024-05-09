@@ -365,7 +365,7 @@ const universalMachineConfig: AuthMachineConfig = {
 
         // If there's already a user refresh their tokens, proceed.
         {
-          target: "refreshTokens",
+          target: "initRefreshTokens",
           cond: "isLoggedIn",
         },
 
@@ -393,6 +393,20 @@ const universalMachineConfig: AuthMachineConfig = {
         // the preview won't proceed to a specific factor.
         {
           target: "showPreviewAndFetchFlow",
+        },
+      ],
+    },
+
+    initRefreshTokens: {
+      always: [
+        // Try to use the query params if they exist
+        {
+          target: "handleLoginWithLink",
+          cond: "hasLinkQueryParams",
+        },
+        // If no query params, proceed refreshing tokens
+        {
+          target: "refreshTokens",
         },
       ],
     },
@@ -699,6 +713,11 @@ const universalMachineConfig: AuthMachineConfig = {
           },
         ],
         onError: [
+          // If logged in go to refresh tokens
+          {
+            target: "refreshTokens",
+            cond: "isLoggedIn",
+          },
           // If there was a problem logging in with the link token and uuid,
           // go back to first factor selection and show the error.
           // Mark the query params invalid, so we don't infinitely retry them.
