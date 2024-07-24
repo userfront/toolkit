@@ -274,14 +274,28 @@ export const markAsSecondFactor = assign({
 // Redirect to the afterLoginPath etc. after signed in, just an alias for the Userfront API method
 export const redirectIfLoggedIn = (context: AuthContext<any>) => {
   if (context.config.redirect !== false) {
-    callUserfront({ method: "redirectIfLoggedIn", args: [] });
+    callUserfront({
+      method: "redirectIfLoggedIn",
+      args: [
+        {
+          redirect: context.config?.redirect,
+        },
+      ],
+    });
   }
 };
 
 // Redirect to the afterLoginPath if the user is already logged in when the form loads, if redirectOnLoad = true
 export const redirectOnLoad = (context: AuthContext<any>) => {
   if (context.config.redirectOnLoad) {
-    callUserfront({ method: "redirectIfLoggedIn", args: [] });
+    callUserfront({
+      method: "redirectIfLoggedIn",
+      args: [
+        {
+          redirect: context.config?.redirect,
+        },
+      ],
+    });
   }
 };
 
