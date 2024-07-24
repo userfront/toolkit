@@ -671,6 +671,7 @@ const universalMachineConfig: AuthMachineConfig = {
             args: [
               {
                 method: event.factor?.strategy,
+                redirect: context.config?.redirect,
               },
             ],
           });
@@ -695,6 +696,7 @@ const universalMachineConfig: AuthMachineConfig = {
                 method: "link",
                 token: context.query.token,
                 uuid: context.query.uuid,
+                redirect: context.config?.redirect,
               },
             ],
           });
