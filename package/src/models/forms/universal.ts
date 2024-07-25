@@ -696,6 +696,7 @@ const universalMachineConfig: AuthMachineConfig = {
                 method: "link",
                 token: context.query.token,
                 uuid: context.query.uuid,
+                linkType: context.query.linkType,
                 redirect: context.config?.redirect,
               },
             ],

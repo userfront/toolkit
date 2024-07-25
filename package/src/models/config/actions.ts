@@ -82,10 +82,12 @@ export const readQueryParams = assign((context: AuthContext<View>) => {
   }
   const uuid = getQueryAttr("uuid");
   const token = getQueryAttr("token");
+  const linkType = getQueryAttr("type");
   return {
     query: {
       uuid,
       token,
+      linkType,
       isValid: true,
     },
   };
