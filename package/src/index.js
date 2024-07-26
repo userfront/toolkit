@@ -24,6 +24,23 @@ Userfront.build = (toolId) => {
   See https://userfront.com/dashboard/toolkit for more information about upgrading to the new toolkit.`);
 };
 
+/**
+ * Override Userfront.init to pass toolkit userfrontSource param into it
+ */
+const UserfrontProxy = new Proxy(Userfront, {
+  get(target, prop) {
+    if (prop === "init") {
+      return (tenantId, options = {}) => {
+        Userfront.init(tenantId, {
+          ...options,
+          userfrontSource: "toolkit",
+        });
+      };
+    }
+    return target[prop];
+  },
+});
+
 /*
  * Dev tools.
  * You probably only want these if you're developing this library.
@@ -47,4 +64,4 @@ export const _devTools = {
   overrideUserfrontSingleton,
 };
 
-export default Userfront;
+export default UserfrontProxy;
