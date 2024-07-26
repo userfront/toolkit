@@ -150,6 +150,7 @@ export type View =
 export type Query = {
   token?: string;
   uuid?: string;
+  linkType?: string;
   isValid?: boolean;
 };
 

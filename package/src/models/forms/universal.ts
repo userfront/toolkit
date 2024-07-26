@@ -329,7 +329,10 @@ const universalMachineConfig: AuthMachineConfig = {
           // @ts-ignore
           callUserfrontSync({
             method: "init",
-            args: [context.config.tenantId!],
+            args: [
+              context.config.tenantId!,
+              { options: { userfrontSource: "toolkit" } },
+            ],
           });
           return context.config.tenantId;
         },
@@ -696,6 +699,7 @@ const universalMachineConfig: AuthMachineConfig = {
                 method: "link",
                 token: context.query.token,
                 uuid: context.query.uuid,
+                linkType: context.query.linkType,
                 redirect: context.config?.redirect,
               },
             ],
