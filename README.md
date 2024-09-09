@@ -8,19 +8,7 @@ To install and use the Userfront Toolkit, follow the instructions for your frame
 
 ### React
 
-**Install:** `npm install --save @userfront/toolkit`
-
-**Use:**
-
-```js
-import Userfront, { SignupForm } from "@userfront/toolkit/react";
-
-Userfront.init("myTenantId");
-
-export default function MyComponent() {
-  return <SignupForm />;
-}
-```
+Use Userfront React instead: [https://github.com/userfront/userfront/tree/main/packages/react](https://github.com/userfront/userfront/tree/main/packages/react)
 
 ### Vue
 
