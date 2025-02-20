@@ -1,6 +1,6 @@
-const path = require("path");
+const path = require("node:path");
 const vite = require("vite");
-const react = require("@vitejs/plugin-react");
+const {default: swc} = require("unplugin-swc");
 const cssInjectedByJsPlugin = require("vite-plugin-css-injected-by-js").default;
 
 const resolve = path.resolve;
@@ -32,13 +32,23 @@ const defaultOptions = {
 };
 
 const rollupOptions = {
-  external: ["react", "react-dom"],
+  external: [/^react($|\/)/, /^react-dom($|\/)/],
   output: {
     globals: {
       react: "React",
       "react-dom": "ReactDOM",
     },
   },
+};
+
+const swcOptions = {
+  jsc: {
+    transform: {
+      react: {
+        runtime: "classic",
+      }
+    }
+  }
 };
 
 /*
@@ -48,8 +58,8 @@ const rollupOptions = {
 /* ESM build config */
 
 const esmPlugins = [
-  react(),
-  cssInjectedByJsPlugin()
+  swc.vite(swcOptions),
+    cssInjectedByJsPlugin()
 ];
 
 const esmOptions = {
@@ -72,7 +82,7 @@ const esmOptions = {
 /* UMD (CommonJS and bundle) build config */
 
 const umdPlugins = [
-  react(),
+  swc.vite(swcOptions),
   cssInjectedByJsPlugin()
 ];
 
@@ -97,8 +107,8 @@ const umdOptions = {
 /* Web Components */
 
 const webComponentPlugins = [
-  react(),
-  cssInjectedByJsPlugin()
+  swc.vite(swcOptions),
+    cssInjectedByJsPlugin()
 ];
 
 const webComponentOptions = {
@@ -115,7 +125,7 @@ const webComponentOptions = {
       name: "web-component"
     },
     emptyOutDir: false,
-    sourcemap: process.env.NODE_ENV === "production" ? false : true
+    sourcemap: process.env.NODE_ENV !== "production",
   }
 }
 
